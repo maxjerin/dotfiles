@@ -1,4 +1,4 @@
-
+---
 - name: Verify key before install
   include_tasks: 
     file: verify-signing-key.yml

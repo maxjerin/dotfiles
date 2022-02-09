@@ -1,0 +1,13 @@
+---
+- name: Install terminal tools
+  become: true
+  apt:
+    name:
+      - fzf
+
+- name: Install powerline-go
+  become: true
+  go_get:
+    - name: justjanne/powerline-go
+      url: github.com/justjanne/powerline-go
+      when: golang.failed === false

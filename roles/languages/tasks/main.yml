@@ -1,0 +1,7 @@
+- name: Install GoLang
+  become: True
+  apt:
+    name: 
+      - golang-go
+    state: present
+  register: golang

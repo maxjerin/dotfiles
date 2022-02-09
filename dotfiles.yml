@@ -1,8 +1,25 @@
+---
 - name: Set up local workstation
+  vars:
   hosts: local
   ignore_errors: yes
   roles:
-    - role: chrome
-      tags:
-        - bootstrap
-        - linux
+    - githubixx.docker
+    # - role: chrome
+    #   tags:
+    #     - bootstrap
+    #     - linux
+    # - role: fonts
+    #   tags:
+    #     - bootstrap
+    #     - linux
+    # - role: terminal
+    #   tags:
+    #     - bootstrap
+    #     - linux
+    # - role: keyboard-mapping
+    # - role: languages
+    #   tags:
+    #     - bootstrap
+    #     - linux
+    

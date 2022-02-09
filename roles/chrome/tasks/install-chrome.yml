@@ -1,3 +1,4 @@
+---
 - name: Debian - Import signing key
   apt_key:
     file: /ansible-managed/google-chrome/linux_signing_key.pub
@@ -6,6 +7,7 @@
   register: key
 
 - name: Debian - Add Google Chrome package source
+  become: true
   copy:
     src: google-chrome.list
     dest: /etc/apt/sources.list.d/

@@ -1,3 +1,4 @@
+---
 # By automating installs with an ansible role,
 # you don't see the normal click-through from the website.
 #
