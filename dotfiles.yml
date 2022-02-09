@@ -1,0 +1,8 @@
+- name: Set up local workstation
+  hosts: local
+  ignore_errors: yes
+  roles:
+    - role: chrome
+      tags:
+        - bootstrap
+        - linux
