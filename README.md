@@ -8,3 +8,8 @@ sudo apt install software-properties-common \
 sudo add-apt-repository --yes --update ppa:ansible/ansible \
 sudo apt install ansible
 ```
+
+
+# TODO
+
+add macos integration test using this pattern https://github.com/geerlingguy/mac-dev-playbook/blob/master/.github/workflows/ci.yml
