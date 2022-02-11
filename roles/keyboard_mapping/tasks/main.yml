@@ -11,8 +11,13 @@
   ansible.builtin.git:
     repo: git@github.com:petrstepanov/gnome-macos-remap
     dest: /tmp/gnome-macos-remap
+    version: 4850089
+
+- name: Add execute permission on files
+  ansible.builtin.file:
+    path: /tmp/gnome-macos-remap/install.sh
+    mode: u+rwx
 
 - name: Run keybindings script
-  ansible.builtin.shell:
-    cmd: chmod +x ./install.sh ./uninstall.sh &&  ./install.sh
-    chdir: /tmp/gnome-macos-remap
+  command: tmp/gnome-macos-remap/install.sh
+  changed_when: true

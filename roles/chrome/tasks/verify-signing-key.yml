@@ -67,6 +67,7 @@
 
 - name: Our key file matches our list of fingerprints
   shell: |
+    set -o pipefail && \
     ./keyfile_to_fingerprints.sh linux_signing_key.pub |
     diff -u key_fingerprints.txt /dev/stdin
   args:

@@ -2,3 +2,4 @@
 roles:
   - name: githubixx.docker
   - name: fubarhouse.golang
+  - name: mlangry.google-chrome

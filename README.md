@@ -9,6 +9,15 @@ sudo add-apt-repository --yes --update ppa:ansible/ansible \
 sudo apt install ansible
 ```
 
+# Files
+
+## Poetry 
+Used to run `yamllint` and `ansible-lint` locally to fix issues in GHA ci
+
+# Requirements.yml
+* Used to download ansible roles that install common tools like chrome, docker, golang
+* To add more roles, use command `ansible-galaxy install <role-name>`
+* `ansible.cfg` is used to specify target ansible directory
 
 # TODO
 

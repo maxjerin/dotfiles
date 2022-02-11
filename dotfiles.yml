@@ -17,7 +17,8 @@
       tags:
         - bootstrap
         - linux
-    - role: keyboard-mapping
+    - role: keyboard_mapping
+    - role: dev_tools
     - role: languages
       tags:
         - bootstrap

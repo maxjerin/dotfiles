@@ -7,6 +7,5 @@
 
 - name: Install powerline-go
   become: true
-  go_get:
-    - name: justjanne/powerline-go
-      url: github.com/justjanne/powerline-go
+  command: go install github.com/justjanne/powerline-go@latest
+  changed_when: true
