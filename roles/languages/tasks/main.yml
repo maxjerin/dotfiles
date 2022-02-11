@@ -4,4 +4,3 @@
     name: 
       - golang-go
     state: present
-  register: golang

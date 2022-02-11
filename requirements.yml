@@ -1,3 +1,4 @@
 ---
 roles:
   - name: githubixx.docker
+  - name: fubarhouse.golang
