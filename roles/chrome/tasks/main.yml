@@ -1,6 +1,6 @@
 ---
 - name: Verify key before install
-  include_tasks: 
+  include_tasks:
     file: verify-signing-key.yml
 
 - name: Install chrome

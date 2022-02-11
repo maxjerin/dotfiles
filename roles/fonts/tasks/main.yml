@@ -6,9 +6,9 @@
     state: present
 
 - name: Install Fonts
-  become: True
+  become: true
   apt:
-    name: 
+    name:
       - fonts-firacode
       - fonts-roboto
     state: present

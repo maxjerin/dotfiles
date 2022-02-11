@@ -19,14 +19,14 @@
   register: update
   failed_when: update.rc != 0 or update.stderr != ""
   args:
-    warn: no  # Can't use apt module.  It doesn't detect unreachable repos.
+    warn: false  # Can't use apt module.  It doesn't detect unreachable repos.
 
 - name: Debian - Test package is available in repo
   command: apt-get --print-uris download google-chrome-stable
   args:
-    warn: no  # can't use ansible apt module, it does not implement this
-  check_mode: False
-  changed_when: False
+    warn: false  # can't use ansible apt module, it does not implement this
+  check_mode: false
+  changed_when: false
 
 - name: Debian - Install Google Chrome
   package:

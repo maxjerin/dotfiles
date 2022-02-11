@@ -10,7 +10,7 @@
     msg: https://www.google.com/chrome/ or read
          https://www.google.com/intl/en/chrome/browser/privacy/eula_text.html
   delegate_to: 127.0.0.1
-  run_once: True
+  run_once: true
 
 # Signing keys, as per https://www.google.com/linuxrepositories/
 #
@@ -23,10 +23,10 @@
   get_url:
     url: https://dl.google.com/linux/linux_signing_key.pub
     dest: "{{ role_path }}/files/linux_signing_key.pub"
-    force: yes
+    force: true
   delegate_to: 127.0.0.1
-  run_once: True
-  check_mode: False
+  run_once: true
+  check_mode: false
 
 # Ansible says "upgrade to latest" is not considered best practice.
 # However, it might be useful here to remediate a system with an
@@ -71,8 +71,8 @@
     diff -u key_fingerprints.txt /dev/stdin
   args:
     chdir: /ansible-managed/google-chrome/
-  changed_when: False
-  check_mode: False
+  changed_when: false
+  check_mode: false
 
 - name: Supported OS - must use apt or dnf (or possibly yum)
   assert:
