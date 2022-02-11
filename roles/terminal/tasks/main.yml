@@ -1,11 +1,9 @@
 ---
 - name: Install terminal tools
-  become: true
   apt:
     name:
       - fzf
 
 - name: Install powerline-go
-  become: true
   command: go install github.com/justjanne/powerline-go@latest
   changed_when: true

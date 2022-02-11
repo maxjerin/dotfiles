@@ -7,7 +7,6 @@
   register: key
 
 - name: Debian - Add Google Chrome package source
-  become: true
   copy:
     src: google-chrome.list
     dest: /etc/apt/sources.list.d/

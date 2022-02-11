@@ -1,6 +1,5 @@
 ---
 - name: Install GoLang
-  become: true
   apt:
     name:
       - golang-go

@@ -1,7 +1,6 @@
 ---
 # https://github.com/petrstepanov/gnome-macos-remap
 - name: Install keyboard mapping tools
-  become: true
   apt:
     name:
       - git

@@ -1,12 +1,10 @@
 ---
 - name: Add universe repositroy
-  become: true
   apt_repository:
     repo: deb http://archive.ubuntu.com/ubuntu {{ ansible_distribution_release }} universe
     state: present
 
 - name: Install Fonts
-  become: true
   apt:
     name:
       - fonts-firacode
@@ -33,12 +31,10 @@
   ansible.builtin.command:
     cmd: mv PowerlineSymbols.otf /usr/share/fonts && fc-cache -vf /usr/share/fonts
     chdir: /tmp
-  become: true
   changed_when: true
 
 - name: Install 10-powerline-symbols.conf
   ansible.builtin.command:
     cmd: mv 10-powerline-symbols.conf /etc/fonts/conf.d
     chdir: /tmp
-  become: true
   changed_when: true
