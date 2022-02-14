@@ -1,5 +1,5 @@
 ---
-- name: Add Notion-Enhancer (unofficial port of Notion to Linux) deb 
+- name: Add Notion-Enhancer (unofficial port of Notion to Linux) deb
   apt_repository:
     update_cache: true
     repo: deb [trusted=yes] https://apt.fury.io/notion-repackaged/ /

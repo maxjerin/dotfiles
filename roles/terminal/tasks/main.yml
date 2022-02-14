@@ -1,7 +1,7 @@
 ---
 - name: Copy Zsh env file to point it to dotfiles repo
   command: cp files/.zshenv /home/maxjerin/dotfiles2
-  change_when: false
+  changed_when: false
 
 - name: Install terminal tools
   apt:
