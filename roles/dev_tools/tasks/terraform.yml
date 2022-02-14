@@ -1,0 +1,27 @@
+---
+- name: Install dependencies
+  apt:
+    name:
+      - gnupg
+      - software-properties-common
+      - curl
+    state: present
+
+- name: Import Terraform apt key
+  apt_key:
+    url: https://apt.releases.hashicorp.com/gpg
+    keyring: /etc/apt/trusted.gpg.d/terraform.gpg
+    state: present
+
+- name: Add terraform repository
+  apt_repository:
+    update_cache: true
+    repo: deb [arch=amd64] https://apt.releases.hashicorp.com {{ ansible_distribution_release }} main
+    state: present
+
+- name: Install terraform from repository
+  apt:
+    update_cache: true
+    name:
+      - terraform
+    state: present

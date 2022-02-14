@@ -5,3 +5,7 @@
     name:
       - git
       - autokey-gtk
+
+- name: Load terraform role script
+  include_tasks:
+    file: terraform.yml
