@@ -1,18 +1,18 @@
 ---
-- name: Debian - Import signing key
+- name: Import signing key
   apt_key:
     file: /ansible-managed/google-chrome/linux_signing_key.pub
     keyring: /etc/apt/trusted.gpg.d/google.gpg
   when: public_key.changed
   register: key
 
-- name: Debian - Add Google Chrome package source
+- name: Add Google Chrome package source
   copy:
     src: google-chrome.list
     dest: /etc/apt/sources.list.d/
   register: source
 
-- name: Debian - Test "apt-get update"
+- name: Test "apt-get update"
   command: apt-get update
   when: key.changed or source.changed
   register: update
@@ -20,14 +20,14 @@
   args:
     warn: false  # Can't use apt module.  It doesn't detect unreachable repos.
 
-- name: Debian - Test package is available in repo
+- name: Test package is available in repo
   command: apt-get --print-uris download google-chrome-stable
   args:
     warn: false  # can't use ansible apt module, it does not implement this
   check_mode: false
   changed_when: false
 
-- name: Debian - Install Google Chrome
+- name: Install Google Chrome
   package:
     name: google-chrome-stable
     state: present
