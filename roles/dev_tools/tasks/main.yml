@@ -1,6 +1,7 @@
 ---
 - name: Install keyboard mapping tools
   apt:
+    update_cache: true
     name:
       - git
       - autokey-gtk

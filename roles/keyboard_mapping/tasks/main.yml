@@ -2,6 +2,7 @@
 # https://github.com/petrstepanov/gnome-macos-remap
 - name: Install keyboard mapping tools
   apt:
+    update_cache: true
     name:
       - git
       - autokey-gtk
@@ -18,5 +19,5 @@
     mode: u+rwx
 
 - name: Run keybindings script
-  command: tmp/gnome-macos-remap/install.sh
+  command: /tmp/gnome-macos-remap/install.sh
   changed_when: true
