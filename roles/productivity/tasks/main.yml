@@ -1,12 +1,25 @@
 ---
 - name: Add Notion-Enhancer (unofficial port of Notion to Linux) deb
+  tags:
+    - notion
   apt_repository:
     update_cache: true
     repo: deb [trusted=yes] https://apt.fury.io/notion-repackaged/ /
     state: present
 
 - name: Install notion app
+  tags:
+    - notion
   apt:
     update_cache: true
     name:
       - notion-app-enhanced
+
+- name: Install slack
+  tags:
+    - slack
+  community.general.snap:
+    name: slack
+    state: present
+    channel: latest/stable
+    classic: yes
