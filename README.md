@@ -1,6 +1,5 @@
 # Dotfiles managed with Ansible
-
-# Install Ansible on Ubuntu
+## Installing Ansible on Ubuntu
 
 ```
 sudo apt update \
@@ -9,9 +8,16 @@ sudo add-apt-repository --yes --update ppa:ansible/ansible \
 sudo apt install ansible
 ```
 
+## Running Dotfiles
+
+```
+# Use local password
+ansible-playbook -i hosts -u <username> --ask-become-pass dotfiles.yml
+```
+
 # Files
 
-## Poetry 
+## Poetry
 Used to run `yamllint` and `ansible-lint` locally to fix issues in GHA ci
 
 # Requirements.yml
@@ -22,3 +28,9 @@ Used to run `yamllint` and `ansible-lint` locally to fix issues in GHA ci
 # TODO
 
 add macos integration test using this pattern https://github.com/geerlingguy/mac-dev-playbook/blob/master/.github/workflows/ci.yml
+
+# Inspirations
+
+* https://dev.to/smashse/devops-environment-on-macos-4gc7
+* https://github.com/geerlingguy/mac-dev-playbook
+* https://towardsthecloud.com/automatically-setup-macbook-development
