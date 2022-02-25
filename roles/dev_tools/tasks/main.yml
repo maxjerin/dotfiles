@@ -1,5 +1,5 @@
 ---
-- name: Install keyboard mapping tools
+- name: Install terraform dependencies
   apt:
     update_cache: true
     name:
