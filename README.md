@@ -8,10 +8,16 @@ sudo add-apt-repository --yes --update ppa:ansible/ansible \
 sudo apt install ansible
 ```
 
-## Running Dotfiles
+## Executing Dotfiles
 
 ```
-# Use local password
+# Run entire playbook
+ansible-playbook -i hosts dotfiles.yml
+
+# Run individual tags
+ansible-playbook -i hosts dotfiles.yml --tags "<tag>"
+
+# Run playbook with specific user
 ansible-playbook -i hosts -u <username> --ask-become-pass dotfiles.yml
 ```
 
