@@ -1,7 +1,7 @@
 ---
 - name: Add Notion-Enhancer (unofficial port of Notion to Linux) deb
   tags:
-    - notion
+    - notion, linux
   apt_repository:
     update_cache: true
     repo: deb [trusted=yes] https://apt.fury.io/notion-repackaged/ /
@@ -9,7 +9,7 @@
 
 - name: Install notion app
   tags:
-    - notion
+    - notion, linux
   apt:
     update_cache: true
     name:
@@ -17,9 +17,17 @@
 
 - name: Install slack
   tags:
-    - slack
+    - slack, linux
   community.general.snap:
     name: slack
     state: present
     channel: latest/stable
     classic: yes
+
+- name: Install WhatsApp for Linux
+  tags:
+    - whatsapp, linux
+  community.general.snap:
+    name: whatsapp-for-linux
+    state: present
+    channel: latest/stable
