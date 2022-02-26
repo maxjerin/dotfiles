@@ -1,7 +1,50 @@
 ---
 - name: Install GoLang
+  tags:
+    - golang, linux
   apt:
     update_cache: true
     name:
       - golang-go
     state: present
+
+- name: Install pyenv build dependencies
+  tags:
+    - pyenv, linux
+  apt:
+    update_cache: true
+    name:
+      - make
+      - build-essential
+      - libssl-dev
+      - zlib1g-dev
+      - libbz2-dev
+      - libreadline-dev
+      - libsqlite3-dev
+      - wget
+      - curl
+      - llvm
+      - libncursesw5-dev
+      - xz-utils
+      - tk-dev
+      - libxml2-dev
+      - libxmlsec1-dev
+      - libffi-dev
+      - liblzma-dev
+    state: present
+
+- name: Download pyenv repo
+  tags:
+    - pyenv, linux
+  ansible.builtin.git:
+    repo: git@github.com:pyenv/pyenv.git
+    dest: $HOME/.pyenv
+    version: master
+
+- name: Configure pyenv in zshrc
+  tags:
+    - pyenv, linux
+  shell: |
+    echo 'eval "$(pyenv init -)"' >> /home/maxjerin/Development/repos/dotfiles2/.zshrc
+  check_mode: false
+  changed_when: false
