@@ -22,7 +22,7 @@
     name: slack
     state: present
     channel: latest/stable
-    classic: yes
+    classic: true
 
 - name: Install WhatsApp for Linux
   tags:
