@@ -48,3 +48,23 @@
     echo 'eval "$(pyenv init -)"' >> /home/maxjerin/Development/repos/dotfiles2/.zshrc
   check_mode: false
   changed_when: false
+
+# sudo apt install openjdk-11-jdk
+
+- name: Download jenv repo
+  tags:
+    - jenv
+  ansible.builtin.git:
+    repo: git@github.com:jenv/jenv.git
+    key_file: '/home/maxjerin/.ssh/id_github'
+    dest: $HOME/.jenv
+    version: master
+
+- name: Configure jenv in zshrc
+  tags:
+    - jenv
+  shell: |
+    echo 'export PATH="$HOME/.jenv/bin:$PATH"' >> /home/maxjerin/Development/repos/dotfiles2/.zshrc
+    echo 'eval "$(jenv init -)"' >> /home/maxjerin/Development/repos/dotfiles2/.zshrc
+  check_mode: false
+  changed_when: false
