@@ -15,6 +15,12 @@ sudo apt install ansible
 2. Download this repo
 3. Install Homebrew
 4. Install pyenv `brew install pyenv`
+4.a  Update .zshrc file with
+```
+echo 'eval "$(pyenv init --path)"' >> ~/.zprofile
+
+echo 'eval "$(pyenv init -)"' >> ~/.zshrc
+```
 5. Install python 3.9.8 `pyenv install 3.9.8`
 6. Set python 3.9.8 as default `pyenv global 3.9.8`
 7. Install poetry `pip install poetry`
