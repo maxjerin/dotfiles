@@ -62,6 +62,7 @@ ENABLE_CORRECTION="true"
 
 # History file settings
 SAVEHIST=1000  # Save most-recent 1000 lines
+HISTSIZE=100
 HISTFILE=~/.zsh_history
 
 # Would you like to use another custom folder than $ZSH/custom?
@@ -119,7 +120,7 @@ export NVM_DIR="$HOME/.nvm"
 #  fi
 #
 #  print -n "%{%f%}"
-#  CURRENT_BG='' 
+#  CURRENT_BG=''
 #
 #  #Adds the new line and ➜ as the start character.
 #  printf "\n ➜";
@@ -210,3 +211,31 @@ function install_powerline_precmd() {
 if [ "$TERM" != "linux" ] && [ -f "$GOPATH/bin/powerline-go" ]; then
     install_powerline_precmd
 fi
+export PATH="$HOME/.jenv/bin:$PATH"
+eval "$(jenv init -)"
+export PATH="$HOME/.jenv/bin:$PATH"
+eval "$(jenv init -)"
+export PATH="$HOME/.jenv/bin:$PATH"
+eval "$(jenv init -)"
+export PATH="$HOME/.jenv/bin:$PATH"
+eval "$(jenv init -)"
+export PATH="$HOME/.jenv/bin:$PATH"
+eval "$(jenv init -)"
+export PATH="$HOME/.jenv/bin:$PATH"
+eval "$(jenv init -)"
+export PATH="$HOME/.jenv/bin:$PATH"
+eval "$(jenv init -)"
+export PATH="$HOME/.jenv/bin:$PATH"
+eval "$(jenv init -)"
+export PATH="$HOME/.jenv/bin:$PATH"
+eval "$(jenv init -)"
+export PATH="$HOME/.jenv/bin:$PATH"
+eval "$(jenv init -)"
+export PATH="$HOME/.jenv/bin:$PATH"
+eval "$(jenv init -)"
+export PATH="$HOME/.jenv/bin:$PATH"
+eval "$(jenv init -)"
+export PATH="$HOME/.jenv/bin:$PATH"
+eval "$(jenv init -)"
+export PATH="$HOME/.jenv/bin:$PATH"
+eval "$(jenv init -)"
