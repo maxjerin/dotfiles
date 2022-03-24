@@ -1,5 +1,6 @@
 # Dotfiles managed with Ansible
-## Installing Ansible on Ubuntu
+
+## Setting up script on Ubuntu
 
 ```
 sudo apt update \
@@ -7,6 +8,18 @@ sudo apt install software-properties-common \
 sudo add-apt-repository --yes --update ppa:ansible/ansible \
 sudo apt install ansible
 ```
+
+## Setting up script on MacOs
+
+1. Install git
+2. Download this repo
+3. Install Homebrew
+4. Install pyenv `brew install pyenv`
+5. Install python 3.9.8 `pyenv install 3.9.8`
+6. Set python 3.9.8 as default `pyenv global 3.9.8`
+7. Install poetry `pip install poetry`
+8. Init poetry `poetry install`
+
 
 ## Executing Dotfiles
 
