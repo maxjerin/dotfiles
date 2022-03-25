@@ -40,19 +40,32 @@ ansible-playbook -i hosts dotfiles.yml --tags "<tag>"
 ansible-playbook -i hosts -u <username> --ask-become-pass dotfiles.yml
 ```
 
+### MacOs
+
+```
+ansible-playbook dotfiles.yml \
+-i hosts \
+--tags macos \
+--extra-vars="ansible_python_interpreter=$(which python)"
+```
+
+
 # Files
 
 ## Poetry
 Used to run `yamllint` and `ansible-lint` locally to fix issues in GHA ci
+
+# Ad-Hoc Commands
+Get Mac Os values of settings
+```
+ansible localhost -i hosts -m community.general.osx_defaults -a "domain=NSGlobalDomain key=KeyRepeat state=list value=1" --extra-vars="ansible_python_interpreter=$(which python)"
+```
 
 # Requirements.yml
 * Used to download ansible roles that install common tools like chrome, docker, golang
 * To add more roles, use command `ansible-galaxy install <role-name>`
 * `ansible.cfg` is used to specify target ansible directory
 
-# TODO
-
-add macos integration test using this pattern https://github.com/geerlingguy/mac-dev-playbook/blob/master/.github/workflows/ci.yml
 
 # Inspirations
 
