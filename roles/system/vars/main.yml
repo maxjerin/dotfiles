@@ -4,7 +4,7 @@ defaults:
     key: InitialKeyRepeat
     name: Set very low key repeat rates
     type: int
-    value: '25'
+    value: '1'
   - domain: NSGlobalDomain
     key: KeyRepeat
     name: Set very low key repeat rates
@@ -45,6 +45,7 @@ homebrew:
     - k9s
     - kubectl
     - mas
+    - terraform
     - vault
     - yamllint
     - zsh
@@ -52,6 +53,13 @@ homebrew:
     - zsh-syntax-highlighting
   casks:
     - 1password-cli
+    - bartender
+    - docker
+    - iterm2
+    - karabiner-elements
+    - notion
+    - notion-enhanced
+    - raycast
     - visual-studio-code
   mas:
     - 961632517   # Be Focused Pro
@@ -60,3 +68,4 @@ homebrew:
     - 1017470484  # Next Meeting
     - 1056643111  # Clocker
     - 937984704   # Amphetamine
+    - 1333542190  # 1Password
