@@ -1,0 +1,14 @@
+---
+- name: Copy Zsh env file to point it to dotfiles repo
+  command: cp files/.zshenv /home/maxjerin/dotfiles2
+  changed_when: false
+
+- name: Install terminal tools
+  apt:
+    update_cache: true
+    name:
+      - fzf
+
+- name: Install powerline-go
+  command: go install github.com/justjanne/powerline-go@latest
+  changed_when: true

@@ -5,6 +5,8 @@
       - gnupg
       - software-properties-common
       - curl
+      - git
+      - autokey-gtk
     state: present
 
 - name: Import Terraform apt key

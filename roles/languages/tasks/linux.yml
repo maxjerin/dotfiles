@@ -1,0 +1,10 @@
+---
+- name: Install GoLang
+  tags:
+    - golang-linux
+    - linux
+  apt:
+    update_cache: true
+    name:
+      - golang-go
+    state: present

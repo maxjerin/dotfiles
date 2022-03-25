@@ -1,15 +1,14 @@
 ---
-- name: Install terraform dependencies
-  apt:
-    update_cache: true
-    name:
-      - git
-      - autokey-gtk
-
 - name: Load terraform role script
   include_tasks:
-    file: terraform.yml
+    file: terraform-linux.yml
+  tags:
+    - terraform-linux
+    - linux
 
 - name: Load docker role script
   include_tasks:
-    file: docker.yml
+    file: docker-linux.yml
+  tags:
+    - docker-linux
+    - linux

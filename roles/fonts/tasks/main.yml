@@ -1,42 +1,7 @@
 ---
-- name: Add universe repositroy
-  apt_repository:
-    update_cache: true
-    repo: deb http://archive.ubuntu.com/ubuntu {{ ansible_distribution_release }} universe
-    state: present
-
-- name: Install Fonts
-  apt:
-    update_cache: true
-    name:
-      - fonts-firacode
-      - fonts-roboto
-    state: present
-
-
-# https://swetankraj.github.io/ubuntu-terminal-powelinego/
-- name: Download Powerline Symbols
-  get_url:
-    url: https://github.com/powerline/powerline/raw/develop/font/PowerlineSymbols.otf
-    dest: /tmp/PowerlineSymbols.otf
-  changed_when: false
-# checksum: figure out how to do this?
-
-- name: Download 10-powerline-symbols
-  get_url:
-    url: https://github.com/powerline/powerline/raw/develop/font/10-powerline-symbols.conf
-    dest: /tmp/10-powerline-symbols.conf
-  changed_when: false
-# checksum: figure out how to do this?
-
-- name: Install Powerline Symbol font
-  ansible.builtin.command:
-    cmd: mv PowerlineSymbols.otf /usr/share/fonts && fc-cache -vf /usr/share/fonts
-    chdir: /tmp
-  changed_when: false
-
-- name: Install 10-powerline-symbols.conf
-  ansible.builtin.command:
-    cmd: mv 10-powerline-symbols.conf /etc/fonts/conf.d
-    chdir: /tmp
-  changed_when: false
+- name: Load font scripts
+  include_tasks:
+    file: linux-fonts.yml
+  tags:
+    - fonts-linux
+    - linux

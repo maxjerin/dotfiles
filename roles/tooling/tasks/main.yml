@@ -1,7 +1,7 @@
 ---
-- name: Load linux language scripts
+- name: Load linux tooling
   include_tasks:
     file: linux.yml
   tags:
-    - languages-linux
+    - tooling-linux
     - linux
