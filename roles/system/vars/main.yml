@@ -30,3 +30,32 @@ defaults:
     name: Auto-hide the Dock
     type: bool
     value: 'true'
+
+homebrew:
+  taps:
+    - homebrew/bundle
+    - homebrew/cask
+    - homebrew/cask-drivers
+    - homebrew/cask-fonts
+    - homebrew/core
+  formulas:
+    - awscli
+    - fzf
+    - helm
+    - k9s
+    - kubectl
+    - vault
+    - yamlint
+    - zsh
+    - zsh-autosuggestions
+    - zsh-syntax-highlighting
+  cask:
+    - 1password-cli
+    - visual-studio-code
+  mas:
+    - 961632517   # Be Focused Pro
+    - 1476964367  # In Your Face
+    - 1099568401  # Home Assistant
+    - 1017470484  # Next Meeting
+    - 1056643111  # Clocker
+    - 937984704   # Amphetamine

@@ -9,3 +9,35 @@
   loop: "{{ defaults }}"
   tags:
     - macos
+
+- name: Install Homebrew taps
+  community.general.homebrew_tap:
+    name: "{{ homebrew['taps'] }}"
+  tags:
+    - macos
+
+- name: Install Homebrew formulas
+  community.general.homebrew:
+    name: "{{ homebrew['formulas'] }}"
+  tags:
+    - macos
+
+- name: Install Homebrew casks
+  community.general.homebrew_cask:
+    name: "{{ homebrew['casks'] }}"
+    accept_external_apps: true
+  tags:
+    - macos
+
+- name: Check Mac App Store authentication status
+  ansible.builtin.command: mas account
+  changed_when: false
+  failed_when: mas_account['rc'] not in [0,1]
+  register: mas_account
+  tags: macos
+
+- name: Install apps
+  ansible.builtin.command: "mas install {{ item }}"
+  loop: "{{ homebrew['mas'] }}"
+  when: mas_account['rc'] == 0
+  tags: macos
