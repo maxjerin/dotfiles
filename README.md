@@ -56,6 +56,8 @@ add macos integration test using this pattern https://github.com/geerlingguy/mac
 
 # Inspirations
 
+* https://github.com/bradleyfrank/ansible
+
 * https://dev.to/smashse/devops-environment-on-macos-4gc7
 * https://github.com/geerlingguy/mac-dev-playbook
 * https://towardsthecloud.com/automatically-setup-macbook-development
