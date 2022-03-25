@@ -7,3 +7,5 @@
     type: "{{ item['type'] | default(omit) }}"
     value: "{{ item['value'] }}"
   loop: "{{ defaults }}"
+  tags:
+    - macos
