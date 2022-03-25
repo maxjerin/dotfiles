@@ -45,11 +45,11 @@ homebrew:
     - k9s
     - kubectl
     - vault
-    - yamlint
+    - yamllint
     - zsh
     - zsh-autosuggestions
     - zsh-syntax-highlighting
-  cask:
+  casks:
     - 1password-cli
     - visual-studio-code
   mas:
