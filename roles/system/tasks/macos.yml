@@ -40,6 +40,7 @@
 - name: Install apps
   ansible.builtin.command: "mas install {{ item }}"
   loop: "{{ homebrew['mas'] }}"
-  when: mas_account['rc'] == 0
+  # Ignored for Monterey MacOS 12
+  # when: mas_account['rc'] == 0
   tags:
     - macos
