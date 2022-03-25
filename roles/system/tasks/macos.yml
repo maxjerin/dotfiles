@@ -34,10 +34,12 @@
   changed_when: false
   failed_when: mas_account['rc'] not in [0,1]
   register: mas_account
-  tags: macos
+  tags:
+    - macos
 
 - name: Install apps
   ansible.builtin.command: "mas install {{ item }}"
   loop: "{{ homebrew['mas'] }}"
   when: mas_account['rc'] == 0
-  tags: macos
+  tags:
+    - macos
