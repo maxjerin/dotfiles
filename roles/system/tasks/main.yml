@@ -1,0 +1,6 @@
+---
+- name: Load linux language scripts
+  include_tasks:
+    file: macos.yml
+  tags:
+    - macos

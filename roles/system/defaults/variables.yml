@@ -1,0 +1,12 @@
+---
+defaults:
+  - domain: NSGlobalDomain
+    key: InitialKeyRepeat
+    name: Set very low key repeat rates
+    type: int
+    value: '25'
+  - domain: NSGlobalDomain
+    key: KeyRepeat
+    name: Set very low key repeat rates
+    type: int
+    value: '1'
