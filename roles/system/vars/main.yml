@@ -41,10 +41,13 @@ homebrew:
   formulas:
     - awscli
     - fzf
+    - go
     - helm
     - k9s
     - kubectl
     - mas
+    - powerline-go
+    - pyenv
     - terraform
     - vault
     - yamllint
