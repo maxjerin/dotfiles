@@ -1,6 +1,14 @@
-# References
+# TODO
 
-https://github.com/kylecrawshaw/ansible-laptop-config/blob/master/vars/main.yml
+/usr/local/Cellar is where all formulae get installed
+
+* [ ] select source code pro font in iTerm
+* [ ] install powerline fonts
+* [ ] setup zsh
+    * [ ] abbrevation
+    * [ ] fzf
+    * [ ] autocomplete
+* [ ] raycast swap disable command + space
 
 # DMG Installer Handler
 
@@ -27,3 +35,7 @@ https://github.com/kylecrawshaw/ansible-laptop-config/blob/master/vars/main.yml
 
 ## Reference
 https://docs.ansible.com/ansible/latest/collections/community/general/launchd_module.html
+
+# References
+
+https://github.com/kylecrawshaw/ansible-laptop-config/blob/master/vars/main.yml
