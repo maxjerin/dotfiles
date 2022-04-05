@@ -46,6 +46,7 @@ homebrew:
     - k9s
     - kubectl
     - mas
+    - nvm
     - powerline-go
     - pyenv
     - terraform
@@ -58,10 +59,12 @@ homebrew:
     - 1password-cli
     - bartender
     - docker
+    # - intellij-idea
     - iterm2
+    # - goland
     - karabiner-elements
     - notion
-    - notion-enhanced
+    # - notion-enhanced
     - raycast
     - visual-studio-code
   mas:
