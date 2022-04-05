@@ -44,3 +44,8 @@
   # when: mas_account['rc'] == 0
   tags:
     - macos
+
+# Setup app for startup
+# one password, bartender
+# remove app from startup
+#   maps, phots, facetime, calendar, contacts, remidners, notes, apple tv, music, podcast, news, pages, numbers, keynote, mail, safari

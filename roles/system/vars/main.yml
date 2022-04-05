@@ -62,6 +62,7 @@ homebrew:
     # - intellij-idea
     - iterm2
     # - goland
+    - google-chrome
     - karabiner-elements
     - notion
     # - notion-enhanced
