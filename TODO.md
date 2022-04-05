@@ -13,6 +13,7 @@
 * [ ] raycast swap disable command + space
 * [ ] disable all spotlight indexing
 * [ ] install nvm
+* [ ] update bootstrap to support both macos and linux
 # DMG Installer Handler
 
 https://www.reddit.com/r/ansible/comments/6w6nnh/ansible_mac_dmg_installs/
