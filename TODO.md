@@ -2,14 +2,17 @@
 
 /usr/local/Cellar is where all formulae get installed
 
-* [ ] select source code pro font in iTerm
+* [ ] Configure iTerm2
+    * [ ] select source code pro font in iTerm
+    * [ ] set font size to 14
 * [ ] install powerline fonts
 * [ ] setup zsh
     * [ ] abbrevation
     * [ ] fzf
     * [ ] autocomplete
 * [ ] raycast swap disable command + space
-
+* [ ] disable all spotlight indexing
+* [ ] install nvm
 # DMG Installer Handler
 
 https://www.reddit.com/r/ansible/comments/6w6nnh/ansible_mac_dmg_installs/
