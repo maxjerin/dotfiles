@@ -1,0 +1,25 @@
+# Git
+abbr gco="git checkout"
+
+# Docker
+abbr add d=docker
+abbr add dr="docker restart"
+abbr add dc="docker compose"
+abbr add dcr="docker compose restart"
+abbr add dcu="docker compose up"
+abbr add dps="docker ps"
+abbr add dpsa="docker ps -a"
+dsr() {
+ docker stop "$1" && docker rm "$1"
+}
+
+# Python
+abbr add p=python
+abbr add p3=python3
+
+# NPM
+abbr add nr="npm run"
+
+# K8
+abbr add k=kubectl
+abbr add mk=minikube
