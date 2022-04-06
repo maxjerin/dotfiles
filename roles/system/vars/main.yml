@@ -38,6 +38,7 @@ homebrew:
     - homebrew/cask-drivers
     - homebrew/cask-fonts
     - homebrew/core
+    - olets/tap/zsh-abbr
   formulas:
     - awscli
     - fzf
@@ -67,7 +68,9 @@ homebrew:
     - notion
     # - notion-enhanced
     - raycast
+    - slack
     - visual-studio-code
+    - zoom
   mas:
     - 961632517   # Be Focused Pro
     - 1476964367  # In Your Face
