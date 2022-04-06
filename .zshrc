@@ -3,23 +3,11 @@ eval "$(/opt/homebrew/bin/brew shellenv)"
 export PATH=/opt/homebrew/bin:$PATH
 export PATH=/opt/homebrew/sbin:$PATH
 
-# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
-# Initialization code that may require console input (password prompts, [y/n]
-# confirmations, etc.) must go above this block; everything else may go below.
-# if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-#   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
-# fi
-
 # If you come from bash you might have to change your $PATH.
 
 # Path to your oh-my-zsh installation.
 # export ZSH="~/maxjerin/.oh-my-zsh"
 
-# Set name of the theme to load --- if set to "random", it will
-# load a random theme each time oh-my-zsh is loaded, in which case,
-# to know which specific one was loaded, run: echo $RANDOM_THEME
-# See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
-# ZSH_THEME="powerlevel10k/powerlevel10k"
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
@@ -154,48 +142,49 @@ export LIBRARY_PATH=$LIBRARY_PATH:/usr/local/opt/openssl/lib/
 # The next line enables shell command completion for gcloud.
 # if [ -f '/Users/maxjerin/Downloads/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/maxjerin/Downloads/google-cloud-sdk/completion.zsh.inc'; fi
 
-# export PATH="$HOME/.jenv/bin:$PATH"
-# eval "$(jenv init -)"
-
 # MacOSX
 # export CPATH=/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include
 # export CPATH=`xcrun --show-sdk-path`/usr/include
 
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-# [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
-# source ~/powerlevel10k/powerlevel10k.zsh-theme
-
 # Fuzzy finder
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
-# Autosuggest
-source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
 
-# Abbreviation
-source ~/.zsh/zsh-abbr/zsh-abbr.zsh
+ZSH_PATH="~/.zsh"
+if [[ $(uname -s) == 'Darwin' ]]; then
+  if type brew &>/dev/null; then
+    FPATH=$(brew --prefix)/share/zsh-completions:$FPATH
 
-# Syntax highlighting
-source ~/.zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+    autoload -Uz compinit
+    compinit
+  fi
+else
+  # Autosuggest
+  source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
 
+  # Abbreviation
+  source ~/.zsh/zsh-abbr/zsh-abbr.zsh
 
-# Autocomplete
-source ~/.zsh/zsh-autocomplete/zsh-autocomplete.plugin.zsh
+  # Syntax highlighting
+  source ~/.zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
-# Groovy Home
-# export GROOVY_HOME=/usr/local/opt/groovy/libexec
+  # Autocomplete
+  source ~/.zsh/zsh-autocomplete/zsh-autocomplete.plugin.zsh
+fi
 
 # PyEnv
 export PATH=$PATH:$HOME/.pyenv/bin
 eval "$(pyenv init -)"
 
-# Created by `pipx` on 2021-06-14 15:23:32
-# export PATH="$PATH:/Users/maxjerin/.local/bin"
+# export PATH="$HOME/.jenv/bin:$PATH"
+# eval "$(jenv init -)"
 
-export PATH=$PATH:/usr/local/go/bin
+if [[ $(uname -s) == 'Darwin' ]]; then
+  export PATH=$PATH:$(brew --prefix)/bin
+  POWERLINE_GO=$(brew --prefix)/bin/powerline-go
 
-GOPATH=$HOME/go
-function powerline_precmd() {
-    PS1="$($GOPATH/bin/powerline-go -error $? -jobs ${${(%):%j}:-0})"
+  function powerline_precmd() {
+    PS1="$($POWERLINE_GO -error $? -jobs ${${(%):%j}:-0})"
 
     # Uncomment the following line to automatically clear errors after showing
     # them once. This not only clears the error for powerline-go, but also for
@@ -203,19 +192,21 @@ function powerline_precmd() {
     # sure this is what you want.
 
     #set "?"
-}
+  }
 
-function install_powerline_precmd() {
-  for s in "${precmd_functions[@]}"; do
-    if [ "$s" = "powerline_precmd" ]; then
-      return
-    fi
-  done
-  precmd_functions+=(powerline_precmd)
-}
+  function install_powerline_precmd() {
+    for s in "${precmd_functions[@]}"; do
+      if [ "$s" = "powerline_precmd" ]; then
+        return
+      fi
+    done
+    precmd_functions+=(powerline_precmd)
+  }
 
-if [ "$TERM" != "linux" ] && [ -f "$GOPATH/bin/powerline-go" ]; then
+  if [ "$TERM" != "linux" ] && [ -f "$POWERLINE_GO" ]; then
     install_powerline_precmd
+  fi
 fi
-export PATH="$HOME/.jenv/bin:$PATH"
-eval "$(jenv init -)"
+
+# Remove all duplicates from $PATH
+typeset -U PATH
