@@ -41,6 +41,7 @@ homebrew:
     - olets/tap/zsh-abbr
   formulas:
     - awscli
+    - docker
     - fzf
     - go
     - helm
