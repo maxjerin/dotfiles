@@ -2,17 +2,25 @@
 
 set -e
 
+# Zsh setup on MacOS
+if [[ $(uname -s) == 'Darwin' ]]; then
 
-# TODO
-# Check if 
-# install homebrew
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
-# source zshrc for homebrew
-source ~/.zshrc
+    # source zshrc for homebrew
+    source ~/.zshrc
 
-# install ansible using homebrew
-brew install ansible
+    # install ansible using homebrew
+    brew install ansible
+
+    # Link zshrc from dotfiles
+    ln -s $(pwd)/.zshrc ~/.zshrc
+    ln -s $(pwd)/.zsh_abbr ~/.zsh_abbr
+
+    if [[ $(uname -s) == 'Darwin' ]]; then
+        chmod -R go-w '$(brew --prefix)/share/zsh'
+    fi
+fi
 
 # Dotfiles' project root directory
 ROOTDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -27,7 +35,11 @@ PLAYBOOK="$ROOTDIR/dotfiles.yml"
 # Runs Ansible playbook using our user.
 ansible-playbook -i "$HOSTS" "$PLAYBOOK" --tags "macos"
 
-# Link zshrc from dotfiles
-ln -s $(pwd)/.zshrc ~/.zshrc
+
+if [[ $(uname -s) != 'Darwin' ]]; then
+    # Link zshrc from dotfiles
+    ln -s $(pwd)/.zshrc ~/.zshrc
+    ln -s $(pwd)/.zsh_abbr ~/.zsh_abbr
+fi
 
 exit 0
