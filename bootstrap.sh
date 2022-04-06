@@ -16,10 +16,6 @@ if [[ $(uname -s) == 'Darwin' ]]; then
     # Link zshrc from dotfiles
     ln -s $(pwd)/.zshrc ~/.zshrc
     ln -s $(pwd)/.zsh_abbr ~/.zsh_abbr
-
-    if [[ $(uname -s) == 'Darwin' ]]; then
-        chmod -R go-w '$(brew --prefix)/share/zsh'
-    fi
 fi
 
 # Dotfiles' project root directory
