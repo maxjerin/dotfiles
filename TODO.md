@@ -14,6 +14,9 @@
 * [ ] disable all spotlight indexing
 * [ ] install nvm
 * [ ] update bootstrap to support both macos and linux
+* [ ] config ssh config
+    * [ ] Host -> AddKeysToAgent yes
+    * [ ] Host -> UseKeyChain yes
 # DMG Installer Handler
 
 https://www.reddit.com/r/ansible/comments/6w6nnh/ansible_mac_dmg_installs/
