@@ -1,7 +1,9 @@
-#  if M1 mac then use the following
-eval "$(/opt/homebrew/bin/brew shellenv)"
-export PATH=/opt/homebrew/bin:$PATH
-export PATH=/opt/homebrew/sbin:$PATH
+if [[ $(uname -s) == 'Darwin' ]] && [[ $(uname -m) == 'arm64' ]]; then
+  #  if M1 mac then use the following
+  eval "$(/opt/homebrew/bin/brew shellenv)"
+  export PATH=$(brew --prefix)/bin:$PATH
+  export PATH=$(brew --prefix)/sbin:$PATH
+fi
 
 # If you come from bash you might have to change your $PATH.
 
@@ -130,9 +132,6 @@ export NVM_DIR="$HOME/.nvm"
 # export CPATH=/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include
 # export CPATH=`xcrun --show-sdk-path`/usr/include
 
-# Fuzzy finder
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-
 
 ZSH_PATH="~/.zsh"
 if [[ $(uname -s) == 'Darwin' ]]; then
@@ -145,6 +144,9 @@ if [[ $(uname -s) == 'Darwin' ]]; then
     load_path "zsh-syntax-highlighting"
   fi
 else
+  # Fuzzy finder
+  [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
   # Autosuggest
   source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
 
@@ -193,6 +195,9 @@ if [[ $(uname -s) == 'Darwin' ]]; then
     install_powerline_precmd
   fi
 fi
+
+# WORK ZSHRC
+source ~/.zshrc_company
 
 # Remove all duplicates from $PATH
 typeset -U PATH
