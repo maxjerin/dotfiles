@@ -1,3 +1,5 @@
+#!/bin/sh
+
 # Git
 abbr gco="git checkout"
 
@@ -23,3 +25,6 @@ abbr add nr="npm run"
 # K8
 abbr add k=kubectl
 abbr add mk=minikube
+
+# General
+abbr add ll="ls -latr"
