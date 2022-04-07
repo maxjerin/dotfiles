@@ -48,6 +48,7 @@ homebrew:
     - k9s
     - kubectl
     - mas
+    - minikube
     - nvm
     - powerline-go
     - pyenv
