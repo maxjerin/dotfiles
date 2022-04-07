@@ -52,6 +52,7 @@ homebrew:
     - nvm
     - powerline-go
     - pyenv
+    - shellcheck
     - terraform
     - vault
     - yamllint
@@ -62,6 +63,7 @@ homebrew:
     - 1password-cli
     - bartender
     - docker
+    - emacs
     # - intellij-idea
     - iterm2
     # - goland
@@ -81,3 +83,11 @@ homebrew:
     - 1056643111  # Clocker
     - 937984704   # Amphetamine
     - 1333542190  # 1Password
+
+
+repos:
+  - name: spacemacs  # Avoid name conflict with repo packaged with rpm: 1password.repo
+    description: Spacemacs
+    baseurl: https://github.com/syl20bnr/spacemacs
+    # gpgkey: https://downloads.1password.com/linux/keys/1password.asc
+    system_type: [desktop]
