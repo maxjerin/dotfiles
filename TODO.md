@@ -29,6 +29,9 @@
     * [ ] one password, bartender
 12. [ ] Remove app from launcher
     * [ ] maps, phots, facetime, calendar, contacts, remidners, notes, apple tv, music, podcast, news, pages, numbers, keynote, mail, safari
+13. [ ] configure raycast import/export using dotfiles
+    * [ ] configure script command locations
+        * [ ] check script for OpenVpn
 
 # DMG Installer Handler
 
