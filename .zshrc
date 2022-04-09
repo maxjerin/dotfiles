@@ -167,6 +167,10 @@ eval "$(pyenv init -)"
 # export PATH="$HOME/.jenv/bin:$PATH"
 # eval "$(jenv init -)"
 
+# Bazel
+export PATH=${HOME}/bin:$PATH
+source ${HOME}/.bazel/bin/bazel-complete.bash
+
 if [[ $(uname -s) == 'Darwin' ]]; then
   export PATH=$PATH:$(brew --prefix)/bin
   POWERLINE_GO=$(brew --prefix)/bin/powerline-go
