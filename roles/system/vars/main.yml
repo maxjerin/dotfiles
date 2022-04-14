@@ -73,6 +73,7 @@ homebrew:
     - iterm2
     # - goland
     - google-chrome
+    - grammarly-desktop
     - karabiner-elements
     - notion
     # - notion-enhanced
