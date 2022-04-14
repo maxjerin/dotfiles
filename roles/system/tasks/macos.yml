@@ -9,6 +9,7 @@
   loop: "{{ defaults }}"
   tags:
     - macos
+    - macos_settings
 
 - name: Install Homebrew taps
   community.general.homebrew_tap:
