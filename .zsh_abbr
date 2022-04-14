@@ -2,6 +2,11 @@
 
 # Git
 abbr gco="git checkout"
+abbr gst="git status"
+abbr gd="git diff"
+
+# Bazel
+abbr add b="bazel"
 
 # Docker
 abbr add d=docker
