@@ -46,6 +46,8 @@ homebrew:
     # adding this back always clashes with casks
     # - docker
     - emacs-mac
+    - font-source-code-pro
+    - font-fira-code
     - fzf
     - go
     - helm
@@ -57,6 +59,7 @@ homebrew:
     - powerline-go
     - pyenv
     - shellcheck
+    - svn
     - terraform
     - vault
     - yamllint
