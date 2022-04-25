@@ -56,8 +56,8 @@ ENABLE_CORRECTION="true"
 # HIST_STAMPS="mm/dd/yyyy"
 
 # History file settings
-SAVEHIST=1000  # Save most-recent 1000 lines
-HISTSIZE=100
+SAVEHIST=500  # Save most-recent 500 lines
+HISTSIZE=500
 HISTFILE=~/.zsh_history
 
 # Would you like to use another custom folder than $ZSH/custom?
