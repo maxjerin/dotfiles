@@ -39,7 +39,7 @@ homebrew:
     - homebrew/cask-fonts
     - homebrew/core
     - railwaycat/emacsmacport
-
+    - warrensbox/tap/tfswitch
   formulas:
     - awscli
     # Don't uncomment this,
@@ -60,7 +60,6 @@ homebrew:
     - pyenv
     - shellcheck
     - svn
-    - terraform
     - vault
     - yamllint
     - zsh
@@ -78,6 +77,7 @@ homebrew:
     - google-chrome
     - grammarly-desktop
     - karabiner-elements
+    - localstack
     - notion
     # - notion-enhanced
     - raycast
