@@ -83,6 +83,7 @@ homebrew:
     - raycast
     - rescuetime
     - slack
+    - stoplight-studio
     - visual-studio-code
     - whatsapp
     - zoom
@@ -94,6 +95,7 @@ homebrew:
     - 1056643111  # Clocker
     - 937984704   # Amphetamine
     - 1333542190  # 1Password
+    - 635757879   # Calca
 
 
 repos:
