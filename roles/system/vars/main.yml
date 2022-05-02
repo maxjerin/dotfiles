@@ -80,6 +80,7 @@ homebrew:
     - localstack
     - notion
     # - notion-enhanced
+    - postico
     - raycast
     - rescuetime
     - slack
