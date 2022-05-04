@@ -67,7 +67,10 @@ homebrew:
     - zsh-syntax-highlighting
   casks:
     - 1password-cli
+    - 1password
+    - appcleaner
     - bartender
+    - clocker
     - docker
     - emacs
     - font-source-code-pro
@@ -76,6 +79,8 @@ homebrew:
     # - goland
     - google-chrome
     - grammarly-desktop
+    - home-assistant
+    - ha-menu
     - karabiner-elements
     - localstack
     - notion
@@ -91,11 +96,7 @@ homebrew:
   mas:
     - 961632517   # Be Focused Pro
     - 1476964367  # In Your Face
-    - 1099568401  # Home Assistant
-    - 1017470484  # Next Meeting
-    - 1056643111  # Clocker
     - 937984704   # Amphetamine
-    - 1333542190  # 1Password
     - 635757879   # Calca
 
 
