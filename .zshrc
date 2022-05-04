@@ -169,7 +169,7 @@ eval "$(pyenv init -)"
 
 # Bazel
 export PATH=${HOME}/bin:$PATH
-source ${HOME}/.bazel/bin/bazel-complete.bash
+# source ${HOME}/.bazel/bin/bazel-complete.bash
 
 if [[ $(uname -s) == 'Darwin' ]]; then
   export PATH=$PATH:$(brew --prefix)/bin
@@ -201,7 +201,9 @@ if [[ $(uname -s) == 'Darwin' ]]; then
 fi
 
 # WORK ZSHRC
-source ~/.zshrc_company
+if test -f ~/.zshrc_company; then
+  source ~/.zshrc_company
+fi
 
 # Remove all duplicates from $PATH
 typeset -U PATH
