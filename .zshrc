@@ -142,6 +142,9 @@ if [[ $(uname -s) == 'Darwin' ]]; then
     load_path "zsh-autosuggestions"
     load_path "zsh-abbr"
     load_path "zsh-syntax-highlighting"
+
+    # Fuzzy finder
+    [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
   fi
 else
   # Fuzzy finder
