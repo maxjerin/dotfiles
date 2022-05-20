@@ -11,6 +11,7 @@
 4. [ ] setup zsh
     * [ ] abbrevation
     * [ ] fzf
+      * Add command to run $(brew --prefix)/opt/fzf/install
     * [ ] autocomplete
 5. [ ] raycast swap disable command + space
 6. [ ] disable all spotlight indexing
