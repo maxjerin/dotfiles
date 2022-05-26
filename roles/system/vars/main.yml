@@ -45,7 +45,9 @@ homebrew:
     # Don't uncomment this,
     # adding this back always clashes with casks
     # - docker
+    - bat
     - emacs-mac
+    - exa
     - font-source-code-pro
     - font-fira-code
     - fzf
@@ -55,6 +57,7 @@ homebrew:
     - kubectl
     - mas
     - minikube
+    - node
     - nvm
     - powerline-go
     - pyenv
@@ -62,6 +65,7 @@ homebrew:
     - svn
     - vault
     - yamllint
+    - yarn
     - zsh
     - zsh-autosuggestions
     - zsh-syntax-highlighting
