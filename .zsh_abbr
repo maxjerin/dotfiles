@@ -32,4 +32,8 @@ abbr add k=kubectl
 abbr add mk=minikube
 
 # General
-abbr add ll="ls -latr"
+abbr add ll="exa -alh"
+abbr add lt="exa --tree"
+abbr add ltl="exa --tree --long"
+abbr add --force ls="exa"
+abbr add --force cat="bat"
