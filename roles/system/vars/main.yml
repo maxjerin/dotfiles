@@ -86,6 +86,7 @@ homebrew:
     - home-assistant
     - ha-menu
     - karabiner-elements
+    - lens
     - localstack
     - notion
     # - notion-enhanced
