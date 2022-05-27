@@ -142,6 +142,7 @@ if [[ $(uname -s) == 'Darwin' ]]; then
     load_path "zsh-autosuggestions"
     load_path "zsh-abbr"
     load_path "zsh-syntax-highlighting"
+    source $(brew --prefix)/share/zsh/site-functions/prompt_spaceship_setup
   fi
 else
   # Fuzzy finder
@@ -171,6 +172,8 @@ eval "$(pyenv init -)"
 export PATH=${HOME}/bin:$PATH
 # source ${HOME}/.bazel/bin/bazel-complete.bash
 
+# Powerline Go Setup
+: '
 if [[ $(uname -s) == 'Darwin' ]]; then
   export PATH=$PATH:$(brew --prefix)/bin
   POWERLINE_GO=$(brew --prefix)/bin/powerline-go
@@ -199,6 +202,7 @@ if [[ $(uname -s) == 'Darwin' ]]; then
     install_powerline_precmd
   fi
 fi
+: '
 
 # WORK ZSHRC
 if test -f ~/.zshrc_company; then
