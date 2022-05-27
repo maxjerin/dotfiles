@@ -143,6 +143,9 @@ if [[ $(uname -s) == 'Darwin' ]]; then
     load_path "zsh-abbr"
     load_path "zsh-syntax-highlighting"
     source $(brew --prefix)/share/zsh/site-functions/prompt_spaceship_setup
+
+    # Fuzzy finder
+    [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
   fi
 else
   # Fuzzy finder
