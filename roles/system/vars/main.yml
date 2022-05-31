@@ -62,6 +62,7 @@ homebrew:
     - powerline-go
     - pyenv
     - shellcheck
+    - spaceship
     - svn
     - vault
     - yamllint
