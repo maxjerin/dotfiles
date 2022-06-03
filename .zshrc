@@ -56,8 +56,8 @@ ENABLE_CORRECTION="true"
 # HIST_STAMPS="mm/dd/yyyy"
 
 # History file settings
-SAVEHIST=500  # Save most-recent 500 lines
-HISTSIZE=500
+SAVEHIST=5000  # Save most-recent 500 lines
+HISTSIZE=5000
 HISTFILE=~/.zsh_history
 
 # Would you like to use another custom folder than $ZSH/custom?
@@ -139,11 +139,17 @@ if [[ $(uname -s) == 'Darwin' ]]; then
     function load_path() {
       source $(brew --prefix)/share/$1/$1.zsh
     }
-    load_path "zsh-autosuggestions"
     load_path "zsh-abbr"
-    load_path "zsh-syntax-highlighting"
+    source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+    # load_path "zsh-autosuggestions"
+    source $(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+    # load_path "zsh-syntax-highlighting"
     source $(brew --prefix)/etc/profile.d/z.sh
-    source $(brew --prefix)/share/zsh/site-functions/prompt_spaceship_setup
+
+    FPATH=$(brew --prefix)/share/zsh-completions:$FPATH
+    autoload -Uz compinit
+    compinit
+    zstyle ':completion:*' menu select
 
     # Fuzzy finder
     [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
@@ -176,6 +182,31 @@ eval "$(pyenv init -)"
 export PATH=${HOME}/bin:$PATH
 # source ${HOME}/.bazel/bin/bazel-complete.bash
 
+
+# WORK ZSHRC
+if test -f ~/.zshrc_company; then
+  source ~/.zshrc_company
+fi
+
+# 1Password Agent Link
+if test -f ~/Library/Group\ Containers/2BUA8C4S2C.com.1password/t/agent.sock; then
+  mkdir -p ~/.1password && ln -s ~/Library/Group\ Containers/2BUA8C4S2C.com.1password/t/agent.sock ~/.1password/agent.sock
+fi
+
+# Remove all duplicates from $PATH
+typeset -U PATH
+
+######### Theme ############
+if [[ $(uname -s) == 'Darwin' ]]; then
+  if type brew &>/dev/null; then
+    # SPACESHIP_PROMPT_ADD_NEWLINE=false
+    # SPACESHIP_PROMPT_SEPARATE_LINE=false
+    # source $(brew --prefix)/share/zsh/site-functions/prompt_spaceship_setup
+
+    eval "$(starship init zsh)"
+  fi
+fi
+
 # Powerline Go Setup
 : '
 if [[ $(uname -s) == 'Darwin' ]]; then
@@ -207,19 +238,4 @@ if [[ $(uname -s) == 'Darwin' ]]; then
   fi
 fi
 : '
-
-# WORK ZSHRC
-if test -f ~/.zshrc_company; then
-  source ~/.zshrc_company
-fi
-
-# 1Password Agent Link
-if test -f ~/Library/Group\ Containers/2BUA8C4S2C.com.1password/t/agent.sock; then
-  mkdir -p ~/.1password && ln -s ~/Library/Group\ Containers/2BUA8C4S2C.com.1password/t/agent.sock ~/.1password/agent.sock
-fi
-
-# Remove all duplicates from $PATH
-typeset -U PATH
-
-autoload -U compinit && compinit
-zstyle ':completion:*' menu select
+######### Theme ############
