@@ -67,6 +67,7 @@ homebrew:
     - vault
     - yamllint
     - yarn
+    - z
     - zsh
     - zsh-autosuggestions
     - zsh-syntax-highlighting
