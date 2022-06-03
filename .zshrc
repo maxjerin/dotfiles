@@ -142,6 +142,7 @@ if [[ $(uname -s) == 'Darwin' ]]; then
     load_path "zsh-autosuggestions"
     load_path "zsh-abbr"
     load_path "zsh-syntax-highlighting"
+    source $(brew --prefix)/etc/profile.d/z.sh
     source $(brew --prefix)/share/zsh/site-functions/prompt_spaceship_setup
 
     # Fuzzy finder
@@ -219,3 +220,6 @@ fi
 
 # Remove all duplicates from $PATH
 typeset -U PATH
+
+autoload -U compinit && compinit
+zstyle ':completion:*' menu select
