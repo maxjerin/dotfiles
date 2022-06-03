@@ -69,6 +69,7 @@ homebrew:
     - yarn
     - z
     - zsh
+    - zsh-completions
     - zsh-autosuggestions
     - zsh-syntax-highlighting
   casks:
@@ -79,6 +80,8 @@ homebrew:
     - clocker
     - docker
     - emacs
+    - font-fira-code-nerd-font
+    - font-hack-nerd-font
     - font-source-code-pro
     # - intellij-idea
     - iterm2
