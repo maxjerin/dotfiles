@@ -1,7 +1,7 @@
 ---
 - name: Add Notion-Enhancer (unofficial port of Notion to Linux) deb
   tags:
-    - notion, linux
+    - linux
   apt_repository:
     update_cache: true
     repo: deb [trusted=yes] https://apt.fury.io/notion-repackaged/ /
@@ -9,7 +9,7 @@
 
 - name: Install notion app
   tags:
-    - notion, linux
+    - linux
   apt:
     update_cache: true
     name:
@@ -17,7 +17,7 @@
 
 - name: Install slack
   tags:
-    - slack, linux
+    - linux
   community.general.snap:
     name: slack
     state: present
@@ -26,8 +26,31 @@
 
 - name: Install WhatsApp for Linux
   tags:
-    - whatsapp, linux
+    - linux
   community.general.snap:
     name: whatsapp-for-linux
     state: present
     channel: latest/stable
+
+- name: Add Google Chrome Signing Key
+  tags:
+    - linux
+  ansible.builtin.apt_key:
+    url: https://dl-ssl.google.com/linux/linux_signing_key.pub
+    state: present
+  
+- name: Add Google Chrome repository
+  tags:
+    - linux
+  apt_repository:
+    update_cache: true
+    repo: deb http://dl.google.com/linux/chrome/deb/ stable main
+    state: present
+
+- name: Install Google Chrome
+  tags:
+    - linux
+  apt:
+    update_cache: true
+    name:
+      - google-chrome-stable
