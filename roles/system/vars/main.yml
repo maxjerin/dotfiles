@@ -60,6 +60,7 @@ homebrew:
     - pyenv
     - shellcheck
     - spaceship
+    - starship
     - svn
     - vault
     - yamllint
@@ -94,6 +95,7 @@ homebrew:
     - pyenv
     - shellcheck
     - spaceship
+    - starship
     - svn
     - vault
     - yamllint
