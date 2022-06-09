@@ -54,3 +54,11 @@
     update_cache: true
     name:
       - google-chrome-stable
+
+- name: Install Debian Utilities
+  tags:
+    - linux
+  apt:
+    update_cache: true
+    name:
+      - hardinfo
