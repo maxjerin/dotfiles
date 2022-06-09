@@ -127,6 +127,8 @@ if test -f ~/.zshrc_company; then
   source ~/.zshrc_company
 fi
 
+source ~/.zsh_abbr
+
 
 ######### Theme ############
 
