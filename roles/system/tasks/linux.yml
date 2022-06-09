@@ -2,6 +2,7 @@
 - name: Install Homebrew formulas
   community.general.homebrew:
     name: "{{ homebrew['formulas_linux'] }}"
+    path: "/home/linuxbrew/.linuxbrew/bin"
   tags:
     - linux
 
