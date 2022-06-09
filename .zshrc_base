@@ -1,9 +1,13 @@
 if [[ $(uname -s) == 'Darwin' ]] && [[ $(uname -m) == 'arm64' ]]; then
   #  if M1 mac then use the following
   eval "$(/opt/homebrew/bin/brew shellenv)"
-  export PATH=$(brew --prefix)/bin:$PATH
-  export PATH=$(brew --prefix)/sbin:$PATH
+else if [[ $(uname -s) == 'Darwin' ]]; then
+  eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 fi
+
+export PATH=$(brew --prefix)/bin:$PATH
+export PATH=$(brew --prefix)/sbin:$PATH
+
 
 # If you come from bash you might have to change your $PATH.
 
@@ -87,12 +91,6 @@ HISTFILE=~/.zsh_history
 #   export EDITOR='mvim'
 # fi
 
-# Compilation flags
-# export ARCHFLAGS="-arch x86_64"
-
-# ssh
-# export SSH_KEY_PATH="~/.ssh/rsa_id"
-
 # NVM config
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
@@ -121,16 +119,6 @@ export NVM_DIR="$HOME/.nvm"
 
 # export LIBRARY_PATH=$LIBRARY_PATH:/usr/local/opt/openssl/lib/
 
-
-# The next line updates PATH for the Google Cloud SDK.
-# if [ -f '/Users/maxjerin/Downloads/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/maxjerin/Downloads/google-cloud-sdk/path.zsh.inc'; fi
-
-# The next line enables shell command completion for gcloud.
-# if [ -f '/Users/maxjerin/Downloads/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/maxjerin/Downloads/google-cloud-sdk/completion.zsh.inc'; fi
-
-# MacOSX
-# export CPATH=/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include
-# export CPATH=`xcrun --show-sdk-path`/usr/include
 
 
 ZSH_PATH="~/.zsh"
@@ -186,11 +174,6 @@ export PATH=${HOME}/bin:$PATH
 # WORK ZSHRC
 if test -f ~/.zshrc_company; then
   source ~/.zshrc_company
-fi
-
-# 1Password Agent Link
-if test -f ~/Library/Group\ Containers/2BUA8C4S2C.com.1password/t/agent.sock; then
-  mkdir -p ~/.1password && ln -s ~/Library/Group\ Containers/2BUA8C4S2C.com.1password/t/agent.sock ~/.1password/agent.sock
 fi
 
 # Remove all duplicates from $PATH
