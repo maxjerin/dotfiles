@@ -23,7 +23,7 @@
 
 - name: Install Homebrew formulas
   community.general.homebrew:
-    name: "{{ homebrew['formulas'] }}"
+    name: "{{ homebrew['formulas_macos'] }}"
   tags:
     - macos
 

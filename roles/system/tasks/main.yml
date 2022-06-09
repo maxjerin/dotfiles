@@ -2,5 +2,11 @@
 - name: Load macos
   include_tasks:
     file: macos.yml
-  # tags:
-  #   - macos
+  tags:
+    - macos
+
+- name: Load linux
+  include_tasks:
+    file: linux.yml
+  tags:
+    - linux

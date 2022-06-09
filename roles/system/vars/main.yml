@@ -40,7 +40,36 @@ homebrew:
     - homebrew/core
     - railwaycat/emacsmacport
     - warrensbox/tap/tfswitch
-  formulas:
+  formulas_linux:
+    - awscli
+    - docker
+    - bat
+    - emacs
+    - exa
+    - fzf
+    - go
+    - helm
+    - jenv
+    - k9s
+    - kubectl
+    - minikube
+    - node
+    - nvm
+    - openjdk@11
+    - powerline-go
+    - pyenv
+    - shellcheck
+    - spaceship
+    - svn
+    - vault
+    - yamllint
+    - yarn
+    - z
+    - zsh
+    - zsh-completions
+    - zsh-autosuggestions
+    - zsh-syntax-highlighting
+  formulas_macos:
     - awscli
     # Don't uncomment this,
     # adding this back always clashes with casks
@@ -53,12 +82,14 @@ homebrew:
     - fzf
     - go
     - helm
+    - jenv
     - k9s
     - kubectl
     - mas
     - minikube
     - node
     - nvm
+    - openjdk@11
     - powerline-go
     - pyenv
     - shellcheck
