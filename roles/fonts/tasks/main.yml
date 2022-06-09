@@ -1,7 +1,6 @@
 ---
 - name: Load font scripts
   include_tasks:
-    file: linux-fonts.yml
+    file: linux.yml
   tags:
-    - fonts-linux
     - linux

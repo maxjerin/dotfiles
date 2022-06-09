@@ -13,7 +13,6 @@
       - fonts-roboto
     state: present
 
-
 # https://swetankraj.github.io/ubuntu-terminal-powelinego/
 - name: Download Powerline Symbols
   get_url:
