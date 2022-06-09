@@ -1,0 +1,17 @@
+---
+- name: Install slack
+  tags:
+    - linux
+  community.general.snap:
+    name: slack
+    state: present
+    channel: latest/stable
+    classic: true
+
+- name: Install WhatsApp for Linux
+  tags:
+    - linux
+  community.general.snap:
+    name: whatsapp-for-linux
+    state: present
+    channel: latest/stable

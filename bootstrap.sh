@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -euox pipefail
+set -euo pipefail
 
 # Link zshrc from dotfiles
 ln -sf $(pwd)/.zsh_abbr ~/.zsh_abbr
@@ -47,6 +47,16 @@ else
     fi
 fi
 
+if [[ $(uname -s) == 'Linux' ]]; then
+    if command -v brew &> /dev/null
+    then
+        command -v zsh | sudo tee -a /etc/shells
+        chsh -s $(brew --prefix)/bin/zsh
+    else
+        echo "zsh not installed"
+    fi
+fi
+
 # source zshrc for homebrew
 source ~/.zshrc
 
@@ -59,16 +69,5 @@ PLAYBOOK="$ROOTDIR/dotfiles.yml"
 
 # Runs Ansible playbook using our user.
 ansible-playbook -i "$HOSTS" "$PLAYBOOK"
-
-if [[ $(uname -s) == 'Linux' ]]; then
-    if command -v brew &> /dev/null
-    then
-        command -v zsh | sudo tee -a /etc/shells
-        chsh -s $(brew --prefix)/bin/zsh
-    else
-        echo "zsh not installed"
-    fi
-fi
-
 
 exit 0

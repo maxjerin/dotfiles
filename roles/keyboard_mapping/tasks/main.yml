@@ -1,31 +1,9 @@
----
-# https://github.com/petrstepanov/gnome-macos-remap
-- name: Install keyboard mapping tools
-  apt:
-    update_cache: true
-    name:
-      - git
-      - autokey-gtk
-  tags:
-    - linux
-
-- name: Download keybindgs repo
-  ansible.builtin.git:
-    repo: git@github.com:petrstepanov/gnome-macos-remap
-    dest: /tmp/gnome-macos-remap
-    version: 4850089
-  tags:
-    - linux
-
-- name: Add execute permission on files
-  ansible.builtin.file:
-    path: /tmp/gnome-macos-remap/install.sh
-    mode: u+rwx
-  tags:
-    - linux
-
-- name: Run keybindings script
-  command: /tmp/gnome-macos-remap/install.sh
-  changed_when: true
+- name: Load linux
+  include_tasks:
+    file: linux.yml
+  args:
+    apply:
+      become: yes
+      become_user: maxjerin
   tags:
     - linux

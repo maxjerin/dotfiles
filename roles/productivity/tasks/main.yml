@@ -1,64 +1,30 @@
 ---
-- name: Add Notion-Enhancer (unofficial port of Notion to Linux) deb
+- name: Load linux snap
+  include_tasks:
+    file: snap.yml
+  args:
+    apply:
+      become: yes
+      become_user: maxjerin
   tags:
     - linux
-  apt_repository:
-    update_cache: true
-    repo: deb [trusted=yes] https://apt.fury.io/notion-repackaged/ /
-    state: present
 
-- name: Install notion app
+- name: Load linux apt
+  include_tasks:
+    file: apt.yml
+  args:
+    apply:
+      become: yes
+      become_user: maxjerin
   tags:
     - linux
-  apt:
-    update_cache: true
-    name:
-      - notion-app-enhanced
 
-- name: Install slack
+- name: Load linux brew tasks
+  include_tasks:
+    file: chrome.yml
+  args:
+    apply:
+      become: yes
+      become_user: maxjerin
   tags:
     - linux
-  community.general.snap:
-    name: slack
-    state: present
-    channel: latest/stable
-    classic: true
-
-- name: Install WhatsApp for Linux
-  tags:
-    - linux
-  community.general.snap:
-    name: whatsapp-for-linux
-    state: present
-    channel: latest/stable
-
-- name: Add Google Chrome Signing Key
-  tags:
-    - linux
-  ansible.builtin.apt_key:
-    url: https://dl-ssl.google.com/linux/linux_signing_key.pub
-    state: present
-  
-- name: Add Google Chrome repository
-  tags:
-    - linux
-  apt_repository:
-    update_cache: true
-    repo: deb http://dl.google.com/linux/chrome/deb/ stable main
-    state: present
-
-- name: Install Google Chrome
-  tags:
-    - linux
-  apt:
-    update_cache: true
-    name:
-      - google-chrome-stable
-
-- name: Install Debian Utilities
-  tags:
-    - linux
-  apt:
-    update_cache: true
-    name:
-      - hardinfo

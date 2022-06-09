@@ -8,5 +8,9 @@
 - name: Load linux
   include_tasks:
     file: linux.yml
+  args:
+    apply:
+      become: yes
+      become_method: sudo
   tags:
     - linux

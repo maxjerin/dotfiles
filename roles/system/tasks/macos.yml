@@ -17,7 +17,7 @@
 
 - name: Install Homebrew taps
   community.general.homebrew_tap:
-    name: "{{ homebrew['taps'] }}"
+    name: "{{ homebrew['taps_macos'] }}"
   tags:
     - macos
 

@@ -1,13 +1,11 @@
 ---
 - name: Add universe repositroy
   apt_repository:
-    update_cache: true
     repo: deb http://archive.ubuntu.com/ubuntu {{ ansible_distribution_release }} universe
     state: present
 
 - name: Install Fonts
   apt:
-    update_cache: true
     name:
       - fonts-firacode
       - fonts-roboto

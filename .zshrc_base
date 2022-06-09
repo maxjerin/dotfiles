@@ -177,11 +177,11 @@ if [[ $(uname -s) == 'Darwin' ]]; then
    else
        print -n "%{%k%}"
    fi
-  
+
    print -n "%{%f%}"
    CURRENT_BG=''
-  
-   #Adds the new line and ➜ as the start character.
+
+   # Adds the new line and ➜ as the start character.
    printf "\n ➜";
   }
 fi

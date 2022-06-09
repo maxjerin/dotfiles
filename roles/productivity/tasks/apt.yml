@@ -1,0 +1,21 @@
+---
+- name: Add Notion-Enhancer (unofficial port of Notion to Linux) deb
+  tags:
+    - linux
+  apt_repository:
+    repo: deb [trusted=yes] https://apt.fury.io/notion-repackaged/ /
+    state: present
+
+- name: Install notion app
+  tags:
+    - linux
+  apt:
+    name:
+      - notion-app-enhanced
+
+- name: Install Debian Utilities
+  tags:
+    - linux
+  apt:
+    name:
+      - hardinfo
