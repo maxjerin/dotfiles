@@ -1,1 +1,7 @@
+eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+PATH=$PATH:~/.linuxbrew/bin
+
 source ~/.zshrc_base
+
+# Remove all duplicates from $PATH
+typeset -u PATH

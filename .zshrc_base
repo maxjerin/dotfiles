@@ -127,11 +127,10 @@ if [[ $(uname -s) == 'Darwin' ]]; then
     function load_path() {
       source $(brew --prefix)/share/$1/$1.zsh
     }
-    load_path "zsh-abbr"
+    # load_path "zsh-abbr"
+    source $(brew --prefix)/share/zsh-abbr/zsh-abbr.zsh
     source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
-    # load_path "zsh-autosuggestions"
     source $(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-    # load_path "zsh-syntax-highlighting"
     source $(brew --prefix)/etc/profile.d/z.sh
 
     FPATH=$(brew --prefix)/share/zsh-completions:$FPATH
@@ -147,16 +146,20 @@ else
   [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
   # Autosuggest
-  source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
+  # source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
+  source $(brew --pref ix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 
   # Abbreviation
-  source ~/.zsh/zsh-abbr/zsh-abbr.zsh
+  # source ~/.zsh/zsh-abbr/zsh-abbr.zsh
+  source $(brew --prefix)/share/zsh-abbr/zsh-abbr.zsh
 
   # Syntax highlighting
-  source ~/.zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+  # source ~/.zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+  source $(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
 
   # Autocomplete
-  source ~/.zsh/zsh-autocomplete/zsh-autocomplete.plugin.zsh
+  # source ~/.zsh/zsh-autocomplete/zsh-autocomplete.plugin.zsh
 fi
 
 # PyEnv
@@ -176,8 +179,6 @@ if test -f ~/.zshrc_company; then
   source ~/.zshrc_company
 fi
 
-# Remove all duplicates from $PATH
-typeset -U PATH
 
 ######### Theme ############
 if [[ $(uname -s) == 'Darwin' ]]; then
