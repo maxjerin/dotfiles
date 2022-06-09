@@ -4,6 +4,9 @@
 
 1. [ ] Setup emacs
     * [ ] https://github.com/hlissner/doom-emacs/blob/master/docs/getting_started.org#with-homebrew
+2. [ ] Linux fonts
+    * [ ] font-source-code-pro
+    * [ ] font-fira-code
 2. [ ] reduce motion blur on Mac
 2. [ ] Configure iTerm2
     * [ ] select source code pro font in iTerm
