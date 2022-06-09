@@ -67,3 +67,4 @@ https://docs.ansible.com/ansible/latest/collections/community/general/launchd_mo
 # References
 
 https://github.com/kylecrawshaw/ansible-laptop-config/blob/master/vars/main.yml
+https://github.com/MonolithProjects/ansible-homebrew/blob/main/tasks/path.yml
