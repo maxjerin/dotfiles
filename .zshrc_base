@@ -1,9 +1,3 @@
-if [[ $(uname -s) == 'Darwin' ]] && [[ $(uname -m) == 'arm64' ]]; then
-  #  if M1 mac then use the following
-  eval "$(/opt/homebrew/bin/brew shellenv)"
-elif [[ $(uname -s) == 'Darwin' ]]; then
-  eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-fi
 
 export PATH=$(brew --prefix)/bin:$PATH
 export PATH=$(brew --prefix)/sbin:$PATH
@@ -95,20 +89,6 @@ HISTFILE=~/.zsh_history
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 
-# Newline after terminal
-# prompt_end() {
-#  if [[ -n $CURRENT_BG ]]; then
-#      print -n "%{%k%F{$CURRENT_BG}%}$SEGMENT_SEPARATOR"
-#  else
-#      print -n "%{%k%}"
-#  fi
-#
-#  print -n "%{%f%}"
-#  CURRENT_BG=''
-#
-#  #Adds the new line and ➜ as the start character.
-#  printf "\n ➜";
-#}
 
 # For compilers to find zlib you may need to set:
 # export LDFLAGS="${LDFLAGS} -L/usr/local/opt/zlib/lib"
@@ -120,47 +100,15 @@ export NVM_DIR="$HOME/.nvm"
 # export LIBRARY_PATH=$LIBRARY_PATH:/usr/local/opt/openssl/lib/
 
 
-
-ZSH_PATH="~/.zsh"
-if [[ $(uname -s) == 'Darwin' ]]; then
-  if type brew &>/dev/null; then
-    function load_path() {
-      source $(brew --prefix)/share/$1/$1.zsh
-    }
-    # load_path "zsh-abbr"
-    source $(brew --prefix)/share/zsh-abbr/zsh-abbr.zsh
-    source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
-    source $(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-    source $(brew --prefix)/etc/profile.d/z.sh
-
-    FPATH=$(brew --prefix)/share/zsh-completions:$FPATH
-    autoload -Uz compinit
-    compinit
-    zstyle ':completion:*' menu select
-
-    # Fuzzy finder
-    [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-  fi
-else
-  # Fuzzy finder
-  [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-
-  # Autosuggest
-  # source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
-  source $(brew --pref ix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
-
-  # Abbreviation
-  # source ~/.zsh/zsh-abbr/zsh-abbr.zsh
-  source $(brew --prefix)/share/zsh-abbr/zsh-abbr.zsh
-
-  # Syntax highlighting
-  # source ~/.zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-  source $(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-
-
-  # Autocomplete
-  # source ~/.zsh/zsh-autocomplete/zsh-autocomplete.plugin.zsh
-fi
+source "$(brew --prefix)/share/zsh-abbr/zsh-abbr.zsh"
+source "$(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
+source "$(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
+source "$(brew --prefix)/etc/profile.d/z.sh"
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+FPATH="$(brew --prefix)/share/zsh-completions:$FPATH"
+autoload -Uz compinit
+compinit
+zstyle ':completion:*' menu select
 
 # PyEnv
 export PATH=$PATH:$HOME/.pyenv/bin
@@ -170,7 +118,7 @@ eval "$(pyenv init -)"
 # eval "$(jenv init -)"
 
 # Bazel
-export PATH=${HOME}/bin:$PATH
+# export PATH=${HOME}/bin:$PATH
 # source ${HOME}/.bazel/bin/bazel-complete.bash
 
 
@@ -181,14 +129,13 @@ fi
 
 
 ######### Theme ############
-if [[ $(uname -s) == 'Darwin' ]]; then
-  if type brew &>/dev/null; then
-    # SPACESHIP_PROMPT_ADD_NEWLINE=false
-    # SPACESHIP_PROMPT_SEPARATE_LINE=false
-    # source $(brew --prefix)/share/zsh/site-functions/prompt_spaceship_setup
 
-    eval "$(starship init zsh)"
-  fi
+if type brew &>/dev/null; then
+  # SPACESHIP_PROMPT_ADD_NEWLINE=true
+  # SPACESHIP_PROMPT_SEPARATE_LINE=false
+  # source $(brew --prefix)/share/zsh/site-functions/prompt_spaceship_setup
+
+  eval "$(starship init zsh)"
 fi
 
 # Powerline Go Setup
@@ -220,6 +167,21 @@ if [[ $(uname -s) == 'Darwin' ]]; then
   if [ "$TERM" != "linux" ] && [ -f "$POWERLINE_GO" ]; then
     install_powerline_precmd
   fi
+
+  # Newline after terminal
+  prompt_end() {
+   if [[ -n $CURRENT_BG ]]; then
+       print -n "%{%k%F{$CURRENT_BG}%}$SEGMENT_SEPARATOR"
+   else
+       print -n "%{%k%}"
+   fi
+  
+   print -n "%{%f%}"
+   CURRENT_BG=''
+  
+   #Adds the new line and ➜ as the start character.
+   printf "\n ➜";
+  }
 fi
 : '
 ######### Theme ############
