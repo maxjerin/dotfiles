@@ -1,7 +1,0 @@
----
-- name: Load linux language scripts
-  include_tasks:
-    file: linux.yml
-  tags:
-    - languages-linux
-    - linux

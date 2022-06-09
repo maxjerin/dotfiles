@@ -1,7 +1,0 @@
----
-- name: Load terminal scripts
-  include_tasks:
-    file: linux.yml
-  tags:
-    - terminal-linux
-    - linux

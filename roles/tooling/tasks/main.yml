@@ -1,7 +1,0 @@
----
-- name: Load linux tooling
-  include_tasks:
-    file: linux.yml
-  tags:
-    - tooling-linux
-    - linux

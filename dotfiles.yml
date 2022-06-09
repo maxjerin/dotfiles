@@ -4,11 +4,7 @@
   hosts: local
   ignore_errors: true
   roles:
-    - role: chrome
     - role: fonts
-    - role: terminal
     - role: keyboard_mapping
-    - role: dev_tools
-    - role: languages
     - role: productivity
     - role: system
