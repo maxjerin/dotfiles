@@ -19,3 +19,16 @@
   apt:
     name:
       - hardinfo
+
+- name: Setup Tabby Gpg Keys
+  tags:
+    - linux
+  ansible.builtin.command:
+    cmd: curl -s https://packagecloud.io/install/repositories/eugeny/tabby/script.deb.sh | sudo bash
+  changed_when: false
+
+- name: Install a Tabby (terminus)
+  tags:
+    - linux
+  apt:
+    deb: https://github.com/Eugeny/tabby/releases/download/v1.0.179/tabby-1.0.179-linux-x64.deb
