@@ -1,39 +1,37 @@
 # TODO
 
-/usr/local/Cellar is where all formulae get installed
-
-1. [ ] Setup emacs
-    * [ ] https://github.com/hlissner/doom-emacs/blob/master/docs/getting_started.org#with-homebrew
+## Linux
 2. [ ] Linux fonts
     * [ ] font-source-code-pro
     * [ ] font-fira-code
+1. [ ] Setup spaceemacs
+    * [ ] https://github.com/hlissner/doom-emacs/blob/master/docs/getting_started.org#with-homebrew
+4. [ ] setup zsh
+    * [ ] abbrevation
+
+## MacOS
 2. [ ] reduce motion blur on Mac
 2. [ ] Configure iTerm2
     * [ ] select source code pro font in iTerm
     * [ ] set font size to 14
 3. [ ] install powerline fonts
-4. [ ] setup zsh
-    * [ ] abbrevation
-    * [ ] fzf
-      * Add command to run $(brew --prefix)/opt/fzf/install
-    * [ ] autocomplete
-5. [ ] raycast swap disable command + space
-6. [ ] disable all spotlight indexing
-7. [ ] install nvm
-8. [ ] update bootstrap to support both macos and linux
-9. [ ] config ssh config
-    * [ ] Host -> AddKeysToAgent yes
-    * [ ] Host -> UseKeyChain yes
+2. [ ] Configure Tabby and save configuration to repo
+11. [ ] Setup app for startup
+    * [ ] one password, bartender, karabiner, clocker, be focusied, next meeting
+12. [ ] Remove app from launcher
+    * [ ] maps, phots, facetime, calendar, contacts, remidners, notes, apple tv, music, podcast, news, pages, numbers, keynote, mail, safari
+3. [ ] Setup karbiner
+    * [ ] caps lock to backspace
+    * [ ] right shift to escape
+
+
+
 10. [ ] create a raycast cheatsheet to read from a custom file
     * [ ] search cheatsheet
     * [ ] add to cheat sheet
     * list of cheat sheets
         * [ ] `ls -latrd ~/.*`
         * [ ] `kubectl config get-contexts`
-11. [ ] Setup app for startup
-    * [ ] one password, bartender
-12. [ ] Remove app from launcher
-    * [ ] maps, phots, facetime, calendar, contacts, remidners, notes, apple tv, music, podcast, news, pages, numbers, keynote, mail, safari
 13. [ ] configure raycast import/export using dotfiles
     * [ ] configure script command locations
         * [ ] check script for OpenVpn
@@ -48,18 +46,9 @@ https://www.reddit.com/r/ansible/comments/6w6nnh/ansible_mac_dmg_installs/
 * [ ] pre commit checks
 
 # MOAR HOMEBREW
-
 https://github.com/kylecrawshaw/ansible-laptop-config/blob/master/vars/main.yml
 
-# Start services on startup
 
-* Bartender
-* Raycast
-* Karabiner
-* Clocker
-* Be Focused Pro
-* Next Meeting
-* Docker
 
 ## Reference
 https://docs.ansible.com/ansible/latest/collections/community/general/launchd_module.html
