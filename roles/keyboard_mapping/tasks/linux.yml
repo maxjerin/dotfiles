@@ -1,32 +1,103 @@
 ---
+####### Deprecated ########
 # https://github.com/petrstepanov/gnome-macos-remap
-- name: Install keyboard mapping tools
-  apt:
-    name:
-      - git
-      - autokey-gtk
-  # become: true
-  # become_user: maxjerin
-  tags:
-    - linux
+# - name: Install keyboard mapping tools
+#   apt:
+#     name:
+#       - git
+#       - autokey-gtk
+#   # become: true
+#   # become_user: maxjerin
+#   tags:
+#     - linux
 
-- name: Download keybindgs repo
-  ansible.builtin.git:
-    repo: git@github.com:petrstepanov/gnome-macos-remap
-    dest: /tmp/gnome-macos-remap
-    version: 4850089
-  tags:
-    - linux
+# - name: Download keybindgs repo
+#   ansible.builtin.git:
+#     repo: git@github.com:petrstepanov/gnome-macos-remap
+#     dest: /tmp/gnome-macos-remap
+#     version: 4850089
+#   tags:
+#     - linux
 
-- name: Add execute permission on files
-  ansible.builtin.file:
-    path: /tmp/gnome-macos-remap/install.sh
-    mode: u+rwx
-  tags:
-    - linux
+# - name: Add execute permission on files
+#   ansible.builtin.file:
+#     path: /tmp/gnome-macos-remap/install.sh
+#     mode: u+rwx
+#   tags:
+#     - linux
 
-- name: Run keybindings script
-  command: /tmp/gnome-macos-remap/install.sh
+# - name: Run keybindings script
+#   command: /tmp/gnome-macos-remap/install.sh
+#   changed_when: true
+#   tags:
+#     - linux
+
+# - name: Install dependencies
+#   apt:
+#     name:
+#       - dconf-cli
+#       - dconf-editor
+#       - dbus-x11
+#   tags:
+#     - linux
+
+# - name: Copy keyboard config
+#   copy:
+#     src: pc.backup
+#     dest: /usr/share/X11/xkb/symbols/pc
+
+# - name: Run command to execute xkb mappings
+#   ansible.builtin.command:
+#     cmd: dconf write "/org/gnome/desktop/input-sources/xkb-options" "['caps:backspace', 'ctrl:swap_lalt_lctl', 'ctrl:swap_lctl_lalt']"
+#   changed_when: true
+#   become: true
+#   become_method: sudo
+#   tags:
+#     - linux
+
+####### Deprecated ########
+
+- name: Create directory if no exists
+  ansible.builtin.command:
+    cmd: mkdir -p ~/.xkb/keymap
   changed_when: true
-  tags:
-    - linux
+  become: true
+  become_method: sudo
+
+- name: Create files
+  ansible.builtin.command:
+    cmd: touch ~/.xkbd/keymap/mykbd
+  changed_when: true
+  become: true
+  become_method: sudo
+
+
+- name: Output current keyboard defintion
+  ansible.builtin.command:
+    cmd: setxkbmap -print > ~/.xkb/keymap/mykbd
+  changed_when: true
+  become: true
+  become_method: sudo
+
+- name: Create directory if no exists
+  ansible.builtin.command:
+    cmd: mkdir -p ~/.xkb/symbols
+  changed_when: true
+  become: true
+  become_method: sudo
+
+- name: Copy keyboard config
+  copy:
+    src: custom_swap
+    dest: ~/.xkb/symbols/custom_swap
+
+# TODO: figure out how to do this using sed
+# https://unix.stackexchange.com/a/65600
+# - name: Inject custom swap defintion
+
+- name: Output current keyboard defintion (disble warnings)
+  ansible.builtin.command:
+    cmd: xkbcomp -w0 -I$HOME/.xkb ~/.xkb/keymap/mykbd $DISPLAY
+  changed_when: true
+  become: true
+  become_method: sudo
