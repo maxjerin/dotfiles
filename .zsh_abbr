@@ -37,3 +37,6 @@ abbr add lt="exa --tree"
 abbr add ltl="exa --tree --long"
 abbr add --force ls="exa"
 abbr add --force cat="bat"
+
+# Network
+abbr ports="sudo lsof -PiTCP -sTCP:LISTEN"
