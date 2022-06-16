@@ -4,12 +4,10 @@ xkb_symbols "swap_definition" {
     key <RTSH> {	[ Escape		]	};
     key <MENU> {     [   Super_L     ]   };
     key <LALT> { [ Control_L, Control_L  ] };
+    key <LCTL> { [ Alt_R, Alt_R  ] };
     key <RALT> { type[Group1] = "TWO_LEVEL",
                 symbols[Group1] = [ Alt_R, Meta_R ] };
-    key <LWIN> { [ Alt_L, Meta_L ] };
-    key <LCTL> { [ Control_L ] };
-    key <RCTL> { [ Control_R ] };
-    modifier_map Control { <LALT>, <LCTL>, <RCTL> };
+    modifier_map Control { <LALT>, <LCTL> };
     modifier_map Mod1 { <LWIN>, <RALT> };
     modifier_map Mod4 { <MENU> };
 };
