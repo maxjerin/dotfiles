@@ -93,7 +93,10 @@
 
 # TODO: figure out how to do this using sed
 # https://unix.stackexchange.com/a/65600
-# - name: Inject custom swap defintion
+# - name: Inject custom swap defintion into ~/xkb/keymap/mykbd
+# +custom_swap(swap_definition) needs to be appended to xkb_symbols
+# xkb_symbols   { include "pc+us+us:2+inet(evdev)+custom_swap(swap_definition)"	};
+
 
 - name: Output current keyboard defintion (disble warnings)
   ansible.builtin.command:
