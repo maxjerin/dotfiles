@@ -4,6 +4,8 @@
 abbr gco="git checkout"
 abbr gst="git status"
 abbr gd="git diff"
+abbr gl="git pull"
+abbr gb="git branch"
 
 # Bazel
 abbr add b="bazel"
