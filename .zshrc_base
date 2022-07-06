@@ -138,8 +138,8 @@ if test -f ~/.zshrc_company; then
   source ~/.zshrc_company
 fi
 
-source ~/.zsh_abbr
-
+# Load abbreviations
+abbr load
 
 ######### Theme ############
 
@@ -148,6 +148,8 @@ if type brew &>/dev/null; then
   # SPACESHIP_PROMPT_SEPARATE_LINE=false
   # source $(brew --prefix)/share/zsh/site-functions/prompt_spaceship_setup
 
+  # TODO: Try this
+  # https://github.com/pbar1/dotfiles/blob/master/.config/starship.toml
   eval "$(starship init zsh)"
 fi
 

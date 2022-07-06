@@ -1,0 +1,40 @@
+# Git
+abbr gco="git checkout"
+abbr gst="git status"
+abbr gd="git diff"
+
+# Bazel
+abbr add b="bazel"
+
+# Docker
+abbr d=docker
+abbr dr="docker restart"
+abbr dc="docker compose"
+abbr dcr="docker compose restart"
+abbr dcu="docker compose up"
+abbr dps="docker ps"
+abbr dpsa="docker ps -a"
+dsr() {
+ docker stop "$1" && docker rm "$1"
+}
+
+# Python
+abbr p=python
+abbr p3=python3
+
+# NPM
+abbr add nr="npm run"
+
+# K8
+abbr k=kubectl
+abbr mk=minikube
+
+# General
+abbr ll="exa -alh"
+abbr lt="exa --tree"
+abbr ltl="exa --tree --long"
+abbr ls="exa"
+abbr cat="bat"
+
+# Linux Keyboard Mapping
+abbr kb="xkbcomp -w0 -I$HOME/.xkb ~/.xkb/keymap/mykbd $DISPLAY"

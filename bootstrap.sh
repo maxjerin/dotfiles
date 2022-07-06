@@ -3,7 +3,6 @@
 set -euo pipefail
 
 # Link zshrc from dotfiles
-ln -sf $(pwd)/.zsh_abbr ~/.zsh_abbr
 ln -sf $(pwd)/.zshrc_base ~/.zshrc_base
 
 # Zsh and brew setup on MacOS
@@ -56,6 +55,12 @@ if [[ $(uname -s) == 'Linux' ]]; then
         echo "zsh not installed"
     fi
 fi
+
+# Copy abbreviations
+[ ! -d "~/.config" ] && mkdir ~/.config
+[ ! -d "~/.config/zsh" ] && mkdir ~/.config/zsh
+cp abbreviations ~/.config/zsh/
+
 
 # source zshrc for homebrew
 source ~/.zshrc
