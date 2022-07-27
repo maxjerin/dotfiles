@@ -3,11 +3,11 @@
 set -euo pipefail
 
 # Link zshrc from dotfiles
-ln -sf $(pwd)/.zshrc_base ~/.zshrc_base
+ln -sf "$(pwd)/.zshrc_base" "${HOME}/.zshrc_base"
 
 # Zsh and brew setup on MacOS
 if [[ $(uname -s) == 'Darwin' ]]; then
-    ln -fs $(pwd)/.zshrc_macos ~/.zshrc
+    ln -fs "$(pwd)/.zshrc_macos" "${HOME}/.zshrc"
 
     if ! command -v brew &> /dev/null
     then
@@ -22,7 +22,7 @@ if [[ $(uname -s) == 'Darwin' ]]; then
     fi
 else
 # Zsh and brew setup on Linux
-    ln -sf $(pwd)/.zshrc_linux ~/.zshrc
+    ln -sf "$(pwd)/.zshrc_linux" "${HOME}/.zshrc"
 
     if ! command -v brew &> /dev/null
     then
@@ -50,20 +50,21 @@ if [[ $(uname -s) == 'Linux' ]]; then
     if command -v brew &> /dev/null
     then
         command -v zsh | sudo tee -a /etc/shells
-        chsh -s $(brew --prefix)/bin/zsh
+        chsh -s "$(brew --prefix)/bin/zsh"
     else
         echo "zsh not installed"
     fi
 fi
 
 # Copy abbreviations
-[ ! -d "~/.config" ] && mkdir ~/.config
-[ ! -d "~/.config/zsh" ] && mkdir ~/.config/zsh
+[ ! -d "${HOME}/.config" ] && mkdir "${HOME}/.config"
+[ ! -d "${HOME}/.config/zsh" ] && mkdir "${HOME}/.config/zsh"
 cp abbreviations ~/.config/zsh/
 
 
 # source zshrc for homebrew
-source ~/.zshrc
+# shellcheck source=/dev/null
+source "${HOME}/.zshrc"
 
 # Dotfiles' project root directory
 ROOTDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
