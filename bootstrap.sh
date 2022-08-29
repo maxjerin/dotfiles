@@ -60,7 +60,6 @@ fi
 [ ! -d "${HOME}/.config" ] && mkdir "${HOME}/.config"
 [ ! -d "${HOME}/.config/zsh" ] && mkdir "${HOME}/.config/zsh"
 cp abbreviations ~/.config/zsh/
-cp abbreviations_work ~/.config/zsh/
 
 
 
