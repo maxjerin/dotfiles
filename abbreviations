@@ -1,3 +1,9 @@
+# Grail
+abbr grac="grail-access"
+abbr grk="grail-k8s"
+abbr grs="source env.bash"
+abbr grsl="source lab/env.bash"
+
 # Git
 abbr gco="git checkout"
 abbr gst="git status"
