@@ -1,10 +1,10 @@
 # Grail
 
-abbr erase grac && abbr grac="grail-access"
-abbr erase grk && abbr grk="grail-k8s"
-abbr erase grs && abbr grs="source env.bash"
-abbr erase grsl && abbr grsl="source lab/env.bash"
-abbr erase gra && abbr gra="grail-aws"
+abbr grac="grail-access"
+abbr grk="grail-k8s"
+abbr grs="source env.bash"
+abbr grsl="source lab/env.bash"
+abbr gra="grail-aws"
 
 # Git
 abbr gco="git checkout"
