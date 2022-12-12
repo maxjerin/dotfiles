@@ -29,6 +29,15 @@ if [[ $(uname -s) == 'Darwin' ]]; then
 
     install_homebrew_linuxbrew
 
+    if ! command -v pyenv &> /dev/null
+    then
+        brew install pyenv
+        pyenv install 3.9.8
+        pyenv global 3.9.8
+        pip install poetry
+        poetry install
+    fi
+    
     if ! command -v ansible &> /dev/null
     then
         # install ansible using homebrew

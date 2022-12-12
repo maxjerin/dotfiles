@@ -1,5 +1,9 @@
 # Dotfiles managed with Ansible
 
+## Encrypt/Decrypt Files
+Sensitive files are encrypted. Replace them with your own
+
+
 ## Setting up script on Ubuntu
 
 ```
@@ -14,7 +18,7 @@ sudo apt install ansible
 1. Install git
 2. Download this repo
 3. Run bootstrap.sh
-<!-- 4.a  Update .zshrc file with
+4.  Update .zshrc file with
 ```
 echo 'eval "$(pyenv init --path)"' >> ~/.zprofile
 
@@ -23,7 +27,7 @@ echo 'eval "$(pyenv init -)"' >> ~/.zshrc
 5. Install python 3.9.8 `pyenv install 3.9.8`
 6. Set python 3.9.8 as default `pyenv global 3.9.8`
 7. Install poetry `pip install poetry`
-8. Init poetry `poetry install` -->
+8. Init poetry `poetry install`
 
 
 ## Executing Dotfiles

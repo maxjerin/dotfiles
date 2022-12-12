@@ -2,3 +2,4 @@ dependencies/
 .zcompdump
 venv/
 .DS_Store
+.vault-password
