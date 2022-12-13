@@ -15,9 +15,17 @@
     - macos
     - macos_settings
 
+- name: Install Homebrew taps
+  community.general.homebrew_tap:
+    name: "{{ homebrew['taps_macos'] }}"
+  ignore_errors: true
+  tags:
+    - macos
+
 - name: Install Homebrew formulas
   community.general.homebrew:
     name: "{{ homebrew['formulas_macos'] }}"
+  ignore_errors: true
   tags:
     - macos
 
@@ -25,6 +33,7 @@
   community.general.homebrew_cask:
     name: "{{ homebrew['casks'] }}"
     accept_external_apps: true
+  ignore_errors: true
   tags:
     - macos
 
