@@ -36,6 +36,8 @@ abbr lt="exa --tree"
 abbr ltl="exa --tree --long"
 abbr ls="exa"
 abbr cat="bat"
+abbr ..="cd .."
+
 
 # Linux Keyboard Mapping
 abbr kb="xkbcomp -w0 -I$HOME/.xkb ~/.xkb/keymap/mykbd $DISPLAY"
