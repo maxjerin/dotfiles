@@ -113,13 +113,14 @@ export NVM_DIR="$HOME/.nvm"
 # export LIBRARY_PATH=$LIBRARY_PATH:/usr/local/opt/openssl/lib/
 
 
+# Check if folder exists before sourcing
 source "$(brew --prefix)/share/zsh-abbr/zsh-abbr.zsh"
 source "$(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
 source "$(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
 source "$(brew --prefix)/etc/profile.d/z.sh"
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-source "$(brew --prefix)/opt/fzf/install" &
 FPATH="$(brew --prefix)/share/zsh-completions:$FPATH"
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
 autoload -Uz compinit
 compinit
 zstyle ':completion:*' menu select
