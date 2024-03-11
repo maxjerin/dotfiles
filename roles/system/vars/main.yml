@@ -115,7 +115,7 @@ homebrew:
     - stoplight-studio
     - visual-studio-code
     # - whatsapp
-    - zoom
+    # - zoom
   mas:
     - 961632517 # Be Focused Pro
     - 635757879 # Calca
