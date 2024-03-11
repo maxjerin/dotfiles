@@ -34,7 +34,7 @@ defaults:
 homebrew:
   taps_macos:
     - homebrew/bundle
-    - homebrew/cask
+    # - homebrew/cask
     - homebrew/cask-drivers
     - homebrew/cask-fonts
     - homebrew/core
@@ -115,7 +115,7 @@ homebrew:
     # - clocker
     - docker
     # - emacs
-    - font-fira-code-nerd-font
+    # - font-fira-code-nerd-font
     - font-hack-nerd-font
     - font-source-code-pro
     # - intellij-idea
