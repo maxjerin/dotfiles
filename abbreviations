@@ -39,10 +39,10 @@ abbr k=kubectl
 abbr mk=minikube
 
 # General
-abbr ll="exa -alh"
-abbr lt="exa --tree"
-abbr ltl="exa --tree --long"
-abbr ls="exa"
+abbr ll="eza -alh"
+abbr lt="eza --tree"
+abbr ltl="eza --tree --long"
+abbr ls="eza"
 abbr cat="bat"
 
 # Linux Keyboard Mapping
