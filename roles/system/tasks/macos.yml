@@ -15,12 +15,6 @@
     - macos
     - macos_settings
 
-- name: Install Homebrew taps
-  community.general.homebrew_tap:
-    name: "{{ homebrew['taps_macos'] }}"
-  tags:
-    - macos
-
 - name: Install Homebrew formulas
   community.general.homebrew:
     name: "{{ homebrew['formulas_macos'] }}"

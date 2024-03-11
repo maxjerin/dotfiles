@@ -32,15 +32,6 @@ defaults:
     value: 'true'
 
 homebrew:
-  taps_macos:
-    # - homebrew/bundle
-    # - homebrew/cask
-    # - homebrew/cask-drivers
-    # - homebrew/cask-fonts
-    # - homebrew/core
-    # - olets/tap/zsh-abbr
-    # - railwaycat/emacsmacport
-    # - warrensbox/tap/tfswitch
   formulas_linux:
     - awscli
     - docker
@@ -74,9 +65,6 @@ homebrew:
     - zsh-syntax-highlighting
   formulas_macos:
     - awscli
-    # Don't uncomment this,
-    # adding this back always clashes with casks
-    # - docker
     - bat
     - emacs-mac
     - exa
@@ -99,7 +87,6 @@ homebrew:
     - shellcheck
     - spaceship
     - starship
-    # - svn
     - vault
     - yamllint
     - yarn
@@ -113,24 +100,15 @@ homebrew:
     - 1password
     - appcleaner
     - arc
-    # - clocker
     - docker
-    # - emacs
-    # - font-fira-code-nerd-font
     - font-hack-nerd-font
     - font-source-code-pro
-    # - intellij-idea
     - iterm2
-    # - goland
-    # - google-chrome
     - grammarly-desktop
-    # - home-assistant
     - ha-menu
     - karabiner-elements
-    # - lens
     - localstack
     - notion
-    # - notion-enhanced
     - postico
     - raycast
     - rescuetime
