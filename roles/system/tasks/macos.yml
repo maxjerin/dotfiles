@@ -17,7 +17,38 @@
 
 - name: Install Homebrew formulas
   community.general.homebrew:
-    name: "{{ homebrew['formulas_macos'] }}"
+    # name: "{{ homebrew['formulas_macos'] }}"
+    name:
+      - awscli
+      - bat
+      - emacs-mac
+      - exa
+      - font-source-code-pro
+      - font-fira-code
+      - fzf
+      - go
+      - helm
+      - jenv
+      - k9s
+      - kubectl
+      - mas
+      - minikube
+      - node
+      - nvm
+      - openjdk@11
+      - olets/tap/zsh-abbr
+      - powerline-go
+      - pyenv
+      - shellcheck
+      - spaceship
+      - starship
+      - vault
+      - yamllint
+      - yarn
+      - z
+      - zsh-completions
+      - zsh-autosuggestions
+      - zsh-syntax-highlighting
   tags:
     - macos
 
