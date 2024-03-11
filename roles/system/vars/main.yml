@@ -33,14 +33,14 @@ defaults:
 
 homebrew:
   taps_macos:
-    - homebrew/bundle
+    # - homebrew/bundle
     # - homebrew/cask
-    - homebrew/cask-drivers
-    - homebrew/cask-fonts
-    - homebrew/core
-    - olets/tap/zsh-abbr
-    - railwaycat/emacsmacport
-    - warrensbox/tap/tfswitch
+    # - homebrew/cask-drivers
+    # - homebrew/cask-fonts
+    # - homebrew/core
+    # - olets/tap/zsh-abbr
+    # - railwaycat/emacsmacport
+    # - warrensbox/tap/tfswitch
   formulas_linux:
     - awscli
     - docker
@@ -93,6 +93,7 @@ homebrew:
     - node
     - nvm
     - openjdk@11
+    - olets/tap/zsh-abbr
     - powerline-go
     - pyenv
     - shellcheck
