@@ -3,7 +3,7 @@ if [[ $(uname -s) == 'Darwin' ]] && [[ $(uname -m) == 'arm64' ]]; then
   eval "$(/opt/homebrew/bin/brew shellenv)"
 fi
 
-source ~/.zshrc_base 
+source ~/.zshrc_base
 
 # 1Password Agent Link
 if test -f ~/Library/Group\ Containers/2BUA8C4S2C.com.1password/t/agent.sock; then

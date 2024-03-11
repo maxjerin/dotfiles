@@ -98,7 +98,7 @@ homebrew:
     - shellcheck
     - spaceship
     - starship
-    - svn
+    # - svn
     - vault
     - yamllint
     - yarn
@@ -111,22 +111,22 @@ homebrew:
     - 1password-cli
     - 1password
     - appcleaner
-    - bartender
-    - clocker
+    - arc
+    # - clocker
     - docker
-    - emacs
+    # - emacs
     - font-fira-code-nerd-font
     - font-hack-nerd-font
     - font-source-code-pro
     # - intellij-idea
     - iterm2
     # - goland
-    - google-chrome
+    # - google-chrome
     - grammarly-desktop
-    - home-assistant
+    # - home-assistant
     - ha-menu
     - karabiner-elements
-    - lens
+    # - lens
     - localstack
     - notion
     # - notion-enhanced
@@ -140,9 +140,10 @@ homebrew:
     - zoom
   mas:
     - 961632517   # Be Focused Pro
-    - 1476964367  # In Your Face
-    - 937984704   # Amphetamine
     - 635757879   # Calca
+    - 1056643111  # Clocker
+    - 1532419400  # Meeting Bar
+    - 1452453066  # Hidden Bar
 
 
 repos:
