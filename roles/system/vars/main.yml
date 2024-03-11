@@ -91,7 +91,6 @@ homebrew:
     - yamllint
     - yarn
     - z
-    - zsh
     - zsh-completions
     - zsh-autosuggestions
     - zsh-syntax-highlighting
@@ -107,7 +106,7 @@ homebrew:
     - grammarly-desktop
     - ha-menu
     - karabiner-elements
-    - localstack
+    # - localstack
     - notion
     - postico
     - raycast
@@ -115,7 +114,7 @@ homebrew:
     - slack
     - stoplight-studio
     - visual-studio-code
-    - whatsapp
+    # - whatsapp
     - zoom
   mas:
     - 961632517   # Be Focused Pro
