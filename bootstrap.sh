@@ -4,16 +4,25 @@ set -euo pipefail
 
 # Link zshrc from dotfiles
 ln -sf "$(pwd)/.zshrc_base" "${HOME}/.zshrc_base"
+ln -sf "$(pwd)/.zprofile" "${HOME}/.zprofile"
+
+install_homebrew_linuxbrew() {
+    if ! command -v brew &> /dev/null
+    then
+        # Install Homebrew/Linuxbrew
+        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+        source "${HOME}/.zprofile"
+    else
+        echo "Homebrew/Linuxbrew already installed"
+    fi
+}
 
 # Zsh and brew setup on MacOS
 if [[ $(uname -s) == 'Darwin' ]]; then
     ln -fs "$(pwd)/.zshrc_macos" "${HOME}/.zshrc"
 
-    if ! command -v brew &> /dev/null
-    then
-        # Install Homebrew/Linuxbrew
-        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-    fi
+    install_homebrew_linuxbrew
 
     if ! command -v ansible &> /dev/null
     then
@@ -24,16 +33,11 @@ else
 # Zsh and brew setup on Linux
     ln -sf "$(pwd)/.zshrc_linux" "${HOME}/.zshrc"
 
-    if ! command -v brew &> /dev/null
-    then
-        # Install Homebrew/Linuxbrew
-        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    install_homebrew_linuxbrew
 
-        # Homebrew build essentials
-        sudo apt update
-        sudo apt-get install -y build-essential
-
-    fi
+    # Homebrew build essentials
+    sudo apt update
+    sudo apt-get install -y build-essential
 
     if ! command -v ansible &> /dev/null
     then
@@ -61,20 +65,18 @@ fi
 [ ! -d "${HOME}/.config/zsh" ] && mkdir "${HOME}/.config/zsh"
 cp abbreviations ~/.config/zsh/
 
-
-
 # source zshrc for homebrew
 # shellcheck source=/dev/null
 source "${HOME}/.zshrc"
 
-# Dotfiles' project root directory
-ROOTDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-# Host file location
-HOSTS="$ROOTDIR/hosts"
-# Main playbook
-PLAYBOOK="$ROOTDIR/dotfiles.yml"
+# # Dotfiles' project root directory
+# ROOTDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# # Host file location
+# HOSTS="$ROOTDIR/hosts"
+# # Main playbook
+# PLAYBOOK="$ROOTDIR/dotfiles.yml"
 
-# Runs Ansible playbook using our user.
-ansible-playbook -i "$HOSTS" "$PLAYBOOK"
+# # Runs Ansible playbook using our user.
+# ansible-playbook -i "$HOSTS" "$PLAYBOOK"
 
 exit 0
