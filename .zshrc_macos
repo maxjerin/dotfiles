@@ -1,3 +1,5 @@
+#! /bin/zsh
+
 if [[ $(uname -s) == 'Darwin' ]] && [[ $(uname -m) == 'arm64' ]]; then
   #  if M1 mac then use the following
   eval "$(/opt/homebrew/bin/brew shellenv)"
@@ -9,6 +11,3 @@ source ~/.zshrc_base
 if test -f ~/Library/Group\ Containers/2BUA8C4S2C.com.1password/t/agent.sock; then
   mkdir -p ~/.1password && ln -s ~/Library/Group\ Containers/2BUA8C4S2C.com.1password/t/agent.sock ~/.1password/agent.sock
 fi
-
-# Remove all duplicates from $PATH
-typeset -U PATH
