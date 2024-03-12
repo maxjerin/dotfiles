@@ -64,8 +64,10 @@ homebrew:
     - zsh-autosuggestions
     - zsh-syntax-highlighting
   formulas_macos:
+    - asdf
     - awscli
     - bat
+    - code-cli
     - eza
     - fzf
     - go

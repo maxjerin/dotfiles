@@ -11,3 +11,7 @@ source ~/.zshrc_base
 if test -f ~/Library/Group\ Containers/2BUA8C4S2C.com.1password/t/agent.sock; then
   mkdir -p ~/.1password && ln -s ~/Library/Group\ Containers/2BUA8C4S2C.com.1password/t/agent.sock ~/.1password/agent.sock
 fi
+
+if test -f /opt/homebrew/opt/asdf/libexec/asdf.sh; then
+  . /opt/homebrew/opt/asdf/libexec/asdf.sh
+fi
