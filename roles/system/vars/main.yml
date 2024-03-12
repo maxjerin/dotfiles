@@ -67,8 +67,6 @@ homebrew:
     - awscli
     - bat
     - eza
-    - font-source-code-pro
-    - font-fira-code
     - fzf
     - go
     - helm
@@ -86,7 +84,6 @@ homebrew:
     - shellcheck
     - spaceship
     - starship
-    - vault
     - yamllint
     - yarn
     - z
@@ -99,8 +96,6 @@ homebrew:
     - appcleaner
     - arc
     - docker
-    - font-hack-nerd-font
-    - font-source-code-pro
     - iterm2
     - grammarly-desktop
     - ha-menu
@@ -116,7 +111,7 @@ homebrew:
     # - zoom
   mas:
     - 961632517 # Be Focused Pro
-    - 635757879 # Calca
+    - 635758264 # Calca
     - 1056643111 # Clocker
     - 1532419400 # Meeting Bar
     - 1452453066 # Hidden Bar
