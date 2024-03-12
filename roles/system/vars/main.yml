@@ -73,6 +73,7 @@ homebrew:
     - go
     - helm
     - jenv
+    - jq
     - k9s
     - kubectl
     - mas
