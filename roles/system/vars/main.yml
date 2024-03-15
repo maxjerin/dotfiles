@@ -68,6 +68,7 @@ homebrew:
     - awscli
     - bat
     - code-cli
+    - dive
     - eza
     - fzf
     - go
@@ -99,7 +100,6 @@ homebrew:
     - appcleaner
     - arc
     - docker
-    - iterm2
     - grammarly-desktop
     - ha-menu
     - karabiner-elements
