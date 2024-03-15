@@ -8,6 +8,9 @@ ln -sf "$(pwd)/.zprofile" "${HOME}/.zprofile"
 mkdir -p ~/.config
 ln -sf "$(pwd)/starship.toml" "${HOME}/.config/starship.toml"
 
+mkdir -p ~/.config/alacritty
+ln -sf "$(pwd)/alacritty.toml "${HOME}/.config/alacritty/alacritty.toml"
+
 install_homebrew_linuxbrew() {
     if ! command -v brew &> /dev/null
     then

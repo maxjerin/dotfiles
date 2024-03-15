@@ -1,0 +1,23 @@
+[shell]
+program = "/bin/zsh"
+
+[window]
+dimensions = { columns = 200, lines = 70 }
+padding = { x = 40, y = 20 }
+dynamic_padding = true
+decorations = "Buttonless"
+opacity = 0.7
+blur = true
+
+decorations_theme_variant = "Light"
+
+[scrolling]
+history = 100000
+
+[font]
+size = 14
+normal = { family = "Menlo", style = "Regular" }
+
+[selection]
+save_to_clipboard = true
+
