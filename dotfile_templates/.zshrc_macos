@@ -1,3 +1,5 @@
+#! /bin/zsh
+
 if [[ $(uname -s) == 'Darwin' ]] && [[ $(uname -m) == 'arm64' ]]; then
   #  if M1 mac then use the following
   eval "$(/opt/homebrew/bin/brew shellenv)"
@@ -10,7 +12,10 @@ if test -f ~/Library/Group\ Containers/2BUA8C4S2C.com.1password/t/agent.sock; th
   mkdir -p ~/.1password && ln -s ~/Library/Group\ Containers/2BUA8C4S2C.com.1password/t/agent.sock ~/.1password/agent.sock
 fi
 
-# Remove all duplicates from $PATH
-typeset -U PATH
+if test -f /opt/homebrew/opt/asdf/libexec/asdf.sh; then
+  . /opt/homebrew/opt/asdf/libexec/asdf.sh
+fi
 
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+if test -f "/Applications/Visual Studio Code.app"; then
+  code version use oss --install-dir "/Applications/Visual Studio Code.app"
+fi

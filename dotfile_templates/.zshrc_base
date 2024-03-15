@@ -1,9 +1,6 @@
-#! /usr/bin/env zsh
-
 export PATH=$(brew --prefix)/bin:$PATH
 export PATH=$(brew --prefix)/sbin:$PATH
 
-export PATH="$PATH:$(go env GOPATH)/bin"
 
 # If you come from bash you might have to change your $PATH.
 
@@ -59,8 +56,6 @@ ENABLE_CORRECTION="true"
 export HISTSIZE=10000000
 export SAVEHIST="$HISTSIZE"
 export HISTFILE=~/.zsh_history
-export _Z_NO_PROMPT_COMMAND=false
-export _Z_NO_RESOLVE_SYMLINKS=false
 setopt EXTENDED_HISTORY          # Write the history file in the ":start:elapsed;command" format.
 setopt INC_APPEND_HISTORY        # Write to the history file immediately, not when the shell exits.
 setopt HIST_EXPIRE_DUPS_FIRST    # Expire duplicate entries first when trimming history.
@@ -100,8 +95,8 @@ setopt HIST_VERIFY               # Don't execute immediately upon history expans
 # fi
 
 # NVM config
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+# export NVM_DIR="$HOME/.nvm"
+# [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 
 
 # For compilers to find zlib you may need to set:
@@ -114,16 +109,17 @@ export NVM_DIR="$HOME/.nvm"
 # export LIBRARY_PATH=$LIBRARY_PATH:/usr/local/opt/openssl/lib/
 
 
-# Check if folder exists before sourcing
 source "$(brew --prefix)/share/zsh-abbr/zsh-abbr.zsh"
 source "$(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
 source "$(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
 source "$(brew --prefix)/etc/profile.d/z.sh"
-FPATH="$(brew --prefix)/share/zsh-completions:$FPATH"
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-
+FPATH="$(brew --prefix)/share/zsh-completions:$FPATH"
 autoload -Uz compinit
-compinit
+for dump in ~/.zcompdump(N.mh+24); do
+  compinit
+done
+compinit -C
 zstyle ':completion:*' menu select
 
 # PyEnv
@@ -156,6 +152,7 @@ if type brew &>/dev/null; then
   # TODO: Try this
   # https://github.com/pbar1/dotfiles/blob/master/.config/starship.toml
   eval "$(starship init zsh)"
+  export STARSHIP_CONFIG=~/.config/starship.toml
 fi
 
 # Powerline Go Setup
@@ -204,4 +201,12 @@ if [[ $(uname -s) == 'Darwin' ]]; then
   }
 fi
 : '
+
+
 ######### Theme ############
+
+# Disable Homebrew autoupdates
+export HOMEBREW_NO_AUTO_UPDATE=1
+
+# Remove all duplicates from $PATH
+typeset -U PATH

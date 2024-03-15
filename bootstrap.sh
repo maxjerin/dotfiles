@@ -3,13 +3,13 @@
 set -euo pipefail
 
 # Link zshrc from dotfiles
-ln -sf "$(pwd)/.zshrc_base" "${HOME}/.zshrc_base"
-ln -sf "$(pwd)/.zprofile" "${HOME}/.zprofile"
+ln -sf "$(pwd)/dotfile_templates/.zshrc_base" "${HOME}/.zshrc_base"
+ln -sf "$(pwd)/dotfile_templates/.zprofile" "${HOME}/.zprofile"
 mkdir -p ~/.config
-ln -sf "$(pwd)/starship.toml" "${HOME}/.config/starship.toml"
+ln -sf "$(pwd)/dotfile_templates/starship.toml" "${HOME}/.config/starship.toml"
 
 mkdir -p ~/.config/alacritty
-ln -sf "$(pwd)/alacritty.toml "${HOME}/.config/alacritty/alacritty.toml"
+ln -sf "$(pwd)/dotfile_templates/alacritty.toml "${HOME}/.config/alacritty/alacritty.toml"
 
 install_homebrew_linuxbrew() {
     if ! command -v brew &> /dev/null
@@ -25,7 +25,7 @@ install_homebrew_linuxbrew() {
 
 # Zsh and brew setup on MacOS
 if [[ $(uname -s) == 'Darwin' ]]; then
-    ln -fs "$(pwd)/.zshrc_macos" "${HOME}/.zshrc"
+    ln -fs "$(pwd)/dotfile_templates/.zshrc_macos" "${HOME}/.zshrc"
 
     install_homebrew_linuxbrew
 
