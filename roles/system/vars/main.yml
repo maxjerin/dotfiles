@@ -64,6 +64,7 @@ homebrew:
     - zsh-autosuggestions
     - zsh-syntax-highlighting
   formulas_macos:
+    - alacritty
     - asdf
     - awscli
     - bat
@@ -73,6 +74,7 @@ homebrew:
     - fzf
     - go
     - helm
+    - insomnia
     - jenv
     - jq
     - k9s
@@ -88,6 +90,7 @@ homebrew:
     - shellcheck
     - spaceship
     - starship
+    - tmux
     - yamllint
     - yarn
     - z
