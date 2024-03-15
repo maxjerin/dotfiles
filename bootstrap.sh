@@ -2,7 +2,7 @@
 
 set -euo pipefail
 
-# Symlink rc files
+# Link zshrc from dotfiles
 ln -sf "$(pwd)/.zshrc_base" "${HOME}/.zshrc_base"
 ln -sf "$(pwd)/.zprofile" "${HOME}/.zprofile"
 mkdir -p ~/.config
@@ -14,7 +14,7 @@ ln -sf "$(pwd)/alacritty.toml "${HOME}/.config/alacritty/alacritty.toml"
 install_homebrew_linuxbrew() {
     if ! command -v brew &> /dev/null
     then
-        # Install Homebrew/Linuxbrew
+        echo "Install Homebrew/Linuxbrew"
         /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
         source "${HOME}/.zprofile"
@@ -31,13 +31,10 @@ if [[ $(uname -s) == 'Darwin' ]]; then
 
     if ! command -v pyenv &> /dev/null
     then
+        echo "Install python toolchain (pyenv, poetry)"
         brew install pyenv
-        pyenv install 3.9.8
-        pyenv global 3.9.8
-        pip install poetry
-        poetry install
     fi
-    
+
     if ! command -v ansible &> /dev/null
     then
         # install ansible using homebrew

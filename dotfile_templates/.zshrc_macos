@@ -12,3 +12,5 @@ fi
 
 # Remove all duplicates from $PATH
 typeset -U PATH
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
