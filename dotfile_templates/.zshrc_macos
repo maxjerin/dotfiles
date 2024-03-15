@@ -16,6 +16,19 @@ if test -f /opt/homebrew/opt/asdf/libexec/asdf.sh; then
   . /opt/homebrew/opt/asdf/libexec/asdf.sh
 fi
 
+if ! command -v tmux &> /dev/null; then
+  git clone https://github.com/tmux-plugins/tpm ~/.config/tmux/plugins/tpm
+  tmux source ~/.config/tmux/tmux.conf
+
+  # Update dark and light theme based on Macos night mode
+  if test -f ~/.config/tmux/plugins/tmux-colors-solarized/tmuxcolors-light.conf; then
+    echo 'run-shell "gsed -i 's/solarized_dark/solarized_light/' ~/.config/alacritty/alacritty.toml"' >> ~/.config/tmux/plugins/tmux-colors-solarized/tmuxcolors-light.conf
+  fi
+  if test -f ~/.config/tmux/plugins/tmux-colors-solarized/tmuxcolors-dark.conf; then
+    echo 'run-shell "gsed -i 's/solarized_light/solarized_dark/' ~/.config/alacritty/alacritty.toml"' >> ~/.config/tmux/plugins/tmux-colors-solarized/tmuxcolors-dark.conf
+  fi
+fi
+
 if test -f "/Applications/Visual Studio Code.app"; then
   code version use oss --install-dir "/Applications/Visual Studio Code.app"
 fi

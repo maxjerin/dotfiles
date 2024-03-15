@@ -69,9 +69,12 @@ homebrew:
     - awscli
     - bat
     - code-cli
+    - cormacrelf/tap/dark-notify
     - dive
     - eza
     - fzf
+    # macOs sed has compatibility issues with bas scripts
+    - gnu-sed
     - go
     - helm
     - insomnia
