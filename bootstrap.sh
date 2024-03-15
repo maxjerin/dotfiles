@@ -2,9 +2,11 @@
 
 set -euo pipefail
 
-# Link zshrc from dotfiles
+# Symlink rc files
 ln -sf "$(pwd)/.zshrc_base" "${HOME}/.zshrc_base"
 ln -sf "$(pwd)/.zprofile" "${HOME}/.zprofile"
+mkdir -p ~/.config
+ln -sf "$(pwd)/starship.toml" "${HOME}/.config/starship.toml"
 
 install_homebrew_linuxbrew() {
     if ! command -v brew &> /dev/null

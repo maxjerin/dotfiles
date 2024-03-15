@@ -151,11 +151,12 @@ if type brew &>/dev/null; then
 
   # TODO: Try this
   # https://github.com/pbar1/dotfiles/blob/master/.config/starship.toml
-  # eval "$(starship init zsh)"
+  eval "$(starship init zsh)"
+  export STARSHIP_CONFIG=~/.config/starship.toml
 fi
 
 # Powerline Go Setup
-# : '
+: '
 if [[ $(uname -s) == 'Darwin' ]]; then
   export PATH=$PATH:$(brew --prefix)/bin
   POWERLINE_GO=$(brew --prefix)/bin/powerline-go
@@ -199,7 +200,7 @@ if [[ $(uname -s) == 'Darwin' ]]; then
    printf "\n ➜";
   }
 fi
-# : '
+: '
 
 
 ######### Theme ############

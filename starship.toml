@@ -1,0 +1,55 @@
+add_newline = true
+
+[cmd_duration]
+min_time = 500
+format = 'underwent [$duration](bold yellow)'
+
+[git_branch]
+symbol = '🌱 '
+truncation_symbol = ''
+ignore_branches = ['master', 'main']
+
+[git_state]
+format = '[\($state( $progress_current of $progress_total)\)]($style) '
+cherry_pick = '[🍒 PICKING](bold red)'
+
+[git_status]
+ahead = '⇡${count}'
+diverged = '⇕⇡${ahead_count}⇣${behind_count}'
+behind = '⇣${count}'
+
+[aws]
+format = 'on [$symbol($profile )(\($region\) )]($style)'
+style = 'bold blue'
+symbol = '🅰 '
+
+[kubernetes]
+# format = 'on [☸️ ($user on )($cluster in )$context \($namespace\)](dimmed green) '
+# format = 'on [☸️  $context](blue) '
+disabled = false
+
+[[kubernetes.contexts]]
+# "bold red" style + default symbol when Kubernetes current context name equals "production" *and* the current user
+# equals "admin_user"
+context_pattern = "*prod*"
+style = "blink bold bg:grey fg:bright-red"
+context_alias = "lims-prod"
+
+[time]
+disabled = false
+format = '[\[ $time \]]($style) '
+time_format = '%T'
+utc_time_offset = 'local'
+time_range = '10:00:00-14:00:00'
+
+[status]
+style = 'bg:blue'
+symbol = '🔴 '
+# success_symbol = '🟢 SUCCESS'
+format = '[\[$symbol$common_meaning$signal_name$maybe_int\]]($style) '
+map_symbol = true
+disabled = false
+
+[terraform]
+# format = '[ $version $workspace]($style) '
+format = '[💠  $version]($style) '
