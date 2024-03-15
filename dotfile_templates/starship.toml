@@ -25,7 +25,7 @@ symbol = '🅰 '
 
 [kubernetes]
 # format = 'on [☸️ ($user on )($cluster in )$context \($namespace\)](dimmed green) '
-# format = 'on [☸️  $context](blue) '
+format = 'on [☸️ $context](blue) '
 disabled = false
 
 [[kubernetes.contexts]]
@@ -34,6 +34,12 @@ disabled = false
 context_pattern = "*prod*"
 style = "blink bold bg:grey fg:bright-red"
 context_alias = "lims-prod"
+
+[[kubernetes.contexts]]
+# "bold red" style + default symbol when Kubernetes current context name equals "production" *and* the current user
+# equals "admin_user"
+context_pattern = "*"
+style = "blink bold bg:grey fg:bright-blue"
 
 [time]
 disabled = false
