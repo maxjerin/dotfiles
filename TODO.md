@@ -10,7 +10,16 @@
     * [ ] abbrevation
 
 ## MacOS
-2. [ ] reduce motion blur on Mac
+* [ ] Setup karbiner
+    * [ ] caps lock to backspace
+    * [ ] right shift to escape
+* [ ] Configure Raycast
+    * [ ] Disable spotlight shortcut
+    * [ ] Enable Raycast shortcut to Cmd + Space
+* [ ] reduce motion blur on Mac
+* [ ] Remove app from launcher
+    * [ ] maps, phots, facetime, calendar, contacts, remidners, notes, apple tv, music, podcast, news, pages, numbers, keynote, mail, safari
+
 2. [ ] Configure iTerm2
     * [ ] select source code pro font in iTerm
     * [ ] set font size to 14
@@ -18,14 +27,6 @@
 2. [ ] Configure Tabby and save configuration to repo
 11. [ ] Setup app for startup
     * [ ] one password, bartender, karabiner, clocker, be focusied, next meeting
-12. [ ] Remove app from launcher
-    * [ ] maps, phots, facetime, calendar, contacts, remidners, notes, apple tv, music, podcast, news, pages, numbers, keynote, mail, safari
-3. [ ] Setup karbiner
-    * [ ] caps lock to backspace
-    * [ ] right shift to escape
-
-
-
 10. [ ] create a raycast cheatsheet to read from a custom file
     * [ ] search cheatsheet
     * [ ] add to cheat sheet

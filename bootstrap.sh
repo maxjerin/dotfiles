@@ -2,19 +2,28 @@
 
 set -euo pipefail
 
-# Symlink rc files
-ln -sf "$(pwd)/.zshrc_base" "${HOME}/.zshrc_base"
-ln -sf "$(pwd)/.zprofile" "${HOME}/.zprofile"
+# Ensure we protect files before commit
+cp repo_config/pre-commit .git/hooks/pre-commit
+
+# Link zshrc from dotfiles
+ln -sf "$(pwd)/dotfile_templates/.zshrc_base" "${HOME}/.zshrc_base"
+ln -sf "$(pwd)/dotfile_templates/.zprofile" "${HOME}/.zprofile"
 mkdir -p ~/.config
-ln -sf "$(pwd)/starship.toml" "${HOME}/.config/starship.toml"
+ln -sf "$(pwd)/dotfile_templates/starship.toml" "${HOME}/.config/starship.toml"
 
 mkdir -p ~/.config/alacritty
-ln -sf "$(pwd)/alacritty.toml "${HOME}/.config/alacritty/alacritty.toml"
+ln -sf "$(pwd)/dotfile_templates/alacritty.toml" "${HOME}/.config/alacritty/alacritty.toml"
+
+# Abbreviations
+[ ! -d "${HOME}/.config" ] && mkdir "${HOME}/.config"
+[ ! -d "${HOME}/.config/zsh" ] && mkdir "${HOME}/.config/zsh"
+cat dotfile_templates/abbreviations_common > ~/.config/zsh/abbreviations
+cat dotfile_templates/abbreviations_work >> ~/.config/zsh/abbreviations
 
 install_homebrew_linuxbrew() {
     if ! command -v brew &> /dev/null
     then
-        # Install Homebrew/Linuxbrew
+        echo "Install Homebrew/Linuxbrew"
         /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
         source "${HOME}/.zprofile"
@@ -23,17 +32,31 @@ install_homebrew_linuxbrew() {
     fi
 }
 
+install_python_toolchain() {
+    if ! command -v pyenv &> /dev/null
+    then
+        echo "Install pyenv"
+        brew install pyenv
+    else
+        echo "Pyenv already installed"
+    fi
+}
+
+setup_poetry_project() {
+    pyenv install -s
+    python3 -m venv venv
+    source venv/bin/activate
+    pip install poetry
+    poetry install
+}
+
 # Zsh and brew setup on MacOS
 if [[ $(uname -s) == 'Darwin' ]]; then
-    ln -fs "$(pwd)/.zshrc_macos" "${HOME}/.zshrc"
+    ln -fs "$(pwd)/dotfile_templates/.zshrc_macos" "${HOME}/.zshrc"
 
     install_homebrew_linuxbrew
-
-    if ! command -v ansible &> /dev/null
-    then
-        # install ansible using homebrew
-        brew install ansible
-    fi
+    install_python_toolchain
+    setup_poetry_project
 else
 # Zsh and brew setup on Linux
     ln -sf "$(pwd)/.zshrc_linux" "${HOME}/.zshrc"
@@ -65,14 +88,10 @@ if [[ $(uname -s) == 'Linux' ]]; then
     fi
 fi
 
-# Copy abbreviations
-[ ! -d "${HOME}/.config" ] && mkdir "${HOME}/.config"
-[ ! -d "${HOME}/.config/zsh" ] && mkdir "${HOME}/.config/zsh"
-cp abbreviations ~/.config/zsh/
-
 # source zshrc for homebrew
 # shellcheck source=/dev/null
-source "${HOME}/.zshrc"
+# source "${HOME}/.zprofile"
+# source "${HOME}/.zshrc"
 
 # # Dotfiles' project root directory
 # ROOTDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
