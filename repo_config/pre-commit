@@ -62,14 +62,6 @@ printf "Encrypting file in pre-commit %s\n" "$(pwd)/dotfile_templates/abbreviati
 FILE_TO_ENCRYPT="$(pwd)/dotfile_templates/abbreviations_work"
 head -1 "$FILE_TO_ENCRYPT" | grep --quiet "^\$ANSIBLE_VAULT;" && ansible-vault encrypt "${FILE_TO_ENCRYPT}" --vault-password-file "${PASSWORD_FILE}"
 
-CURR_DIR="$(pwd)/iTerm2"
-pushd "$CURR_DIR" || exit
-for i in $(find . -type f); do
-	printf "Encrypting file in pre-commit %s \n" "${CURR_DIR}/${i}"
-	head -1 "${i}" | grep --quiet "^\$ANSIBLE_VAULT;" && ansible-vault encrypt "$i" --vault-password-file "${PASSWORD_FILE}";
-done
-popd || exit
-
 CURR_DIR="$(pwd)/Raycast"
 pushd "$CURR_DIR" || exit
 for i in $(find . -type f); do
