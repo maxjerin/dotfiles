@@ -2,6 +2,9 @@
 
 set -euo pipefail
 
+# Ensure we protect files before commit
+cp repo_config/pre-commit .git/hooks/pre-commit
+
 # Link zshrc from dotfiles
 ln -sf "$(pwd)/dotfile_templates/.zshrc_base" "${HOME}/.zshrc_base"
 ln -sf "$(pwd)/dotfile_templates/.zprofile" "${HOME}/.zprofile"
