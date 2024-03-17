@@ -3,6 +3,7 @@ name = "dotfiles"
 version = "0.1.0"
 description = "Dotfiles project with poetry to perform linting"
 authors = ["Jerin Mathew <maxjerin@gmail.com>"]
+package-mode = false
 
 [tool.poetry.dependencies]
 python = "^3.8"
