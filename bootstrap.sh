@@ -12,7 +12,6 @@ mkdir -p ~/.config
 ln -sf "$(pwd)/dotfile_templates/starship.toml" "${HOME}/.config/starship.toml"
 
 mkdir -p ~/.config/alacritty
-git clone https://github.com/alacritty/alacritty-theme ~/.config/alacritty/themes
 ln -sf "$(pwd)/dotfile_templates/alacritty.toml" "${HOME}/.config/alacritty/alacritty.toml"
 
 mkdir -p ~/.config/tmux
