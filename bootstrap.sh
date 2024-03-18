@@ -17,6 +17,10 @@ ln -sf "$(pwd)/dotfile_templates/alacritty.toml" "${HOME}/.config/alacritty/alac
 mkdir -p ~/.config/tmux
 ln -sf "$(pwd)/dotfile_templates/tmux.conf" "${HOME}/.config/tmux/tmux.conf"
 
+mkdir -p ~/.config/k9s/skins
+ln -sf "$(pwd)/dotfile_templates/k9s_config.yaml" "${HOME}/.config/k9s/config.yaml"
+ln -sf "$(pwd)/dotfile_templates/k9s_skin.yaml" "${HOME}/.config/k9s/skins/dracula.yaml"
+
 # Abbreviations
 [ ! -d "${HOME}/.config" ] && mkdir "${HOME}/.config"
 [ ! -d "${HOME}/.config/zsh" ] && mkdir "${HOME}/.config/zsh"

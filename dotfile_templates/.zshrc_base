@@ -133,6 +133,9 @@ eval "$(pyenv init -)"
 # export PATH=${HOME}/bin:$PATH
 # source ${HOME}/.bazel/bin/bazel-complete.bash
 
+# K9S
+export K9S_CONFIG_DIR=~/.config/k9s
+
 
 # WORK ZSHRC
 if test -f ~/.zshrc_company; then
