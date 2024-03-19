@@ -21,6 +21,9 @@ mkdir -p ~/.config/k9s/skins
 ln -sf "$(pwd)/dotfile_templates/k9s_config.yaml" "${HOME}/.config/k9s/config.yaml"
 ln -sf "$(pwd)/dotfile_templates/k9s_skin.yaml" "${HOME}/.config/k9s/skins/dracula.yaml"
 
+mkdir -p ~/.config/karabiner
+ln -sf "$(pwd)/dotfile_templates/karabiner.json" "${HOME}/.config/karbiner/karabiner.json"
+
 # Abbreviations
 [ ! -d "${HOME}/.config" ] && mkdir "${HOME}/.config"
 [ ! -d "${HOME}/.config/zsh" ] && mkdir "${HOME}/.config/zsh"
