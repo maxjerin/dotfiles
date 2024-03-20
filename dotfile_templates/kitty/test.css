@@ -1,24 +1,26 @@
 /* Test file to alter themes */
 body {
-    background: #2A2B2E;
-    foreground: #929CA3;
-    cursor: #d9e6f2;
-    selection_background: #073642;
-    color0: #000000;
-    color8: #5f666c;
-    color1: #c37372;
-    color9: #dbaaaa;
-    color2: #72c373;
-    color10: #aadbaa;
-    color3: #CE5274;
-    color11: #dadbaa;
-    color4: #4E97D1;
-    color12: #aaaadb;
-    color5: #c372c2;
-    color13: #dbaada;
-    color6: #72c2c3;
-    color14: #aadadb;
-    color7: #d9d9d9;
-    color15: #ffffff;
-    selection_foreground: #29262f;
+    background:            #fbf8ef;
+    /* foreground:            #713987; */
+    foreground:            #3d2747;
+    cursor:                #73635a;
+    selection_background:  #a4a390;
+    color0:                #000000;
+    color8:                #7f7f7f;
+    color1:                #cc0000;
+    color9:                #cc0000;
+    color2:                #009600;
+    color10:               #009600;
+    color3:                #713463;
+    color11:               #d06b00;
+    color4:                #2c68a4;
+    color12:               #0000cc;
+    color5:                #cc00cc;
+    color13:               #cc00cc;
+    color6:                #0087cc;
+    color14:               #0086cb;
+    color7:                #cccccc;
+    color15:               #ffffff;
+    selection_foreground: #dfdbc3;
+
 }
