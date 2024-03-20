@@ -82,6 +82,7 @@ homebrew:
     - jenv
     - jq
     - k9s
+    - kitty
     - kubectl
     - mas
     - minikube

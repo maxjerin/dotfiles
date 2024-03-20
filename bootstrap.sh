@@ -22,7 +22,10 @@ ln -sf "$(pwd)/dotfile_templates/k9s_config.yaml" "${HOME}/.config/k9s/config.ya
 ln -sf "$(pwd)/dotfile_templates/k9s_skin.yaml" "${HOME}/.config/k9s/skins/dracula.yaml"
 
 mkdir -p ~/.config/karabiner
-ln -sf "$(pwd)/dotfile_templates/karabiner.json" "${HOME}/.config/karbiner/karabiner.json"
+ln -sf "$(pwd)/dotfile_templates/karabiner.json" "${HOME}/.config/karabiner/karabiner.json"
+
+mkdir -p ~/.config/kitty
+ln -sf "$(pwd)/dotfile_templates/kitty.conf" "${HOME}/.config/kitty/kitty.conf"
 
 # Abbreviations
 [ ! -d "${HOME}/.config" ] && mkdir "${HOME}/.config"
