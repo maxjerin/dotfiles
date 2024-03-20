@@ -6,26 +6,29 @@ set -euo pipefail
 cp repo_config/pre-commit .git/hooks/pre-commit
 
 # Link zshrc from dotfiles
-ln -sf "$(pwd)/dotfile_templates/.zshrc_base" "${HOME}/.zshrc_base"
-ln -sf "$(pwd)/dotfile_templates/.zprofile" "${HOME}/.zprofile"
+ln -sf "$(pwd)/dotfile_templates/zsh/.zshrc_base" "${HOME}/.zshrc_base"
+ln -sf "$(pwd)/dotfile_templates/zsh/.zprofile" "${HOME}/.zprofile"
 mkdir -p ~/.config
-ln -sf "$(pwd)/dotfile_templates/starship.toml" "${HOME}/.config/starship.toml"
+ln -sf "$(pwd)/dotfile_templates/starship/starship.toml" "${HOME}/.config/starship.toml"
 
 mkdir -p ~/.config/alacritty
-ln -sf "$(pwd)/dotfile_templates/alacritty.toml" "${HOME}/.config/alacritty/alacritty.toml"
+ln -sf "$(pwd)/dotfile_templates/alacritty/alacritty.toml" "${HOME}/.config/alacritty/alacritty.toml"
 
 mkdir -p ~/.config/tmux
-ln -sf "$(pwd)/dotfile_templates/tmux.conf" "${HOME}/.config/tmux/tmux.conf"
+ln -sf "$(pwd)/dotfile_templates/tmux/tmux.conf" "${HOME}/.config/tmux/tmux.conf"
 
 mkdir -p ~/.config/k9s/skins
-ln -sf "$(pwd)/dotfile_templates/k9s_config.yaml" "${HOME}/.config/k9s/config.yaml"
-ln -sf "$(pwd)/dotfile_templates/k9s_skin.yaml" "${HOME}/.config/k9s/skins/dracula.yaml"
+ln -sf "$(pwd)/dotfile_templates/k9s/config.yaml" "${HOME}/.config/k9s/config.yaml"
+ln -sf "$(pwd)/dotfile_templates/k9s/skin.yaml" "${HOME}/.config/k9s/skins/dracula.yaml"
 
 mkdir -p ~/.config/karabiner
-ln -sf "$(pwd)/dotfile_templates/karabiner.json" "${HOME}/.config/karabiner/karabiner.json"
+ln -sf "$(pwd)/dotfile_templates/karabiner/karabiner.json" "${HOME}/.config/karabiner/karabiner.json"
 
 mkdir -p ~/.config/kitty
-ln -sf "$(pwd)/dotfile_templates/kitty.conf" "${HOME}/.config/kitty/kitty.conf"
+ln -sf "$(pwd)/dotfile_templates/kitty/kitty.conf" "${HOME}/.config/kitty/kitty.conf"
+cp "$(pwd)/dotfile_templates/kitty/Spacemacs_dark.conf" "${HOME}/.config/kitty/Spacemacs_dark.conf"
+cp "$(pwd)/dotfile_templates/kitty/Spacemacs_light.conf" "${HOME}/.config/kitty/Spacemacs_light.conf"
+ln -sf ~/.config/kitty/Spacemacs_dark.conf ~/.config/kitty/theme.conf
 
 # Abbreviations
 [ ! -d "${HOME}/.config" ] && mkdir "${HOME}/.config"
@@ -65,14 +68,14 @@ setup_poetry_project() {
 
 # Zsh and brew setup on MacOS
 if [[ $(uname -s) == 'Darwin' ]]; then
-    ln -fs "$(pwd)/dotfile_templates/.zshrc_macos" "${HOME}/.zshrc"
+    ln -fs "$(pwd)/dotfile_templates/zsh/.zshrc_macos" "${HOME}/.zshrc"
 
     install_homebrew_linuxbrew
     install_python_toolchain
     setup_poetry_project
 else
 # Zsh and brew setup on Linux
-    ln -sf "$(pwd)/.zshrc_linux" "${HOME}/.zshrc"
+    ln -sf "$(pwd)/dotfile_templates/zsh/.zshrc_linux" "${HOME}/.zshrc"
 
     install_homebrew_linuxbrew
 
