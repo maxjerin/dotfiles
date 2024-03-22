@@ -59,3 +59,6 @@ disabled = false
 [terraform]
 # format = '[ $version $workspace]($style) '
 format = '[💠  $version]($style) '
+
+[battery]
+disabled = true
