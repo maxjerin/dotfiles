@@ -69,15 +69,20 @@ homebrew:
     - awscli
     - bat
     - code-cli
+    - cormacrelf/tap/dark-notify
     - dive
     - eza
     - fzf
+    # macOs sed has compatibility issues with bas scripts
+    - gnu-sed
     - go
     - helm
+    - htop
     - insomnia
     - jenv
     - jq
     - k9s
+    - kitty
     - kubectl
     - mas
     - minikube
@@ -93,7 +98,7 @@ homebrew:
     - tmux
     - yamllint
     - yarn
-    - z
+    - zoxide
     - zsh-completions
     - zsh-autosuggestions
     - zsh-syntax-highlighting

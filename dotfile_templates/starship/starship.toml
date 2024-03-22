@@ -26,7 +26,7 @@ symbol = '🅰 '
 [kubernetes]
 # format = 'on [☸️ ($user on )($cluster in )$context \($namespace\)](dimmed green) '
 format = 'on [☸️ $context](blue) '
-disabled = false
+disabled = true
 
 [[kubernetes.contexts]]
 # "bold red" style + default symbol when Kubernetes current context name equals "production" *and* the current user

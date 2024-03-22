@@ -1,31 +1,39 @@
 ### Window Operations
 
-* create new window
-`C-b :neww`
+create new window `<prefix> :neww`
 
-* rename window
-`C-b ,`
+rename window `<prefix> ,`
 
-* switch window
-`C-b p`: previous
-`C-b n`: next:
+switch previous window `<prefix> p`
+
+switch next window `<prefix> n`
+
 
 ### Session Operations
 
-* list sessions
-`tmux list-sessions`
+list sessions `tmux list-sessions`
 
-* rename current session
-`C-b $`
+rename current session `<prefix> $`
 
-* attach to a session
-`tmux attach -s <session-name>`
+attach to a session `tmux attach -t <session-name>`
 
+switch sessions `<prefix>` `(` | `)`
+
+open session manager `<prefix> s`
+
+kill sessions `<prefix> s x`
 
 ### Pane Operations
 
-* resize pane
-`C-b Ctrl+<arrow>`
+resize pane`<prefix> Ctrl+<arrow>`
 
-* switch pane
-`C-b <arrow>`
+switch pane `<prefix> <arrow>`
+
+
+### Plugins
+
+Installs new plugins from GitHub or any other git repository `<prefix>` + `I`
+
+updates plugin(s) `<prefix>` + `U`
+
+remove/uninstall plugins not on the plugin list `<prefix>` + `alt` + `u`
