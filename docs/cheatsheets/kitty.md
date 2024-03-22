@@ -6,4 +6,4 @@
 
 ## Changing Icon
 
-https://github.com/DinkDonk/kitty-icon
+https://sw.kovidgoyal.net/kitty/faq/#i-do-not-like-the-kitty-icon
