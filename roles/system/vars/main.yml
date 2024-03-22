@@ -69,7 +69,7 @@ homebrew:
     - awscli
     - bat
     - code-cli
-    - cormacrelf/tap/dark-notify
+    # - cormacrelf/tap/dark-notify
     - dive
     - eza
     - fzf
@@ -78,26 +78,19 @@ homebrew:
     - go
     - helm
     - htop
-    - insomnia
-    - jenv
+    # - insomnia
     - jq
     - k9s
     - kitty
     - kubectl
     - mas
     - minikube
-    - node
-    - nvm
-    - openjdk@11
     - olets/tap/zsh-abbr
     - powerline-go
-    - pyenv
     - shellcheck
-    - spaceship
     - starship
     - tmux
     - yamllint
-    - yarn
     - zoxide
     - zsh-completions
     - zsh-autosuggestions
