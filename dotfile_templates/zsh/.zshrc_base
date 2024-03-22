@@ -122,10 +122,6 @@ done
 compinit -C
 zstyle ':completion:*' menu select
 
-# PyEnv
-export PATH=$PATH:$HOME/.pyenv/bin
-eval "$(pyenv init -)"
-
 # export PATH="$HOME/.jenv/bin:$PATH"
 # eval "$(jenv init -)"
 

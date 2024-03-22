@@ -48,18 +48,7 @@ install_homebrew_linuxbrew() {
     fi
 }
 
-install_python_toolchain() {
-    if ! command -v pyenv &> /dev/null
-    then
-        echo "Install pyenv"
-        brew install pyenv
-    else
-        echo "Pyenv already installed"
-    fi
-}
-
 setup_poetry_project() {
-    pyenv install -s
     python3 -m venv venv
     source venv/bin/activate
     pip install poetry
@@ -71,7 +60,6 @@ if [[ $(uname -s) == 'Darwin' ]]; then
     ln -fs "$(pwd)/dotfile_templates/zsh/.zshrc_macos" "${HOME}/.zshrc"
 
     install_homebrew_linuxbrew
-    install_python_toolchain
     setup_poetry_project
 else
 # Zsh and brew setup on Linux
@@ -104,11 +92,6 @@ if [[ $(uname -s) == 'Linux' ]]; then
     fi
 fi
 
-# source zshrc for homebrew
-# shellcheck source=/dev/null
-# source "${HOME}/.zprofile"
-# source "${HOME}/.zshrc"
-
 # # Dotfiles' project root directory
 # ROOTDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # # Host file location
@@ -118,5 +101,16 @@ fi
 
 # # Runs Ansible playbook using our user.
 # ansible-playbook -i "$HOSTS" "$PLAYBOOK"
+
+# MacOs Playbook
+ansible-playbook dotfiles.yml \
+-i hosts \
+--tags macos \
+--extra-vars="ansible_python_interpreter=$(which python)"
+
+# source zshrc for homebrew
+# shellcheck source=/dev/null
+source "${HOME}/.zprofile"
+source "${HOME}/.zshrc"
 
 exit 0
