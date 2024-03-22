@@ -2,33 +2,35 @@
 
 [[package]]
 name = "ansible"
-version = "5.10.0"
+version = "9.3.0"
 description = "Radically simple IT automation"
 optional = false
-python-versions = ">=3.8"
+python-versions = ">=3.10"
 files = [
-    {file = "ansible-5.10.0.tar.gz", hash = "sha256:c77f556a7c3d9948f86639c5742aa885be25a7cdbda3bfb41a8314b60a3341e8"},
+    {file = "ansible-9.3.0-py3-none-any.whl", hash = "sha256:471993dd239611b4b6134e46911612f85639035f10d82b6c888528b5ffb3b16a"},
+    {file = "ansible-9.3.0.tar.gz", hash = "sha256:7f4ea0e4d065538879b3e11e81e85eed4d802d1940f6564ad950e9d11a31b03c"},
 ]
 
 [package.dependencies]
-ansible-core = ">=2.12.7,<2.13.0"
+ansible-core = ">=2.16.4,<2.17.0"
 
 [[package]]
 name = "ansible-core"
-version = "2.12.10"
+version = "2.16.4"
 description = "Radically simple IT automation"
 optional = false
-python-versions = ">=3.8"
+python-versions = ">=3.10"
 files = [
-    {file = "ansible-core-2.12.10.tar.gz", hash = "sha256:feb1df61738cfc1f5e893b42a2ec1a7de32977d67e86707b45eb63d0c5c3c236"},
+    {file = "ansible-core-2.16.4.tar.gz", hash = "sha256:2cd208b0915948c88bffad331e5d07097b6edca1872cb53375e51b6719e6a060"},
+    {file = "ansible_core-2.16.4-py3-none-any.whl", hash = "sha256:c55d9a5f55651eb6c7f004ca9a9ed854d8cc310e6b438d96cea051cf3d2b2710"},
 ]
 
 [package.dependencies]
 cryptography = "*"
-jinja2 = "*"
+jinja2 = ">=3.0.0"
 packaging = "*"
-PyYAML = "*"
-resolvelib = ">=0.5.3,<0.6.0"
+PyYAML = ">=5.1"
+resolvelib = ">=0.5.3,<1.1.0"
 
 [[package]]
 name = "ansible-lint"
@@ -433,19 +435,19 @@ files = [
 
 [[package]]
 name = "resolvelib"
-version = "0.5.4"
+version = "1.0.1"
 description = "Resolve abstract dependencies into concrete ones"
 optional = false
 python-versions = "*"
 files = [
-    {file = "resolvelib-0.5.4-py2.py3-none-any.whl", hash = "sha256:8113ae3ed6d33c6be0bcbf03ffeb06c0995c099b7b8aaa5ddf2e9b3b3df4e915"},
-    {file = "resolvelib-0.5.4.tar.gz", hash = "sha256:9b9b80d5c60e4c2a8b7fbf0712c3449dc01d74e215632e5199850c9eca687628"},
+    {file = "resolvelib-1.0.1-py2.py3-none-any.whl", hash = "sha256:d2da45d1a8dfee81bdd591647783e340ef3bcb104b54c383f70d422ef5cc7dbf"},
+    {file = "resolvelib-1.0.1.tar.gz", hash = "sha256:04ce76cbd63fded2078ce224785da6ecd42b9564b1390793f64ddecbe997b309"},
 ]
 
 [package.extras]
 examples = ["html5lib", "packaging", "pygraphviz", "requests"]
-lint = ["black", "flake8"]
-release = ["setl", "towncrier"]
+lint = ["black", "flake8", "isort", "mypy", "types-requests"]
+release = ["build", "towncrier", "twine"]
 test = ["commentjson", "packaging", "pytest"]
 
 [[package]]
@@ -462,7 +464,6 @@ files = [
 [package.dependencies]
 markdown-it-py = ">=2.2.0"
 pygments = ">=2.13.0,<3.0.0"
-typing-extensions = {version = ">=4.0.0,<5.0", markers = "python_version < \"3.9\""}
 
 [package.extras]
 jupyter = ["ipywidgets (>=7.5.1,<9)"]
@@ -559,17 +560,6 @@ files = [
 doc = ["reno", "sphinx", "tornado (>=4.5)"]
 
 [[package]]
-name = "typing-extensions"
-version = "4.10.0"
-description = "Backported and Experimental Type Hints for Python 3.8+"
-optional = false
-python-versions = ">=3.8"
-files = [
-    {file = "typing_extensions-4.10.0-py3-none-any.whl", hash = "sha256:69b1a937c3a517342112fb4c6df7e72fc39a38e7891a5730ed4985b5214b5475"},
-    {file = "typing_extensions-4.10.0.tar.gz", hash = "sha256:b0abd7c89e8fb96f98db18d86106ff1d90ab692004eb746cf6eda2682f91b3cb"},
-]
-
-[[package]]
 name = "wcmatch"
 version = "8.5.1"
 description = "Wildcard/glob file name matcher."
@@ -603,5 +593,5 @@ dev = ["doc8", "flake8", "flake8-import-order", "rstcheck[sphinx]", "sphinx"]
 
 [metadata]
 lock-version = "2.0"
-python-versions = "^3.8"
-content-hash = "922bd08749c2a71137d910a485ce26196d46b3db8470ab9b57f5b44cfd8c6a2b"
+python-versions = "^3.10"
+content-hash = "2ea3ea5fb567815111b029facde04018f1e01c31f8fd9824ebcd7684f7d7a39a"
