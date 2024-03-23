@@ -44,6 +44,7 @@ homebrew:
     - jenv
     - k9s
     - kubectl
+    - lazygit
     - minikube
     - node
     - nvm

@@ -12,6 +12,9 @@ abbr gst="git status"
 abbr gd="git diff"
 abbr gl="git pull"
 
+# Lazy Git
+abbr lg="lazygit"
+
 # Bazel
 abbr add b="bazel"
 
