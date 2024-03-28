@@ -33,6 +33,7 @@ defaults:
 
 homebrew:
   formulas_linux:
+    - asdf
     - awscli
     - docker
     - bat
@@ -41,13 +42,9 @@ homebrew:
     - fzf
     - go
     - helm
-    - jenv
     - k9s
     - kubectl
-    - lazygit
     - minikube
-    - node
-    - nvm
     - olets/tap/zsh-abbr
     - openjdk@11
     - powerline-go
@@ -65,7 +62,6 @@ homebrew:
     - zsh-autosuggestions
     - zsh-syntax-highlighting
   formulas_macos:
-    - alacritty
     - asdf
     - awscli
     - bat
@@ -84,8 +80,10 @@ homebrew:
     - k9s
     - kitty
     - kubectl
+    - lazygit
     - mas
     - minikube
+    - neovim
     - olets/tap/zsh-abbr
     - powerline-go
     - shellcheck
