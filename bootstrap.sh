@@ -16,6 +16,9 @@ ln -sf "$(pwd)/dotfile_templates/alacritty/alacritty.toml" "${HOME}/.config/alac
 
 mkdir -p ~/.config/tmux
 ln -sf "$(pwd)/dotfile_templates/tmux/tmux.conf" "${HOME}/.config/tmux/tmux.conf"
+ln -sf "$(pwd)/dotfile_templates/tmux/settings.conf" "${HOME}/.config/tmux/settings.conf"
+ln -sf "$(pwd)/dotfile_templates/tmux/style.conf" "${HOME}/.config/tmux/style.conf"
+ln -sf "$(pwd)/dotfile_templates/tmux/window.conf" "${HOME}/.config/tmux/window.conf"
 
 mkdir -p ~/.config/k9s/skins
 ln -sf "$(pwd)/dotfile_templates/k9s/config.yaml" "${HOME}/.config/k9s/config.yaml"
