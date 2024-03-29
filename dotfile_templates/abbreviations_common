@@ -1,11 +1,3 @@
-# Grail
-
-abbr grac="grail-access"
-abbr grk="grail-k8s"
-abbr grs="source env.bash"
-abbr grsl="source lab/env.bash"
-abbr gra="grail-aws"
-
 # Git
 abbr gco="git checkout"
 abbr gst="git status"
@@ -47,6 +39,7 @@ abbr lt="eza --tree"
 abbr ltl="eza --tree --long"
 abbr ls="eza"
 abbr cat="bat"
+abbr ..="cd .."
 
 # Linux Keyboard Mapping
 abbr kb="xkbcomp -w0 -I$HOME/.xkb ~/.xkb/keymap/mykbd $DISPLAY"
