@@ -5,50 +5,11 @@ set -euo pipefail
 # Ensure we protect files before commit
 cp repo_config/pre-commit .git/hooks/pre-commit
 
-# Link zshrc from dotfiles
-ln -sf "$(pwd)/dotfile_templates/zsh/.zshrc_base" "${HOME}/.zshrc_base"
-ln -sf "$(pwd)/dotfile_templates/zsh/.zprofile" "${HOME}/.zprofile"
-mkdir -p ~/.config
-ln -sf "$(pwd)/dotfile_templates/starship/starship.toml" "${HOME}/.config/starship.toml"
-
-mkdir -p ~/.config/alacritty
-ln -sf "$(pwd)/dotfile_templates/alacritty/alacritty.toml" "${HOME}/.config/alacritty/alacritty.toml"
-
-mkdir -p ~/.config/tmux
-ln -sf "$(pwd)/dotfile_templates/tmux/tmux.conf" "${HOME}/.config/tmux/tmux.conf"
-ln -sf "$(pwd)/dotfile_templates/tmux/settings.conf" "${HOME}/.config/tmux/settings.conf"
-ln -sf "$(pwd)/dotfile_templates/tmux/style.conf" "${HOME}/.config/tmux/style.conf"
-ln -sf "$(pwd)/dotfile_templates/tmux/window.conf" "${HOME}/.config/tmux/window.conf"
-
-mkdir -p ~/.config/nvim
-cp -R "$(pwd)/dotfile_templates/nvim" "${HOME}/.config"
-
-mkdir -p ~/.config/k9s/skins
-ln -sf "$(pwd)/dotfile_templates/k9s/config.yaml" "${HOME}/.config/k9s/config.yaml"
-ln -sf "$(pwd)/dotfile_templates/k9s/skin.yaml" "${HOME}/.config/k9s/skins/dracula.yaml"
-
-mkdir -p ~/.config/karabiner
-ln -sf "$(pwd)/dotfile_templates/karabiner/karabiner.json" "${HOME}/.config/karabiner/karabiner.json"
-
-mkdir -p ~/.config/kitty
-ln -sf "$(pwd)/dotfile_templates/kitty/kitty.conf" "${HOME}/.config/kitty/kitty.conf"
-cp "$(pwd)/dotfile_templates/kitty/Spacemacs_dark.conf" "${HOME}/.config/kitty/Spacemacs_dark.conf"
-cp "$(pwd)/dotfile_templates/kitty/Spacemacs_light.conf" "${HOME}/.config/kitty/Spacemacs_light.conf"
-ln -sf ~/.config/kitty/Spacemacs_dark.conf ~/.config/kitty/theme.conf
-
-# Abbreviations
-[ ! -d "${HOME}/.config" ] && mkdir "${HOME}/.config"
-[ ! -d "${HOME}/.config/zsh" ] && mkdir "${HOME}/.config/zsh"
-cat dotfile_templates/abbreviations_common > ~/.config/zsh/abbreviations
-cat dotfile_templates/abbreviations_work >> ~/.config/zsh/abbreviations
-
 install_homebrew_linuxbrew() {
     if ! command -v brew &> /dev/null
     then
         echo "Install Homebrew/Linuxbrew"
         /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-
-        source "${HOME}/.zprofile"
     else
         echo "Homebrew/Linuxbrew already installed"
     fi
@@ -63,7 +24,7 @@ setup_poetry_project() {
 
 # Zsh and brew setup on MacOS
 if [[ $(uname -s) == 'Darwin' ]]; then
-    ln -fs "$(pwd)/dotfile_templates/zsh/.zshrc_macos" "${HOME}/.zshrc"
+    # ln -fs "$(pwd)/dotfile_templates/zsh/.zshrc_macos" "${HOME}/.zshrc"
 
     install_homebrew_linuxbrew
     setup_poetry_project
@@ -98,21 +59,63 @@ if [[ $(uname -s) == 'Linux' ]]; then
     fi
 fi
 
-# # Dotfiles' project root directory
-# ROOTDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-# # Host file location
-# HOSTS="$ROOTDIR/hosts"
-# # Main playbook
-# PLAYBOOK="$ROOTDIR/dotfiles.yml"
-
-# # Runs Ansible playbook using our user.
-# ansible-playbook -i "$HOSTS" "$PLAYBOOK"
-
 # MacOs Playbook
-ansible-playbook dotfiles.yml \
--i hosts \
---tags macos \
---extra-vars="ansible_python_interpreter=$(which python)"
+# ansible-playbook dotfiles.yml \
+# -i hosts \
+# --tags macos \
+# --extra-vars="ansible_python_interpreter=$(which python)"
+
+# Link zshrc from dotfiles
+if ! command -v stow &> /dev/null; then
+    echo "Stow not installed"
+else
+    pushd dotfile_templates
+    stow -R --no-folding --target ~ zsh
+    popd
+    pushd dotfile_templates/zsh
+    mkdir -p ~/.config/zsh
+    stow -R --target ~/.config/zsh zsh
+    popd
+
+    pushd dotfile_templates
+    mkdir -p ~/.config/starship
+    stow -R --target ~/.config/starship starship
+    mkdir -p ~/.config/alacritty
+    stow -R --target ~/.config/alacritty alacritty
+    mkdir -p ~/.config/tmux
+    stow -R --target ~/.config/tmux tmux
+    popd
+
+    pushd dotfile_templates
+    mkdir -p ~/.config/nvim/lua/config ~/.config/nvim/lua/craftzdog ~/.config/nvim/lua/plugins ~/.config/nvim/lua/util
+    stow -R --no-folding --target ~/.config/nvim nvim
+    popd
+    pushd dotfile_templates/nvim/lua
+    stow -R --no-folding --target ~/.config/nvim/lua/config config
+    stow -R --no-folding --target ~/.config/nvim/lua/craftzdog craftzdog
+    stow -R --no-folding --target ~/.config/nvim/lua/plugins plugins
+    stow -R --no-folding --target ~/.config/nvim/lua/util util
+    popd
+
+
+    pushd dotfile_templates
+    stow -R --target ~/.config/k9s k9s
+    popd
+    pushd dotfile_templates/k9s
+    mkdir -p ~/.config/k9s/skins
+    stow -R --target ~/.config/k9s/skins skins
+    popd
+
+    pushd dotfile_templates
+    mkdir -p ~/.config/karabiner
+    stow -R --target ~/.config/karabiner karabiner
+    popd
+
+    pushd dotfile_templates
+    mkdir -p ~/.config/kitty
+    stow -R --target ~/.config/kitty kitty
+    popd
+fi
 
 # source zshrc for homebrew
 # shellcheck source=/dev/null

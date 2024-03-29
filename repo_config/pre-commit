@@ -58,8 +58,8 @@ then
 fi
 
 PASSWORD_FILE="$(pwd)/.vault-password"
-printf "Encrypting file in pre-commit %s\n" "$(pwd)/dotfile_templates/abbreviations_work"
-FILE_TO_ENCRYPT="$(pwd)/dotfile_templates/abbreviations_work"
+printf "Encrypting file in pre-commit %s\n" "$(pwd)/dotfile_templates/zsh/zsh/abbreviations_work"
+FILE_TO_ENCRYPT="$(pwd)/dotfile_templates/zsh/zsh/abbreviations_work"
 head -1 "$FILE_TO_ENCRYPT" | grep --quiet "^\$ANSIBLE_VAULT;" && ansible-vault encrypt "${FILE_TO_ENCRYPT}" --vault-password-file "${PASSWORD_FILE}"
 
 CURR_DIR="$(pwd)/Raycast"

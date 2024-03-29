@@ -1,11 +1,9 @@
-#! /bin/zsh
+# Combine abbreviations as abbr only loads one file
+cat ~/.config/zsh/abbreviations_common > ~/.config/zsh/abbreviations
+cat ~/.config/zsh/abbreviations_work >> ~/.config/zsh/abbreviations
 
-if [[ $(uname -s) == 'Darwin' ]] && [[ $(uname -m) == 'arm64' ]]; then
-  #  if M1 mac then use the following
-  eval "$(/opt/homebrew/bin/brew shellenv)"
-fi
-
-source ~/.zshrc_base
+# Load abbreviations
+abbr load
 
 # 1Password Agent Link
 if test -f ~/Library/Group\ Containers/2BUA8C4S2C.com.1password/t/agent.sock; then
@@ -41,3 +39,5 @@ fi
 if test -f "/Applications/Visual Studio Code.app"; then
   code version use oss --install-dir "/Applications/Visual Studio Code.app"
 fi
+
+echo "Running 04-init"
