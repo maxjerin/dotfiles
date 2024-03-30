@@ -34,3 +34,15 @@
 
 `/ <search-string>` filter by text string
 `<Space> <Space>` quickly find files in the current project
+
+# Spelling
+
+## Toggle Spelling Check
+
+`<Space u>` for ui and then `s` for Toggle Spelling
+
+# Editor
+
+## Relative Line Numbers
+
+`<Space u>` for ui and then `L` to toggle relative line number
