@@ -120,6 +120,6 @@ fi
 # source zshrc for homebrew
 # shellcheck source=/dev/null
 source "${HOME}/.zprofile"
-source "${HOME}/.zshrc"
+# source "${HOME}/.zshrc"
 
 exit 0
