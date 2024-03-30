@@ -39,5 +39,3 @@ fi
 if test -f "/Applications/Visual Studio Code.app"; then
   code version use oss --install-dir "/Applications/Visual Studio Code.app"
 fi
-
-echo "Running 04-init"
