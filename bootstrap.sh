@@ -86,15 +86,23 @@ else
     stow -R --target ~/.config/tmux tmux
     popd
 
-    pushd dotfile_templates
-    mkdir -p ~/.config/nvim/lua/config ~/.config/nvim/lua/craftzdog ~/.config/nvim/lua/plugins ~/.config/nvim/lua/util
+    mkdir -p ~/.config/nvim/lua/plugins/ls/servers \
+        ~/.config/nvim/lua/utils \
     stow -R --no-folding --target ~/.config/nvim nvim
+    pushd dotfile_templates/nvim
+    stow -R --no-folding --target ~/.config/nvim/lua lua
     popd
     pushd dotfile_templates/nvim/lua
-    stow -R --no-folding --target ~/.config/nvim/lua/config config
-    stow -R --no-folding --target ~/.config/nvim/lua/craftzdog craftzdog
+    stow -R --no-folding --target ~/.config/nvim/lua/utils utils
+    popd
+    pushd dotfile_templates/nvim/lua
     stow -R --no-folding --target ~/.config/nvim/lua/plugins plugins
-    stow -R --no-folding --target ~/.config/nvim/lua/util util
+    popd
+    pushd dotfile_templates/nvim/lua/plugins
+    stow -R --no-folding --target ~/.config/nvim/lua/plugins/lsp lsp
+    popd
+    pushd dotfile_templates/nvim/lua/plugins/lsp
+    stow -R --no-folding --target ~/.config/nvim/lua/plugins/lsp/servers servers
     popd
 
 
