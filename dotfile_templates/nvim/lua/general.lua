@@ -18,7 +18,7 @@
 vim.opt.modelines = 0
 
 -- set leader key to comma
-vim.g.mapleader = ","
+vim.g.mapleader = " "
 
 -- hide buffers, not close them
 vim.opt.hidden = true

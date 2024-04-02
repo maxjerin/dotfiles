@@ -30,6 +30,14 @@ end
 -- install plugins
 lazy.setup({
 	spec = {
+		{
+			"LazyVim/LazyVim",
+			import = "lazyvim.plugins",
+			opts = {
+				background = "light",
+				colorscheme = "spacemacs-theme",
+			},
+		},
 		require("plugins.miasma"),
 		require("plugins.osc52-yank"),
 		require("plugins.git"),
@@ -57,7 +65,7 @@ lazy.setup({
 		require("plugins.devicons"),
 		require("plugins.matchparen"),
 		require("plugins.lush"),
-		require("plugins.alpha"),
+		-- require("plugins.alpha"),
 		require("plugins.dadbod"),
 		require("plugins.spacemacs-theme"),
 		--require("plugins.copilot"),
