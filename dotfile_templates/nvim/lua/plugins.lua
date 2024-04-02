@@ -34,7 +34,7 @@ lazy.setup({
 			"LazyVim/LazyVim",
 			import = "lazyvim.plugins",
 			opts = {
-				background = "light",
+				background = "dark",
 				colorscheme = "spacemacs-theme",
 			},
 		},
@@ -68,6 +68,8 @@ lazy.setup({
 		-- require("plugins.alpha"),
 		require("plugins.dadbod"),
 		require("plugins.spacemacs-theme"),
+		-- require("plugins.space-nvim"),
+		-- require("plugins.space-vim-theme"),
 		--require("plugins.copilot"),
 		--require("plugins.mason-dap"),
 		--{ "xero/sourcerer.vim" },
@@ -78,6 +80,7 @@ lazy.setup({
 		path = "~/Development/dotfiles",
 	},
 	lockfile = vim.fn.stdpath("config") .. "/lua/plugins/lazy-lock.json",
+	install = { colorscheme = { "spacemacs-theme" } },
 	ui = {
 		size = { width = 0.8, height = 0.8 },
 		wrap = true,
