@@ -8,10 +8,17 @@ cp repo_config/pre-commit .git/hooks/pre-commit
 install_homebrew_linuxbrew() {
     if ! command -v brew &> /dev/null
     then
-        echo "Install Homebrew/Linuxbrew"
+        echo "Installing Homebrew/Linuxbrew"
         /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
     else
         echo "Homebrew/Linuxbrew already installed"
+    fi
+}
+
+install_stow() {
+    if ! command -v stow &> /dev/null; then
+        echo "Installing Stow"
+        brew install stow
     fi
 }
 
@@ -27,6 +34,7 @@ if [[ $(uname -s) == 'Darwin' ]]; then
     # ln -fs "$(pwd)/dotfile_templates/zsh/.zshrc_macos" "${HOME}/.zshrc"
 
     install_homebrew_linuxbrew
+    install_stow
     setup_poetry_project
 else
 # Zsh and brew setup on Linux
@@ -87,8 +95,11 @@ else
     popd
 
     mkdir -p ~/.config/nvim/lua/plugins/ls/servers \
-        ~/.config/nvim/lua/utils \
+        ~/.config/nvim/lua/utils
+
+    pushd dotfile_templates
     stow -R --no-folding --target ~/.config/nvim nvim
+    popd
     pushd dotfile_templates/nvim
     stow -R --no-folding --target ~/.config/nvim/lua lua
     popd
