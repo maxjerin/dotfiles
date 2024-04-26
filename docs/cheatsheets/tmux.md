@@ -1,3 +1,7 @@
+### Reload Config
+
+`<prefix> r`
+
 ### Window Operations
 
 create new window `<prefix> :neww`
