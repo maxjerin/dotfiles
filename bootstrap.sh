@@ -127,7 +127,7 @@ else
 
     pushd dotfile_templates
     mkdir -p ~/.config/karabiner
-    stow -R --target ~/.config/karabiner karabiner
+    stow -R --no-folding --target ~/.config/karabiner karabiner
     popd
 
     pushd dotfile_templates
