@@ -1,8 +1,11 @@
 # Git
-abbr gco="git checkout"
+abbr gs="git switch"
+abbr gco="git switch -c "
 abbr gst="git status"
 abbr gd="git diff"
-abbr gl="git pull"
+abbr gf="git fetch"
+abbr gfx="git commit --fixup="
+abbr gr="git rebase"
 
 # Lazy Git
 abbr lg="lazygit"

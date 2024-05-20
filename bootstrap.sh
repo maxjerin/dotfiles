@@ -8,10 +8,17 @@ cp repo_config/pre-commit .git/hooks/pre-commit
 install_homebrew_linuxbrew() {
     if ! command -v brew &> /dev/null
     then
-        echo "Install Homebrew/Linuxbrew"
+        echo "Installing Homebrew/Linuxbrew"
         /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
     else
         echo "Homebrew/Linuxbrew already installed"
+    fi
+}
+
+install_stow() {
+    if ! command -v stow &> /dev/null; then
+        echo "Installing Stow"
+        brew install stow
     fi
 }
 
@@ -27,6 +34,7 @@ if [[ $(uname -s) == 'Darwin' ]]; then
     # ln -fs "$(pwd)/dotfile_templates/zsh/.zshrc_macos" "${HOME}/.zshrc"
 
     install_homebrew_linuxbrew
+    install_stow
     setup_poetry_project
 else
 # Zsh and brew setup on Linux
@@ -86,15 +94,26 @@ else
     stow -R --target ~/.config/tmux tmux
     popd
 
+    mkdir -p ~/.config/nvim/lua/plugins/ls/servers \
+        ~/.config/nvim/lua/utils
+
     pushd dotfile_templates
-    mkdir -p ~/.config/nvim/lua/config ~/.config/nvim/lua/craftzdog ~/.config/nvim/lua/plugins ~/.config/nvim/lua/util
     stow -R --no-folding --target ~/.config/nvim nvim
     popd
+    pushd dotfile_templates/nvim
+    stow -R --no-folding --target ~/.config/nvim/lua lua
+    popd
     pushd dotfile_templates/nvim/lua
-    stow -R --no-folding --target ~/.config/nvim/lua/config config
-    stow -R --no-folding --target ~/.config/nvim/lua/craftzdog craftzdog
+    stow -R --no-folding --target ~/.config/nvim/lua/utils utils
+    popd
+    pushd dotfile_templates/nvim/lua
     stow -R --no-folding --target ~/.config/nvim/lua/plugins plugins
-    stow -R --no-folding --target ~/.config/nvim/lua/util util
+    popd
+    pushd dotfile_templates/nvim/lua/plugins
+    stow -R --no-folding --target ~/.config/nvim/lua/plugins/lsp lsp
+    popd
+    pushd dotfile_templates/nvim/lua/plugins/lsp
+    stow -R --no-folding --target ~/.config/nvim/lua/plugins/lsp/servers servers
     popd
 
 
@@ -108,7 +127,7 @@ else
 
     pushd dotfile_templates
     mkdir -p ~/.config/karabiner
-    stow -R --target ~/.config/karabiner karabiner
+    stow -R --no-folding --target ~/.config/karabiner karabiner
     popd
 
     pushd dotfile_templates

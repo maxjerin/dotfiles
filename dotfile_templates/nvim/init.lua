@@ -1,10 +1,25 @@
-if vim.loader then
-	vim.loader.enable()
-end
+--                                     ██
+--                                    ░░
+--  ███████   █████   ██████  ██    ██ ██ ██████████
+-- ░░██░░░██ ██░░░██ ██░░░░██░██   ░██░██░░██░░██░░██
+--  ░██  ░██░███████░██   ░██░░██ ░██ ░██ ░██ ░██ ░██
+--  ░██  ░██░██░░░░ ░██   ░██ ░░████  ░██ ░██ ░██ ░██
+--  ███  ░██░░██████░░██████   ░░██   ░██ ███ ░██ ░██
+-- ░░░   ░░  ░░░░░░  ░░░░░░     ░░    ░░ ░░░  ░░  ░░
+--
+--  ▓▓▓▓▓▓▓▓▓▓
+-- ░▓ author ▓ xero <x@xero.style>
+-- ░▓ code   ▓ https://code.x-e.ro/dotfiles
+-- ░▓ mirror ▓ https://git.io/.files
+-- ░▓▓▓▓▓▓▓▓▓▓
+-- ░░░░░░░░░░
 
-_G.dd = function(...)
-	require("util.debug").dump(...)
+require("general")
+require("ui")
+require("commands")
+if vim.g.noplugins == nil then
+	require("plugins")
+else
+	local colors = vim.fn.stdpath("data") .. "/lazy/space-nvim/colors/space-nvim.vim"
+	if vim.fn.filereadable(colors) then vim.cmd('source ' .. colors) end
 end
-vim.print = _G.dd
-
-require("config.lazy")
