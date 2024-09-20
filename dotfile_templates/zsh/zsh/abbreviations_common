@@ -1,11 +1,13 @@
 # Git
 abbr gs="git switch"
-abbr gco="git switch -c "
+abbr gco="git switch -c"
 abbr gst="git status"
 abbr gd="git diff"
 abbr gf="git fetch"
 abbr gfx="git commit --fixup="
 abbr gr="git rebase"
+abbr "gfp=git force --force-with-lease"
+abbr "gfr=git fetch; git rebase;"
 
 # Lazy Git
 abbr lg="lazygit"
