@@ -61,21 +61,25 @@ homebrew:
     - zsh-completions
     - zsh-autosuggestions
     - zsh-syntax-highlighting
+  taps_macos:
+    - hashicorp/tap
+    - olets/tap
+    - cormacrelf/tap
   formulas_macos:
     - asdf
     - awscli
     - bat
     - code-cli
-    # - cormacrelf/tap/dark-notify
+    - cormacrelf/tap/dark-notify
     - dive
     - eza
     - fzf
     # macOs sed has compatibility issues with bas scripts
     - gnu-sed
     - go
+    - hashicorp/tap/terraform
     - helm
     - htop
-    # - insomnia
     - jq
     - k9s
     - kitty
@@ -84,12 +88,14 @@ homebrew:
     - mas
     - minikube
     - neovim
-    - olets/tap/zsh-abbr
+    - olets/tap/zsh-abbr@6
+    - ollama
     - powerline-go
     - shellcheck
     - starship
     - tmux
     - yamllint
+    - yq
     - zoxide
     - zsh-completions
     - zsh-autosuggestions
@@ -99,19 +105,27 @@ homebrew:
     - 1password
     - appcleaner
     - arc
+    - copilot # Money management app
+    - cursor
     - docker
+    - ghostty
     - grammarly-desktop
     - ha-menu
+    - home-assistant
+    - intellij-idea-ce
     - karabiner-elements
+    - msty
     - notion
+    - orbstack
     - postico
     - raycast
     - rescuetime
     - slack
     - stoplight-studio
     - visual-studio-code
-    # - whatsapp
-    # - zoom
+    - warp
+    - whatsapp
+    - zoom
   mas:
     - 961632517 # Be Focused Pro
     - 635758264 # Calca

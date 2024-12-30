@@ -23,6 +23,14 @@
   tags:
     - macos
 
+- name: Add Homebrew taps
+  community.general.homebrew_tap:
+    name: "{{ homebrew['taps_macos'] }}"
+    state: present
+  with_items:
+    - homebrew/core
+    - homebrew/cask
+
 - name: Install Homebrew casks
   community.general.homebrew_cask:
     name: "{{ homebrew['casks'] }}"
