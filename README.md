@@ -3,16 +3,6 @@
 ## Encrypt/Decrypt Files
 Sensitive files are encrypted. Replace them with your own
 
-
-## Setting up script on Ubuntu
-
-```
-sudo apt update \
-sudo apt install software-properties-common \
-sudo add-apt-repository --yes --update ppa:ansible/ansible \
-sudo apt install ansible
-```
-
 ## Setting up script on MacOs
 
 1. Install git
@@ -52,6 +42,15 @@ ansible-playbook dotfiles.yml \
 --extra-vars="ansible_python_interpreter=$(which python)"
 ```
 
+
+## Setting up script on Ubuntu
+
+```
+sudo apt update \
+sudo apt install software-properties-common \
+sudo add-apt-repository --yes --update ppa:ansible/ansible \
+sudo apt install ansible
+```
 
 # Files
 
