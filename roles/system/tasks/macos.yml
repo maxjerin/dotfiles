@@ -15,18 +15,17 @@
     - macos
     - macos_settings
 
-
-- name: Install Homebrew formulas
-  community.general.homebrew:
-    name: "{{ homebrew['formulas_macos'] }}"
-  ignore_errors: true
-  tags:
-    - macos
-
 - name: Add Homebrew taps
   community.general.homebrew_tap:
     name: "{{ homebrew['taps_macos'] }}"
     state: present
+  ignore_errors: true
+  tags:
+    - macos
+
+- name: Install Homebrew formulas
+  community.general.homebrew:
+    name: "{{ homebrew['formulas_macos'] }}"
   ignore_errors: true
   tags:
     - macos
