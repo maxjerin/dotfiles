@@ -78,61 +78,61 @@ if ! command -v stow &> /dev/null; then
     echo "Stow not installed"
 else
     pushd dotfile_templates
-    stow -R --no-folding --target ~ zsh
+    stow --adopt -R --no-folding --target ~ zsh
     popd
     pushd dotfile_templates/zsh
     mkdir -p ~/.config/zsh
-    stow -R --target ~/.config/zsh zsh
+    stow --adopt -R --target ~/.config/zsh zsh
     popd
 
     pushd dotfile_templates
     mkdir -p ~/.config/starship
-    stow -R --target ~/.config/starship starship
+    stow --adopt -R --target ~/.config/starship starship
     mkdir -p ~/.config/alacritty
-    stow -R --target ~/.config/alacritty alacritty
+    stow --adopt -R --target ~/.config/alacritty alacritty
     mkdir -p ~/.config/tmux
-    stow -R --target ~/.config/tmux tmux
+    stow --adopt -R --target ~/.config/tmux tmux
     popd
 
     mkdir -p ~/.config/nvim/lua/plugins/ls/servers \
         ~/.config/nvim/lua/utils
 
     pushd dotfile_templates
-    stow -R --no-folding --target ~/.config/nvim nvim
+    stow --adopt -R --no-folding --target ~/.config/nvim nvim
     popd
     pushd dotfile_templates/nvim
-    stow -R --no-folding --target ~/.config/nvim/lua lua
+    stow --adopt -R --no-folding --target ~/.config/nvim/lua lua
     popd
     pushd dotfile_templates/nvim/lua
-    stow -R --no-folding --target ~/.config/nvim/lua/utils utils
+    stow --adopt -R --no-folding --target ~/.config/nvim/lua/utils utils
     popd
     pushd dotfile_templates/nvim/lua
-    stow -R --no-folding --target ~/.config/nvim/lua/plugins plugins
+    stow --adopt -R --no-folding --target ~/.config/nvim/lua/plugins plugins
     popd
     pushd dotfile_templates/nvim/lua/plugins
-    stow -R --no-folding --target ~/.config/nvim/lua/plugins/lsp lsp
+    stow --adopt -R --no-folding --target ~/.config/nvim/lua/plugins/lsp lsp
     popd
     pushd dotfile_templates/nvim/lua/plugins/lsp
-    stow -R --no-folding --target ~/.config/nvim/lua/plugins/lsp/servers servers
+    stow --adopt -R --no-folding --target ~/.config/nvim/lua/plugins/lsp/servers servers
     popd
 
 
     pushd dotfile_templates
-    stow -R --target ~/.config/k9s k9s
+    stow --adopt -R --target ~/.config/k9s k9s
     popd
     pushd dotfile_templates/k9s
     mkdir -p ~/.config/k9s/skins
-    stow -R --target ~/.config/k9s/skins skins
+    stow --adopt -R --target ~/.config/k9s/skins skins
     popd
 
     pushd dotfile_templates
     mkdir -p ~/.config/karabiner
-    stow -R --no-folding --target ~/.config/karabiner karabiner
+    stow --adopt -R --no-folding --target ~/.config/karabiner karabiner
     popd
 
     pushd dotfile_templates
     mkdir -p ~/.config/kitty
-    stow -R --target ~/.config/kitty kitty
+    stow --adopt -R --target ~/.config/kitty kitty
     popd
 fi
 
