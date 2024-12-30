@@ -3,7 +3,9 @@
 set -euo pipefail
 
 # Ensure we protect files before commit
-cp repo_config/pre-commit .git/hooks/pre-commit
+if [ -d ".git" ]; then
+    cp repo_config/pre-commit .git/hooks/pre-commit
+fi
 
 install_homebrew_linuxbrew() {
     if ! command -v brew &> /dev/null
@@ -118,6 +120,7 @@ else
 
 
     pushd dotfile_templates
+    mkdir -o ~/.config/k9s/skins
     stow --adopt -R --target ~/.config/k9s k9s
     popd
     pushd dotfile_templates/k9s
