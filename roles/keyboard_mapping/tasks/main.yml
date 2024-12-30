@@ -4,6 +4,5 @@
   args:
     apply:
       become: yes
-      become_user: maxjerin
   tags:
     - linux

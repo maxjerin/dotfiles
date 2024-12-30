@@ -9,7 +9,6 @@
     name: "{{ homebrew['formulas_linux'] }}"
     path: "/home/linuxbrew/.linuxbrew/bin"
   become: true
-  become_user: maxjerin
   tags:
     - linux
 
