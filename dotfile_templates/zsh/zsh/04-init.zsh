@@ -11,7 +11,11 @@ if test -f ~/Library/Group\ Containers/2BUA8C4S2C.com.1password/t/agent.sock; th
 fi
 
 if test -f /opt/homebrew/opt/asdf/libexec/asdf.sh; then
-  . /opt/homebrew/opt/asdf/libexec/asdf.sh
+  source $(brew --prefix asdf)/libexec/asdf.sh
+fi
+
+if test -f ~/.orbstack/shell/init.zsh; then
+  . ~/.orbstack/shell/init.zsh 2>/dev/null || :
 fi
 
 if command -v zoxide &> /dev/null; then
@@ -39,3 +43,12 @@ fi
 if test -f "/Applications/Visual Studio Code.app"; then
   code version use oss --install-dir "/Applications/Visual Studio Code.app"
 fi
+
+# Configure PNPM
+# pnpm
+export PNPM_HOME="~/Library/pnpm"
+case ":$PATH:" in
+  *":$PNPM_HOME:"*) ;;
+  *) export PATH="$PNPM_HOME:$PATH" ;;
+esac
+# pnpm end
