@@ -14,13 +14,22 @@ echo 'eval "$(pyenv init --path)"' >> ~/.zprofile
 
 echo 'eval "$(pyenv init -)"' >> ~/.zshrc
 ```
-5. Install python 3.9.8 `pyenv install 3.9.8`
-6. Set python 3.9.8 as default `pyenv global 3.9.8`
+5. Install python 3.12 `pyenv install 3.12`
+6. Set python 3.12 as default `pyenv global 3.12`
 7. Install poetry `pip install poetry`
 8. Init poetry `poetry install`
 
 
 ## Executing Dotfiles
+
+```
+
+ansible-playbook -i hosts dotfiles.yml --tags "macos"
+
+```
+
+
+### Other Commands
 
 ```
 # Run entire playbook
