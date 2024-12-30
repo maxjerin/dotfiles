@@ -27,9 +27,9 @@
   community.general.homebrew_tap:
     name: "{{ homebrew['taps_macos'] }}"
     state: present
-  with_items:
-    - homebrew/core
-    - homebrew/cask
+  ignore_errors: true
+  tags:
+    - macos
 
 - name: Install Homebrew casks
   community.general.homebrew_cask:
@@ -39,19 +39,17 @@
   tags:
     - macos
 
-- name: Check Mac App Store authentication status
-  ansible.builtin.command: mas account
-  changed_when: false
-  failed_when: mas_account['rc'] not in [0,1]
-  register: mas_account
-  tags:
-    - macos
+# - name: Check Mac App Store authentication status
+#   ansible.builtin.command: mas account
+#   changed_when: false
+#   failed_when: mas_account['rc'] not in [0,1]
+#   register: mas_account
+#   tags:
+#     - macos
 
 - name: Install apps
   ansible.builtin.command: "mas install {{ item }}"
   loop: "{{ homebrew['mas'] }}"
-  # Ignored for Monterey MacOS 12
-  # when: mas_account['rc'] == 0
   tags:
     - macos
 

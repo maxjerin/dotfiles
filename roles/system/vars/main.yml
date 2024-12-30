@@ -62,34 +62,32 @@ homebrew:
     - zsh-autosuggestions
     - zsh-syntax-highlighting
   taps_macos:
-    - hashicorp/tap
+    # - hashicorp/tap
     - olets/tap
-    - cormacrelf/tap
+    # - cormacrelf/tap
   formulas_macos:
     - asdf
     - awscli
     - bat
     - code-cli
-    - cormacrelf/tap/dark-notify
+    # - cormacrelf/tap/dark-notify
     - dive
     - eza
     - fzf
     # macOs sed has compatibility issues with bas scripts
     - gnu-sed
     - go
-    - hashicorp/tap/terraform
+    # - hashicorp/tap/terraform
     - helm
     - htop
     - jq
     - k9s
-    - kitty
     - kubectl
     - lazygit
     - mas
     - minikube
     - neovim
     - olets/tap/zsh-abbr@6
-    - ollama
     - powerline-go
     - shellcheck
     - starship
@@ -116,6 +114,7 @@ homebrew:
     - karabiner-elements
     - msty
     - notion
+    - ollama
     - orbstack
     - postico
     - raycast
