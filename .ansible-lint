@@ -1,4 +1,41 @@
 ---
+# Ansible Lint Configuration
+# https://ansible-lint.readthedocs.io/en/latest/configuring.html
+
+# Rules to skip (temporarily disabled)
 skip_list:
-  - experimental
-  - no-handler
+  - experimental  # Skip experimental rules
+  - no-handler    # Allow tasks without handlers (useful for simple playbooks)
+
+# Paths to exclude from linting
+exclude_paths:
+  - .cache/
+  - .venv/
+  - venv/
+  - dependencies/
+  - .git/
+  - node_modules/
+
+# Use default ruleset
+use_default_rules: true
+
+# Verbosity level (0-4)
+verbosity: 1
+
+# Parse errors as fatal
+parseable: false
+
+# Quiet mode (only show errors)
+quiet: false
+
+# Show relative paths
+show_relpath: true
+
+# Tags to include (empty means all)
+tags: []
+
+# Skip tags
+skip_tags: []
+
+# Enable colored output
+colored: true

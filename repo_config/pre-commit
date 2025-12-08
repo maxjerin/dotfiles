@@ -1,42 +1,56 @@
 #!/bin/bash
 
 #
-# An example hook script to verify what is about to be committed.
-# Called by "git commit" with no arguments.  The hook should
-# exit with non-zero status after issuing an appropriate message if
-# it wants to stop the commit.
+# Pre-commit hook for dotfiles repository
+# Performs various checks before allowing commits
 #
 
-#
-# #1 Non-ASCII filename check
-#
-if git rev-parse --verify HEAD >/dev/null 2>&1
-then
+set -euo pipefail
+
+# Determine what we're comparing against
+if git rev-parse --verify HEAD >/dev/null 2>&1; then
 	against=HEAD
 else
 	# Initial commit: diff against an empty tree object
 	against=$(git hash-object -t tree /dev/null)
 fi
 
-# If you want to allow non-ASCII filenames set this variable to true.
-allownonascii=$(git config --type=bool hooks.allownonascii)
-
-# Redirect output to stderr.
+# Redirect output to stderr
 exec 1>&2
 
-# Cross platform projects tend to avoid non-ASCII filenames; prevent
-# them from being added to the repository. We exploit the fact that the
-# printable range starts at the space character and ends with tilde.
-if [ "$allownonascii" != "true" ] &&
-	# Note that the use of brackets around a tr range is ok here, (it's
-	# even required, for portability to Solaris 10's /usr/bin/tr), since
-	# the square bracket bytes happen to fall in the designated range.
-	test $(git diff --cached --name-only --diff-filter=A -z $against |
-	  LC_ALL=C tr -d '[ -~]\0' | wc -c) != 0
-then
-	cat <<\EOF
-Error: Attempt to add a non-ASCII file name.
+# Colors for output
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+NC='\033[0m' # No Color
 
+# Function to print error messages
+error() {
+	echo -e "${RED}ERROR:${NC} $1" >&2
+}
+
+# Function to print warning messages
+warning() {
+	echo -e "${YELLOW}WARNING:${NC} $1" >&2
+}
+
+# Function to print info messages
+info() {
+	echo -e "${GREEN}INFO:${NC} $1" >&2
+}
+
+#
+# #1 Non-ASCII filename check
+#
+allownonascii=$(git config --type=bool hooks.allownonascii || echo "false")
+
+if [ "$allownonascii" != "true" ]; then
+	non_ascii_files=$(git diff --cached --name-only --diff-filter=A -z "$against" |
+		LC_ALL=C tr -d '[ -~]\0' | wc -c)
+
+	if [ "$non_ascii_files" != "0" ]; then
+		error "Attempt to add a non-ASCII file name."
+		cat <<\EOF
 This can cause problems if you want to work with people on other platforms.
 
 To be portable it is advisable to rename the file.
@@ -45,33 +59,106 @@ If you know what you are doing you can disable this check using:
 
   git config hooks.allownonascii true
 EOF
-	exit 1
+		exit 1
+	fi
 fi
 
 #
-# #2 Encrypt before committing
+# #2 Ansible Vault encryption check
 #
-if ! command -v ansible-vault &> /dev/null
-then
-	echo "ansible-vault not installed, cannot encrypt before commit"
+if command -v ansible-vault &> /dev/null; then
+	PASSWORD_FILE="$(pwd)/.vault-password"
+
+	# Check if password file exists
+	if [ ! -f "$PASSWORD_FILE" ]; then
+		warning ".vault-password file not found, skipping vault encryption checks"
+	else
+		# Encrypt abbreviations_work if it exists and is not already encrypted
+		FILE_TO_ENCRYPT="$(pwd)/dotfile_templates/zsh/zsh/abbreviations_work"
+		if [ -f "$FILE_TO_ENCRYPT" ]; then
+			if ! head -1 "$FILE_TO_ENCRYPT" | grep --quiet "^\$ANSIBLE_VAULT;"; then
+				info "Encrypting $FILE_TO_ENCRYPT"
+				if ansible-vault encrypt "$FILE_TO_ENCRYPT" --vault-password-file "$PASSWORD_FILE"; then
+					git add "$FILE_TO_ENCRYPT"
+				else
+					error "Failed to encrypt $FILE_TO_ENCRYPT"
+					exit 1
+				fi
+			fi
+		fi
+
+		# Encrypt Raycast files if they exist and are not already encrypted
+		CURR_DIR="$(pwd)/Raycast"
+		if [ -d "$CURR_DIR" ]; then
+			pushd "$CURR_DIR" > /dev/null || exit 1
+			while IFS= read -r -d '' file; do
+				if [ -f "$file" ] && ! head -1 "$file" | grep --quiet "^\$ANSIBLE_VAULT;"; then
+					info "Encrypting Raycast file: $file"
+					if ansible-vault encrypt "$file" --vault-password-file "$PASSWORD_FILE"; then
+						git add "$file"
+					else
+						error "Failed to encrypt $file"
+						popd > /dev/null || true
+						exit 1
+					fi
+				fi
+			done < <(find . -type f -print0)
+			popd > /dev/null || true
+		fi
+	fi
+else
+	warning "ansible-vault not found, skipping vault encryption checks"
+fi
+
+#
+# #3 YAML linting (if yamllint is available)
+#
+if command -v yamllint &> /dev/null; then
+	yaml_files=$(git diff --cached --name-only --diff-filter=ACM "$against" | grep -E '\.(yml|yaml)$' || true)
+	if [ -n "$yaml_files" ]; then
+		info "Running yamllint on YAML files..."
+		echo "$yaml_files" | while IFS= read -r file; do
+			if [ -f "$file" ]; then
+				if ! yamllint "$file"; then
+					error "yamllint found issues in $file"
+					exit 1
+				fi
+			fi
+		done
+	fi
+else
+	warning "yamllint not found, skipping YAML linting"
+fi
+
+#
+# #4 Ansible linting (if ansible-lint is available)
+#
+if command -v ansible-lint &> /dev/null; then
+	ansible_files=$(git diff --cached --name-only --diff-filter=ACM "$against" | grep -E '\.(yml|yaml)$' || true)
+	if [ -n "$ansible_files" ]; then
+		info "Running ansible-lint on Ansible files..."
+		echo "$ansible_files" | while IFS= read -r file; do
+			# Only lint files that look like Ansible playbooks/roles
+			if [ -f "$file" ] && (grep -q "^---" "$file" && grep -qE "^(hosts|tasks|roles|name):" "$file"); then
+				if ! ansible-lint "$file"; then
+					error "ansible-lint found issues in $file"
+					exit 1
+				fi
+			fi
+		done
+	fi
+else
+	warning "ansible-lint not found, skipping Ansible linting"
+fi
+
+#
+# #5 Whitespace error check
+#
+info "Checking for whitespace errors..."
+if ! git diff-index --check --cached "$against" --; then
+	error "Whitespace errors detected. Please fix them before committing."
 	exit 1
 fi
 
-PASSWORD_FILE="$(pwd)/.vault-password"
-printf "Encrypting file in pre-commit %s\n" "$(pwd)/dotfile_templates/zsh/zsh/abbreviations_work"
-FILE_TO_ENCRYPT="$(pwd)/dotfile_templates/zsh/zsh/abbreviations_work"
-head -1 "$FILE_TO_ENCRYPT" | grep --quiet "^\$ANSIBLE_VAULT;" && ansible-vault encrypt "${FILE_TO_ENCRYPT}" --vault-password-file "${PASSWORD_FILE}"
-
-CURR_DIR="$(pwd)/Raycast"
-pushd "$CURR_DIR" || exit
-for i in $(find . -type f); do
-	printf "Encrypting file in pre-commit %s \n" "${CURR_DIR}/${i}"
-	head -1 "${i}" | grep --quiet "^\$ANSIBLE_VAULT;" && ansible-vault encrypt "$i" --vault-password-file "${PASSWORD_FILE}";
-done
-popd || exit
-
-#
-# #3 Whitespace error
-#
-# If there are whitespace errors, print the offending file names and fail.
-exec git diff-index --check --cached $against --
+info "Pre-commit checks passed!"
+exit 0

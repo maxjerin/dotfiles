@@ -1,21 +1,53 @@
 ---
-- name: Add Google Chrome Signing Key
+# Modern Google Chrome installation for Debian/Ubuntu
+# Uses current best practices: apt_key with 'url' parameter is deprecated,
+# so we download the key first and use apt_key with 'file' parameter
+- name: Download Google Chrome signing key
+  tags:
+    - linux
+  ansible.builtin.get_url:
+    url: https://dl.google.com/linux/linux_signing_key.pub
+    dest: /tmp/google-chrome-signing-key.pub
+    mode: '0644'
+  when: ansible_pkg_mgr == 'apt'
+  become: true
+
+- name: Add Google Chrome signing key to apt keyring
   tags:
     - linux
   ansible.builtin.apt_key:
-    url: https://dl-ssl.google.com/linux/linux_signing_key.pub
+    file: /tmp/google-chrome-signing-key.pub
     state: present
+  when: ansible_pkg_mgr == 'apt'
+  become: true
+
+- name: Clean up temporary key file
+  tags:
+    - linux
+  ansible.builtin.file:
+    path: /tmp/google-chrome-signing-key.pub
+    state: absent
+  when: ansible_pkg_mgr == 'apt'
+  become: true
 
 - name: Add Google Chrome repository
   tags:
     - linux
-  apt_repository:
-    repo: deb http://dl.google.com/linux/chrome/deb/ stable main
+  ansible.builtin.apt_repository:
+    repo: "deb [arch=amd64] https://dl.google.com/linux/chrome/deb/ stable main"
     state: present
+    filename: google-chrome
+    update_cache: true
+  when: ansible_pkg_mgr == 'apt'
+  become: true
 
 - name: Install Google Chrome
   tags:
     - linux
-  apt:
+  ansible.builtin.apt:
     name:
       - google-chrome-stable
+    state: present
+    update_cache: true
+  when: ansible_pkg_mgr == 'apt'
+  become: true

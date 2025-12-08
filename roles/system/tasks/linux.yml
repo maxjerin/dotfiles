@@ -4,11 +4,23 @@
     src: linux_config
     dest: ~/.ssh/config
 
-- name: Install Homebrew formulas
+- name: Install common Homebrew formulas
   community.general.homebrew:
-    name: "{{ homebrew['formulas_linux'] }}"
+    name: "{{ item }}"
     path: "/home/linuxbrew/.linuxbrew/bin"
+  loop: "{{ homebrew['formulas_common'] }}"
   become: true
+  ignore_errors: true
+  tags:
+    - linux
+
+- name: Install Linux-specific Homebrew formulas
+  community.general.homebrew:
+    name: "{{ item }}"
+    path: "/home/linuxbrew/.linuxbrew/bin"
+  loop: "{{ homebrew['formulas_linux'] }}"
+  become: true
+  ignore_errors: true
   tags:
     - linux
 

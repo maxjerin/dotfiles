@@ -7,17 +7,13 @@ Sensitive files are encrypted. Replace them with your own
 
 1. Install git
 2. Download this repo
-3. Run bootstrap.sh
-4.  Update .zshrc file with
-```
-echo 'eval "$(pyenv init --path)"' >> ~/.zprofile
+3. Run `./bootstrap.sh` (or `./bootstrap-macos.sh` directly)
 
-echo 'eval "$(pyenv init -)"' >> ~/.zshrc
-```
-5. Install python 3.12 `pyenv install 3.12`
-6. Set python 3.12 as default `pyenv global 3.12`
-7. Install poetry `pip install poetry`
-8. Init poetry `poetry install`
+The bootstrap script will:
+- Install Homebrew (if not present)
+- Install Stow
+- Install pipx and project dependencies (ansible, ansible-lint, yamllint)
+- Set up dotfiles using Stow
 
 
 ## Executing Dotfiles
@@ -52,19 +48,23 @@ ansible-playbook dotfiles.yml \
 ```
 
 
-## Setting up script on Ubuntu
+## Setting up script on Linux
 
-```
-sudo apt update \
-sudo apt install software-properties-common \
-sudo add-apt-repository --yes --update ppa:ansible/ansible \
-sudo apt install ansible
-```
+1. Install git
+2. Download this repo
+3. Run `./bootstrap.sh` (or `./bootstrap-linux.sh` directly)
+
+The bootstrap script will:
+- Install build essentials
+- Install Linuxbrew (if not present)
+- Install Stow
+- Install pipx and project dependencies (ansible, ansible-lint, yamllint)
+- Set up dotfiles using Stow
 
 # Files
 
-## Poetry
-Used to run `yamllint` and `ansible-lint` locally to fix issues in GHA ci
+## pipx
+Used to install and manage CLI tools (`ansible`, `ansible-lint`, `yamllint`) in isolated environments. This ensures clean installations without conflicts and makes it easy to update tools with `pipx upgrade-all`.
 
 # Ad-Hoc Commands
 Get Mac Os values of settings

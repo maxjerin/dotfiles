@@ -17,6 +17,15 @@
   tags:
     - linux
 
+- name: Load linux cursor and warp installation
+  include_tasks:
+    file: cursor-warp.yml
+  args:
+    apply:
+      become: yes
+  tags:
+    - linux
+
 - name: Load linux brew tasks
   include_tasks:
     file: chrome.yml

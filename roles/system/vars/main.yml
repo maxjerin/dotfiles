@@ -31,79 +31,65 @@ defaults:
     type: bool
     value: "true"
 
+# Common formulas that work on both macOS and Linux
 homebrew:
-  formulas_linux:
+  formulas_common:
     - asdf
     - awscli
-    - docker
     - bat
-    - emacs
-    - exa
     - fzf
     - go
     - helm
     - k9s
     - kubectl
     - minikube
-    - olets/tap/zsh-abbr
-    - openjdk@11
-    - powerline-go
-    - pyenv
     - shellcheck
-    - spaceship
     - starship
+    - yamllint
+    - zsh-completions
+    - zsh-autosuggestions
+    - zsh-syntax-highlighting
+
+  # Linux-specific formulas
+  formulas_linux:
+    - emacs
+    - exa
+    - openjdk@11
+    - pyenv
+    - spaceship
     - svn
     - vault
-    - yamllint
     - yarn
     - z
     - zsh
-    - zsh-completions
-    - zsh-autosuggestions
-    - zsh-syntax-highlighting
-  taps_macos:
-    # - hashicorp/tap
-    - olets/tap
-    # - cormacrelf/tap
+
+  # macOS-specific formulas
   formulas_macos:
-    - asdf
-    - awscli
-    - bat
     - code-cli
-    # - cormacrelf/tap/dark-notify
     - dive
     - eza
-    - fzf
-    # macOs sed has compatibility issues with bas scripts
-    - gnu-sed
-    - go
-    # - hashicorp/tap/terraform
-    - helm
+    - gnu-sed  # macOS sed has compatibility issues with bash scripts
     - htop
     - jq
-    - k9s
-    - kubectl
     - lazygit
-    - mas
-    - minikube
+    - mas  # Mac App Store CLI
     - neovim
-    - olets/tap/zsh-abbr@6
     - powerline-go
-    - shellcheck
-    - starship
     - tmux
-    - yamllint
     - yq
     - zoxide
-    - zsh-completions
-    - zsh-autosuggestions
-    - zsh-syntax-highlighting
-  casks:
+
+  # macOS-specific taps
+  taps_macos:
+    - olets/tap
+
+  # macOS-only GUI applications (casks)
+  casks_macos_only:
     - 1password-cli
     - 1password
     - appcleaner
     - arc
-    - copilot # Money management app
+    - copilot  # Money management app
     - cursor
     - docker
     - ghostty
@@ -111,13 +97,13 @@ homebrew:
     - ha-menu
     - home-assistant
     - intellij-idea-ce
-    - karabiner-elements
+    - karabiner-elements  # macOS-only keyboard remapper
     - msty
     - notion
     - ollama
     - orbstack
-    - postico
-    - raycast
+    - postico  # macOS-only PostgreSQL client
+    - raycast  # macOS-only launcher
     - rescuetime
     - slack
     - stoplight-studio
@@ -125,12 +111,24 @@ homebrew:
     - warp
     - whatsapp
     - zoom
+
+  # Mac App Store applications (macOS-only)
   mas:
-    - 961632517 # Be Focused Pro
-    - 635758264 # Calca
-    - 1056643111 # Clocker
-    - 1532419400 # Meeting Bar
-    - 1452453066 # Hidden Bar
+    - 961632517  # Be Focused Pro
+    - 635758264  # Calca
+    - 1056643111  # Clocker
+    - 1532419400  # Meeting Bar
+    - 1452453066  # Hidden Bar
+
+  # Linux GUI applications (via snap/apt)
+  apps_linux:
+    - cursor
+    - warp
+    - slack
+    - whatsapp
+    - notion
+    - docker
+    - visual-studio-code
 
 repos:
   - name: spacemacs # Avoid name conflict with repo packaged with rpm: 1password.repo
