@@ -114,29 +114,6 @@ setup_dotfiles() {
     mkdir -p ~/.config/tmux
     stow --adopt -R --target ~/.config/tmux tmux
 
-    # Neovim
-    mkdir -p ~/.config/nvim/lua/plugins/lsp/servers ~/.config/nvim/lua/util
-    stow --adopt -R --no-folding --target ~/.config/nvim neovim
-    pushd neovim > /dev/null
-    stow --adopt -R --no-folding --target ~/.config/nvim/lua lua
-    popd > /dev/null
-    pushd neovim/lua > /dev/null
-    # Stow util directory (note: directory is 'util', not 'utils')
-    if [ -d "util" ]; then
-        stow --adopt -R --no-folding --target ~/.config/nvim/lua/util util
-    fi
-    stow --adopt -R --no-folding --target ~/.config/nvim/lua/plugins plugins
-    popd > /dev/null
-    pushd neovim/lua/plugins > /dev/null
-    stow --adopt -R --no-folding --target ~/.config/nvim/lua/plugins/lsp lsp
-    popd > /dev/null
-    pushd neovim/lua/plugins/lsp > /dev/null
-    # Only stow servers if the directory exists
-    if [ -d "servers" ]; then
-        stow --adopt -R --no-folding --target ~/.config/nvim/lua/plugins/lsp/servers servers
-    fi
-    popd > /dev/null
-
     # K9s
     mkdir -p ~/.config/k9s/skins
     stow --adopt -R --target ~/.config/k9s k9s
