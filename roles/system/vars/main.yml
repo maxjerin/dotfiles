@@ -90,6 +90,7 @@ homebrew:
     - tmux
     - yq
     - zoxide
+    - dockutil  # Tool for managing Dock apps programmatically
 
   # macOS-specific taps
   taps_macos:
