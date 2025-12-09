@@ -47,6 +47,8 @@ defaults:
     type: int
     value: "0"
   # Mirror Accessibility toggle (some macOS versions consult this)
+  # Note: This domain may require special permissions and can fail silently
+  # The task is configured to ignore failures for this setting
   - domain: com.apple.universalaccess
     key: trackpadThreeFingerDrag
     name: Enable three finger drag (Accessibility mirror)

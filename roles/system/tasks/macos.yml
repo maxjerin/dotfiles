@@ -11,6 +11,7 @@
     type: "{{ item['type'] | default(omit) }}"
     value: "{{ item['value'] }}"
   loop: "{{ defaults }}"
+  failed_when: false
   tags:
     - macos
     - macos_settings
@@ -83,19 +84,7 @@
 
 - name: Disable Spotlight indexing and search results
   ansible.builtin.shell: |
-    # Disable Spotlight indexing for all volumes
-    sudo mdutil -i off / 2>/dev/null || true
-    sudo mdutil -i off /System/Volumes/Data 2>/dev/null || true
-
-    # Clear and erase existing Spotlight indexes
-    sudo mdutil -E / 2>/dev/null || true
-    sudo mdutil -E /System/Volumes/Data 2>/dev/null || true
-
-    # Remove Spotlight index directories (more aggressive)
-    sudo rm -rf /.Spotlight-V100 2>/dev/null || true
-    sudo rm -rf /System/Volumes/Data/.Spotlight-V100 2>/dev/null || true
-
-    # Disable indexing via defaults
+    # Disable indexing via defaults (no sudo required)
     defaults write com.apple.Spotlight.plist indexingEnabled -bool false 2>/dev/null || true
 
     # Replace entire orderedItems array with all categories disabled
@@ -151,21 +140,19 @@
       '{enabled = 0; name = SOURCE;}' \
       '{enabled = 0; name = WEB_PAGES;}' 2>/dev/null || true
 
-    # Disable Spotlight indexing service
-    sudo launchctl unload -w /System/Library/LaunchDaemons/com.apple.metadata.mds.plist 2>/dev/null || true
-
     # Restart SystemUIServer and kill Spotlight processes
     killall SystemUIServer 2>/dev/null || true
     killall Spotlight 2>/dev/null || true
 
-    echo "Spotlight indexing and search results disabled"
-    echo "NOTE: You may need to log out and back in for changes to take full effect"
+    echo "Spotlight indexing and search results disabled (user-level settings)"
+    echo "NOTE: For full system-level disabling, run manually with sudo:"
+    echo "  sudo mdutil -i off /"
+    echo "  sudo mdutil -E /"
   tags:
     - macos
     - macos_settings
   changed_when: true
   ignore_errors: true
-  become: true
   register: disable_spotlight_indexing_result
 
 - name: Configure Dock with custom apps
@@ -198,59 +185,56 @@
       echo "Dock configured using dockutil"
     else
       # Fallback: Use Python to create proper plist structure
-      python3 << 'PYTHON_SCRIPT'
+      TMP_SCRIPT=$(mktemp)
+      cat > "$TMP_SCRIPT" << 'PYEOF'
       import plistlib
       import os
       from pathlib import Path
 
       apps = [
-          "/Applications/WhatsApp.app",
-          "/Applications/Messages.app",
-          "/Applications/Copilot.app",
-          "/Applications/Slack.app",
-          "/Applications/Arc.app",
-          "/Applications/Visual Studio Code.app",
-          "/Applications/Warp.app",
-          "/Applications/Cursor.app",
-          "/Applications/Notion.app",
-          "/Applications/iMovie.app",
-          "/Applications/Music.app",
-          "/Applications/Reminders.app"
+          '/Applications/WhatsApp.app',
+          '/Applications/Messages.app',
+          '/Applications/Copilot.app',
+          '/Applications/Slack.app',
+          '/Applications/Arc.app',
+          '/Applications/Visual Studio Code.app',
+          '/Applications/Warp.app',
+          '/Applications/Cursor.app',
+          '/Applications/Notion.app',
+          '/Applications/iMovie.app',
+          '/Applications/Music.app',
+          '/Applications/Reminders.app'
       ]
 
       persistent_apps = []
       for app_path in apps:
           if os.path.exists(app_path):
-              app_url = f"file://{app_path}"
+              app_url = f'file://{app_path}'
               tile_data = {
-                  "tile-data": {
-                      "file-data": {
-                          "_CFURLString": app_url,
-                          "_CFURLStringType": 0
+                  'tile-data': {
+                      'file-data': {
+                          '_CFURLString': app_url,
+                          '_CFURLStringType': 0
                       }
                   },
-                  "tile-type": "file-tile"
+                  'tile-type': 'file-tile'
               }
               persistent_apps.append(tile_data)
 
       if persistent_apps:
-          plist_path = Path.home() / "Library/Preferences/com.apple.dock.plist"
+          plist_path = Path.home() / 'Library/Preferences/com.apple.dock.plist'
           try:
-              # Read existing plist
               with open(plist_path, 'rb') as f:
                   plist = plistlib.load(f)
-
-              # Update persistent-apps
               plist['persistent-apps'] = persistent_apps
-
-              # Write back
               with open(plist_path, 'wb') as f:
                   plistlib.dump(plist, f)
-
-              print("Dock configured with custom apps")
+              print('Dock configured with custom apps')
           except Exception as e:
-              print(f"Error configuring Dock: {e}")
-      PYTHON_SCRIPT
+              print(f'Error configuring Dock: {e}')
+      PYEOF
+      python3 "$TMP_SCRIPT"
+      rm -f "$TMP_SCRIPT"
     fi
 
     # Restart Dock to apply changes
@@ -306,25 +290,37 @@
 
 - name: Set Arc as default browser (http/https) using duti
   ansible.builtin.shell: |
-    set -e
     if ! command -v duti >/dev/null 2>&1; then
       echo "duti not installed; skipping default browser configuration"
       exit 0
     fi
 
     ARC_PLIST="/Applications/Arc.app/Contents/Info.plist"
+    ARC_BUNDLE_ID=""
     if [ -f "$ARC_PLIST" ]; then
       ARC_BUNDLE_ID=$(/usr/libexec/PlistBuddy -c "Print :CFBundleIdentifier" "$ARC_PLIST" 2>/dev/null || echo "")
     fi
 
-    # Fallback to known bundle id if plist lookup failed
+    # Try known bundle IDs if plist lookup failed
     if [ -z "${ARC_BUNDLE_ID:-}" ]; then
-      ARC_BUNDLE_ID="company.thebrowser.Arc"
+      # Try common Arc bundle IDs
+      for bundle_id in "company.thebrowser.Browser" "company.thebrowser.Arc" "com.thebrowser.Arc"; do
+        if duti -s "${bundle_id}" http 2>/dev/null; then
+          ARC_BUNDLE_ID="${bundle_id}"
+          break
+        fi
+      done
+    fi
+
+    if [ -z "${ARC_BUNDLE_ID:-}" ]; then
+      echo "Could not determine Arc bundle ID; skipping default browser configuration"
+      echo "You may need to set Arc as default browser manually in System Settings"
+      exit 0
     fi
 
     echo "Setting default handler for http/https to ${ARC_BUNDLE_ID}"
-    duti -s "${ARC_BUNDLE_ID}" http
-    duti -s "${ARC_BUNDLE_ID}" https
+    duti -s "${ARC_BUNDLE_ID}" http 2>/dev/null || echo "Warning: Failed to set http handler (may require manual configuration)"
+    duti -s "${ARC_BUNDLE_ID}" https 2>/dev/null || echo "Warning: Failed to set https handler (may require manual configuration)"
   tags:
     - macos
     - macos_settings
@@ -362,6 +358,7 @@
 - name: Install apps
   ansible.builtin.command: "mas install {{ item }}"
   loop: "{{ homebrew['mas'] }}"
+  ignore_errors: true
   tags:
     - macos
 
