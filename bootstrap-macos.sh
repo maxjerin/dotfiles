@@ -51,8 +51,12 @@ setup_pipx_tools() {
         echo "Installing pipx..."
         brew install pipx
         pipx ensurepath
+        # Add pipx bin to PATH for current session
+        export PATH="$HOME/.local/bin:$PATH"
     else
         echo "pipx already installed"
+        # Ensure pipx bin is in PATH for current session
+        export PATH="$HOME/.local/bin:$PATH"
     fi
 
     echo "Installing project dependencies with pipx..."
@@ -60,6 +64,8 @@ setup_pipx_tools() {
     # Install tools if not already installed
     if ! command_exists ansible; then
         pipx install ansible
+        # Re-export PATH after installation to ensure it's available
+        export PATH="$HOME/.local/bin:$PATH"
     fi
 
     if ! command_exists ansible-lint; then
@@ -69,10 +75,43 @@ setup_pipx_tools() {
     if ! command_exists yamllint; then
         pipx install yamllint
     fi
+
+    # Verify ansible-playbook is accessible
+    if ! command_exists ansible-playbook; then
+        echo "Warning: ansible-playbook not found in PATH"
+        echo "Trying to locate it..."
+        ANSIBLE_PATH=$(find ~ -name ansible-playbook 2>/dev/null | head -1)
+        if [ -n "$ANSIBLE_PATH" ]; then
+            echo "Found ansible-playbook at: $ANSIBLE_PATH"
+            export PATH="$(dirname "$ANSIBLE_PATH"):$PATH"
+        else
+            echo "Error: Could not find ansible-playbook after installation"
+            echo "Please check pipx installation: pipx list"
+            return 1
+        fi
+    fi
+
+    echo "✓ Ansible tools installed and available"
 }
 
 # Function to run Ansible playbook for macOS
 run_ansible_playbook() {
+    # Ensure pipx bin is in PATH
+    export PATH="$HOME/.local/bin:$PATH"
+
+    # Try to find ansible-playbook if not in PATH
+    if ! command_exists ansible-playbook; then
+        ANSIBLE_PATH=$(find ~ -name ansible-playbook 2>/dev/null | head -1)
+        if [ -n "$ANSIBLE_PATH" ]; then
+            echo "Found ansible-playbook at: $ANSIBLE_PATH"
+            export PATH="$(dirname "$ANSIBLE_PATH"):$PATH"
+        else
+            echo "Error: ansible-playbook not found."
+            echo "Please ensure pipx is installed and ansible is installed via: pipx install ansible"
+            return 1
+        fi
+    fi
+
     if command_exists ansible-playbook; then
         echo "Running Ansible playbook for macOS..."
         ansible-playbook dotfiles.yml \
@@ -80,7 +119,8 @@ run_ansible_playbook() {
             --tags macos \
             --extra-vars="ansible_python_interpreter=$(which python3)"
     else
-        echo "Warning: ansible-playbook not found. It should have been installed via pipx."
+        echo "Error: ansible-playbook not found. It should have been installed via pipx."
+        return 1
     fi
 }
 
@@ -147,7 +187,11 @@ main() {
     setup_dotfiles
 
     echo "Bootstrap complete!"
-    echo "Please source your shell configuration: source ~/.zprofile"
+    echo ""
+    echo "To apply changes in your current shell, run:"
+    echo "  source ~/.zshrc"
+    echo ""
+    echo "Or simply open a new terminal window."
 }
 
 main "$@"

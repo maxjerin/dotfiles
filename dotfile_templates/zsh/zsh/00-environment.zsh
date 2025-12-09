@@ -1,6 +1,9 @@
 export PATH=$(brew --prefix)/bin:$PATH
 export PATH=$(brew --prefix)/sbin:$PATH
 
+# Add pipx bin directory to PATH (for ansible, ansible-lint, yamllint, etc.)
+export PATH="$HOME/.local/bin:$PATH"
+
 # K9S
 export K9S_CONFIG_DIR=~/.config/k9s
 
