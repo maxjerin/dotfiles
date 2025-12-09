@@ -140,8 +140,9 @@ main() {
     install_stow
     setup_pipx_tools
 
-    # Optionally run Ansible playbook (commented out by default)
-    # run_ansible_playbook
+    # Run Ansible playbook to configure macOS settings
+    # This configures Spotlight, Raycast, Dock, keyboard settings, etc.
+    run_ansible_playbook
 
     setup_dotfiles
 
