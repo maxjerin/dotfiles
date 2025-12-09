@@ -19,17 +19,39 @@ defaults:
     type: int
     value: "1"
 
-  # Three finger drag/resize for trackpad
+  # Three finger drag/resize for trackpad (internal and Bluetooth)
+  - domain: com.apple.AppleMultitouchTrackpad
+    key: TrackpadThreeFingerDrag
+    name: Enable three finger drag (internal trackpad)
+    type: bool
+    value: "true"
   - domain: com.apple.driver.AppleBluetoothMultitouch.trackpad
-    key: trackpadThreeFingerDrag
-    name: Enable three finger drag (for moving and resizing windows)
+    key: TrackpadThreeFingerDrag
+    name: Enable three finger drag (Bluetooth trackpad)
+    type: bool
+    value: "true"
+  # Avoid conflicts by disabling three-finger swipe gestures
+  - domain: NSGlobalDomain
+    key: com.apple.trackpad.threeFingerSwipeGesture
+    name: Disable three-finger swipe gesture globally (prevents conflict with drag)
     type: int
-    value: "1"
-  - domain: com.apple.AppleBluetoothMultitouch
-    key: trackpadThreeFingerDrag
-    name: Enable three finger drag (for moving and resizing windows)
+    value: "0"
+  - domain: com.apple.AppleMultitouchTrackpad
+    key: TrackpadThreeFingerHorizSwipeGesture
+    name: Disable three-finger horizontal swipe (internal trackpad)
     type: int
-    value: "1"
+    value: "0"
+  - domain: com.apple.driver.AppleBluetoothMultitouch.trackpad
+    key: TrackpadThreeFingerHorizSwipeGesture
+    name: Disable three-finger horizontal swipe (Bluetooth trackpad)
+    type: int
+    value: "0"
+  # Mirror Accessibility toggle (some macOS versions consult this)
+  - domain: com.apple.universalaccess
+    key: trackpadThreeFingerDrag
+    name: Enable three finger drag (Accessibility mirror)
+    type: bool
+    value: "true"
 
   # Dock settings
   - domain: com.apple.dock
@@ -82,6 +104,7 @@ homebrew:
     - dive
     - eza
     - gnu-sed  # macOS sed has compatibility issues with bash scripts
+    - duti
     - htop
     - jq
     - lazygit
