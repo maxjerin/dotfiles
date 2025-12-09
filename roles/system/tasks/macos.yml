@@ -15,6 +15,41 @@
     - macos
     - macos_settings
 
+- name: Disable Spotlight Command+Space shortcut
+  ansible.builtin.shell: |
+    # Ensure the preferences file exists
+    if [ ! -f ~/Library/Preferences/com.apple.symbolichotkeys.plist ]; then
+      defaults read com.apple.symbolichotkeys > /dev/null 2>&1 || true
+    fi
+    # Disable Spotlight shortcut (key 64 = Command+Space)
+    /usr/libexec/PlistBuddy -c "Set :AppleSymbolicHotKeys:64:enabled false" ~/Library/Preferences/com.apple.symbolichotkeys.plist 2>/dev/null || \
+    /usr/libexec/PlistBuddy -c "Add :AppleSymbolicHotKeys:64:enabled bool false" ~/Library/Preferences/com.apple.symbolichotkeys.plist 2>/dev/null || \
+    defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 64 "{enabled = 0; value = { parameters = (32, 49, 1048576); type = 'standard'; }; }"
+  tags:
+    - macos
+    - macos_settings
+  changed_when: false
+  register: disable_spotlight_result
+
+- name: Configure Raycast to use Command+Space hotkey
+  ansible.builtin.shell: |
+    # Set Raycast hotkey to Command+Space if Raycast is installed
+    if [ -d "/Applications/Raycast.app" ]; then
+      # Raycast stores hotkey in its preferences
+      # Format: "cmd+space" or similar
+      defaults write com.raycast.macos hotkey "cmd+space" 2>/dev/null || true
+      # Alternative: Use Raycast's CLI if available
+      /Applications/Raycast.app/Contents/MacOS/Raycast --set-hotkey "cmd+space" 2>/dev/null || true
+      # Kill Raycast if running to apply changes (will restart automatically)
+      killall Raycast 2>/dev/null || true
+    fi
+  tags:
+    - macos
+    - macos_settings
+  changed_when: false
+  ignore_errors: true
+  register: configure_raycast_result
+
 - name: Add Homebrew taps
   community.general.homebrew_tap:
     name: "{{ item }}"
