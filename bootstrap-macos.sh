@@ -50,13 +50,15 @@ setup_pipx_tools() {
     if ! command_exists pipx; then
         echo "Installing pipx..."
         brew install pipx
-        pipx ensurepath
+        pipx ensurepath --force
         # Add pipx bin to PATH for current session
         export PATH="$HOME/.local/bin:$PATH"
     else
         echo "pipx already installed"
         # Ensure pipx bin is in PATH for current session
         export PATH="$HOME/.local/bin:$PATH"
+        # Refresh shell PATH hints for current session
+        pipx ensurepath --force >/dev/null 2>&1 || true
     fi
 
     echo "Installing project dependencies with pipx..."
@@ -66,6 +68,9 @@ setup_pipx_tools() {
         pipx install ansible
         # Re-export PATH after installation to ensure it's available
         export PATH="$HOME/.local/bin:$PATH"
+    else
+        # Ensure ansible entrypoints are linked into ~/.local/bin even if venv exists
+        pipx reinstall ansible >/dev/null 2>&1 || true
     fi
 
     if ! command_exists ansible-lint; then
@@ -79,15 +84,28 @@ setup_pipx_tools() {
     # Verify ansible-playbook is accessible
     if ! command_exists ansible-playbook; then
         echo "Warning: ansible-playbook not found in PATH"
-        echo "Trying to locate it..."
-        ANSIBLE_PATH=$(find ~ -name ansible-playbook 2>/dev/null | head -1)
-        if [ -n "$ANSIBLE_PATH" ]; then
-            echo "Found ansible-playbook at: $ANSIBLE_PATH"
-            export PATH="$(dirname "$ANSIBLE_PATH"):$PATH"
+        # Prefer direct, cheap checks of common pipx venv locations before an expensive home scan
+        if [ -x "$HOME/.local/bin/ansible-playbook" ]; then
+            export PATH="$HOME/.local/bin:$PATH"
+        elif [ -x "$HOME/.local/pipx/venvs/ansible/bin/ansible-playbook" ]; then
+            export PATH="$HOME/.local/pipx/venvs/ansible/bin:$PATH"
+            echo "Using ansible-playbook from pipx venv: ~/.local/pipx/venvs/ansible/bin"
+        elif [ -x "$HOME/.local/pipx/venvs/ansible-core/bin/ansible-playbook" ]; then
+            export PATH="$HOME/.local/pipx/venvs/ansible-core/bin:$PATH"
+            echo "Using ansible-playbook from pipx venv: ~/.local/pipx/venvs/ansible-core/bin"
         else
-            echo "Error: Could not find ansible-playbook after installation"
-            echo "Please check pipx installation: pipx list"
-            return 1
+            echo "Trying to locate it with pipx metadata..."
+            # As a last resort, do a targeted search under pipx directory rather than ~
+            ANSIBLE_PATH=$(find "$HOME/.local/pipx/venvs" -type f -name ansible-playbook 2>/dev/null | head -1)
+            if [ -n "${ANSIBLE_PATH:-}" ]; then
+                echo "Found ansible-playbook at: $ANSIBLE_PATH"
+                export PATH="$(dirname "$ANSIBLE_PATH"):$PATH"
+            else
+                echo "Error: Could not find ansible-playbook after installation"
+                echo "Please check pipx installation with: pipx list"
+                echo "You can also run: pipx install --force ansible"
+                return 1
+            fi
         fi
     fi
 
@@ -101,14 +119,13 @@ run_ansible_playbook() {
 
     # Try to find ansible-playbook if not in PATH
     if ! command_exists ansible-playbook; then
-        ANSIBLE_PATH=$(find ~ -name ansible-playbook 2>/dev/null | head -1)
-        if [ -n "$ANSIBLE_PATH" ]; then
-            echo "Found ansible-playbook at: $ANSIBLE_PATH"
-            export PATH="$(dirname "$ANSIBLE_PATH"):$PATH"
-        else
-            echo "Error: ansible-playbook not found."
-            echo "Please ensure pipx is installed and ansible is installed via: pipx install ansible"
-            return 1
+        # Attempt direct known locations first
+        if [ -x "$HOME/.local/bin/ansible-playbook" ]; then
+            export PATH="$HOME/.local/bin:$PATH"
+        elif [ -x "$HOME/.local/pipx/venvs/ansible/bin/ansible-playbook" ]; then
+            export PATH="$HOME/.local/pipx/venvs/ansible/bin:$PATH"
+        elif [ -x "$HOME/.local/pipx/venvs/ansible-core/bin/ansible-playbook" ]; then
+            export PATH="$HOME/.local/pipx/venvs/ansible-core/bin:$PATH"
         fi
     fi
 
@@ -119,8 +136,18 @@ run_ansible_playbook() {
             --tags macos \
             --extra-vars="ansible_python_interpreter=$(which python3)"
     else
-        echo "Error: ansible-playbook not found. It should have been installed via pipx."
-        return 1
+        # Fallback: run via pipx without relying on PATH
+        if command_exists pipx; then
+            echo "Running Ansible playbook for macOS via pipx..."
+            pipx run --spec ansible-core ansible-playbook dotfiles.yml \
+                -i hosts \
+                --tags macos \
+                --extra-vars="ansible_python_interpreter=$(which python3)"
+        else
+            echo "Error: ansible-playbook not found and pipx unavailable."
+            echo "Please ensure pipx is installed and ansible is installed via: pipx install ansible"
+            return 1
+        fi
     fi
 }
 
