@@ -44,11 +44,16 @@
     # Method 2: Also use defaults write as a backup (more reliable)
     defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 64 "{enabled = 0; value = { parameters = (32, 49, 1048576); type = 'standard'; }; }" 2>/dev/null || true
 
+    # Method 3: Try to change Spotlight shortcut to something else to force it off
+    # Change it to Command+Option+Space (which is less likely to conflict)
+    defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 65 "{enabled = 1; value = { parameters = (32, 49, 1179648); type = 'standard'; }; }" 2>/dev/null || true
+
     # Restart Dock and SystemUIServer to apply changes
     killall Dock 2>/dev/null || true
     killall SystemUIServer 2>/dev/null || true
 
     echo "Spotlight Command+Space shortcut disabled"
+    echo "NOTE: You may need to manually uncheck Spotlight in System Settings → Keyboard → Keyboard Shortcuts"
   tags:
     - macos
     - macos_settings
@@ -75,6 +80,28 @@
   changed_when: true
   ignore_errors: true
   register: configure_raycast_result
+
+- name: Disable Spotlight indexing
+  ansible.builtin.shell: |
+    # Disable Spotlight indexing for all volumes
+    # This stops Spotlight from indexing files and using CPU/disk resources
+    sudo mdutil -i off / 2>/dev/null || true
+    sudo mdutil -i off /System/Volumes/Data 2>/dev/null || true
+
+    # Also disable indexing via defaults
+    defaults write com.apple.Spotlight.plist indexingEnabled -bool false 2>/dev/null || true
+
+    # Disable Spotlight indexing service
+    sudo launchctl unload -w /System/Library/LaunchDaemons/com.apple.metadata.mds.plist 2>/dev/null || true
+
+    echo "Spotlight indexing disabled"
+  tags:
+    - macos
+    - macos_settings
+  changed_when: true
+  ignore_errors: true
+  become: true
+  register: disable_spotlight_indexing_result
 
 - name: Add Homebrew taps
   community.general.homebrew_tap:

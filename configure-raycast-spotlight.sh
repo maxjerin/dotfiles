@@ -42,6 +42,42 @@ fi
 defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 64 "{enabled = 0; value = { parameters = (32, 49, 1048576); type = 'standard'; }; }" 2>/dev/null || true
 echo "✓ Spotlight shortcut disabled via defaults write"
 
+# Method 3: Use AppleScript to programmatically uncheck Spotlight shortcut in System Settings
+# This is the most reliable method as it actually changes the UI setting
+echo "Disabling Spotlight shortcut via System Settings..."
+osascript <<'EOF' || true
+tell application "System Settings"
+    activate
+end tell
+delay 1
+tell application "System Events"
+    tell process "System Settings"
+        -- Navigate to Keyboard Shortcuts
+        try
+            click button "Keyboard Shortcuts…" of group 1 of scroll area 1 of group 1 of splitter group 1 of group 1 of window 1
+            delay 1
+            -- Select Spotlight in sidebar
+            click row 8 of outline 1 of scroll area 1 of group 1 of splitter group 1 of group 1 of window 1
+            delay 0.5
+            -- Uncheck "Show Spotlight search"
+            set spotlightCheckbox to checkbox 1 of group 1 of scroll area 2 of group 1 of splitter group 1 of group 1 of window 1
+            if value of spotlightCheckbox is 1 then
+                click spotlightCheckbox
+                delay 0.5
+            end if
+            -- Close System Settings
+            keystroke "w" using command down
+        on error
+            -- If automation fails, just close System Settings
+            try
+                keystroke "w" using command down
+            end try
+        end try
+    end tell
+end tell
+EOF
+echo "✓ Attempted to disable via System Settings UI"
+
 # Configure Raycast if installed
 if [ -d "/Applications/Raycast.app" ]; then
     echo "Configuring Raycast to use Command+Space..."
@@ -57,6 +93,14 @@ else
     echo "  Please install Raycast first, then run this script again"
 fi
 
+# Disable Spotlight indexing
+echo "Disabling Spotlight indexing..."
+sudo mdutil -i off / 2>/dev/null || echo "⚠ Could not disable Spotlight indexing (may need sudo password)"
+sudo mdutil -i off /System/Volumes/Data 2>/dev/null || true
+defaults write com.apple.Spotlight.plist indexingEnabled -bool false 2>/dev/null || true
+sudo launchctl unload -w /System/Library/LaunchDaemons/com.apple.metadata.mds.plist 2>/dev/null || true
+echo "✓ Spotlight indexing disabled"
+
 # Restart Dock and SystemUIServer to apply Spotlight changes
 echo "Restarting Dock and SystemUIServer to apply Spotlight changes..."
 killall Dock 2>/dev/null || true
@@ -64,10 +108,18 @@ killall SystemUIServer 2>/dev/null || true
 
 echo ""
 echo "Configuration complete!"
-echo "Try pressing Command+Space - it should open Raycast instead of Spotlight."
 echo ""
-echo "If it doesn't work:"
-echo "1. Make sure Raycast is running"
-echo "2. Open Raycast preferences (⌘,) and verify the hotkey is set to ⌘ Space"
-echo "3. You may need to log out and back in for Spotlight changes to take effect"
+echo "⚠️  IMPORTANT: macOS may ignore programmatic keyboard shortcut changes."
+echo "   You MUST manually disable Spotlight's shortcut:"
+echo ""
+echo "   1. Open System Settings → Keyboard → Keyboard Shortcuts"
+echo "   2. Click 'Spotlight' in the left sidebar"
+echo "   3. UNCHECK 'Show Spotlight search'"
+echo "   4. Close System Settings"
+echo ""
+echo "   See MANUAL_SPOTLIGHT_FIX.md for detailed instructions."
+echo ""
+echo "After manually disabling Spotlight:"
+echo "  - Press Command+Space - only Raycast should open"
+echo "  - If both still open, log out and back in"
 
