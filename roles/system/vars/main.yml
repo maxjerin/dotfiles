@@ -1,35 +1,47 @@
 ---
 defaults:
+  # Keyboard settings - Fast arrow key movement
   - domain: NSGlobalDomain
     key: InitialKeyRepeat
-    name: Set very low key repeat rates
+    name: Set very fast initial key repeat (lower = faster, minimum is 15)
     type: int
-    value: "25"
+    value: "15"  # Minimum value = fastest start (15 is the fastest macOS allows)
   - domain: NSGlobalDomain
     key: KeyRepeat
-    name: Set very low key repeat rates
+    name: Set maximum key repeat rate (lower = faster)
     type: int
-    value: "1"
+    value: "1"  # Minimum value = fastest repeat rate
+
+  # Mouse/Trackpad settings
   - domain: NSGlobalDomain
     key: com.apple.mouse.tapBehavior
     name: Enable tap-to-click on Apple mouse
     type: int
     value: "1"
+
+  # Three finger drag/resize for trackpad
   - domain: com.apple.driver.AppleBluetoothMultitouch.trackpad
     key: trackpadThreeFingerDrag
-    name: Enable three finger drag
+    name: Enable three finger drag (for moving and resizing windows)
     type: int
     value: "1"
   - domain: com.apple.AppleBluetoothMultitouch
     key: trackpadThreeFingerDrag
-    name: Enable three finger drag
+    name: Enable three finger drag (for moving and resizing windows)
     type: int
     value: "1"
+
+  # Dock settings
   - domain: com.apple.dock
     key: autohide
     name: Auto-hide the Dock
     type: bool
     value: "true"
+  - domain: com.apple.dock
+    key: mineffect
+    name: Dock minimize effect (genie = 1, scale = 2, suck = 0)
+    type: string
+    value: "genie"
 
 # Common formulas that work on both macOS and Linux
 homebrew:
