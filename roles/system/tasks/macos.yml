@@ -75,53 +75,53 @@
     else
       # Fallback: Use Python to create proper plist structure
       python3 - <<'PYEOF'
-        import plistlib
-        import os
-        from pathlib import Path
+      import plistlib
+      import os
+      from pathlib import Path
 
-        apps = [
-            '/Applications/WhatsApp.app',
-            '/Applications/Messages.app',
-            '/Applications/Copilot.app',
-            '/Applications/Slack.app',
-            '/Applications/Arc.app',
-            '/Applications/Visual Studio Code.app',
-            '/Applications/Warp.app',
-            '/Applications/Cursor.app',
-            '/Applications/Notion.app',
-            '/Applications/iMovie.app',
-            '/Applications/Music.app',
-            '/Applications/Reminders.app'
-        ]
+      apps = [
+          '/Applications/WhatsApp.app',
+          '/Applications/Messages.app',
+          '/Applications/Copilot.app',
+          '/Applications/Slack.app',
+          '/Applications/Arc.app',
+          '/Applications/Visual Studio Code.app',
+          '/Applications/Warp.app',
+          '/Applications/Cursor.app',
+          '/Applications/Notion.app',
+          '/Applications/iMovie.app',
+          '/Applications/Music.app',
+          '/Applications/Reminders.app'
+      ]
 
-        persistent_apps = []
-        for app_path in apps:
-            if os.path.exists(app_path):
-                app_url = f'file://{app_path}'
-                tile_data = {
-                    'tile-data': {
-                        'file-data': {
-                            '_CFURLString': app_url,
-                            '_CFURLStringType': 0
-                        }
-                    },
-                    'tile-type': 'file-tile'
-                }
-                persistent_apps.append(tile_data)
+      persistent_apps = []
+      for app_path in apps:
+          if os.path.exists(app_path):
+              app_url = f'file://{app_path}'
+              tile_data = {
+                  'tile-data': {
+                      'file-data': {
+                          '_CFURLString': app_url,
+                          '_CFURLStringType': 0
+                      }
+                  },
+                  'tile-type': 'file-tile'
+              }
+              persistent_apps.append(tile_data)
 
-        if persistent_apps:
-            plist_path = Path.home() / 'Library/Preferences/com.apple.dock.plist'
-            try:
-                with open(plist_path, 'rb') as f:
-                    plist = plistlib.load(f)
-                plist['persistent-apps'] = persistent_apps
-                with open(plist_path, 'wb') as f:
-                    plistlib.dump(plist, f)
-                print('Dock configured with custom apps')
-            except Exception as e:
-                print(f'Error configuring Dock: {e}')
+      if persistent_apps:
+          plist_path = Path.home() / 'Library/Preferences/com.apple.dock.plist'
+          try:
+              with open(plist_path, 'rb') as f:
+                  plist = plistlib.load(f)
+              plist['persistent-apps'] = persistent_apps
+              with open(plist_path, 'wb') as f:
+                  plistlib.dump(plist, f)
+              print('Dock configured with custom apps')
+          except Exception as e:
+              print(f'Error configuring Dock: {e}')
       PYEOF
-      fi
+    fi
 
     # Restart Dock to apply changes
     killall Dock 2>/dev/null || true
