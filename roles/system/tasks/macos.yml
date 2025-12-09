@@ -117,13 +117,12 @@
       "SOURCE" "WEB_PAGES"
     )
 
+    INDEX=0
     for category in "${CATEGORIES[@]}"; do
-      /usr/libexec/PlistBuddy -c "Add :orderedItems:$((${#CATEGORIES[@]} - 1)) dict" "$PLIST_FILE" 2>/dev/null || \
-      /usr/libexec/PlistBuddy -c "Add :orderedItems:0 dict" "$PLIST_FILE" 2>/dev/null || true
-      /usr/libexec/PlistBuddy -c "Add :orderedItems:$((${#CATEGORIES[@]} - 1)):enabled integer 0" "$PLIST_FILE" 2>/dev/null || \
-      /usr/libexec/PlistBuddy -c "Add :orderedItems:0:enabled integer 0" "$PLIST_FILE" 2>/dev/null || true
-      /usr/libexec/PlistBuddy -c "Add :orderedItems:$((${#CATEGORIES[@]} - 1)):name string $category" "$PLIST_FILE" 2>/dev/null || \
-      /usr/libexec/PlistBuddy -c "Add :orderedItems:0:name string $category" "$PLIST_FILE" 2>/dev/null || true
+      /usr/libexec/PlistBuddy -c "Add :orderedItems:$INDEX dict" "$PLIST_FILE" 2>/dev/null || true
+      /usr/libexec/PlistBuddy -c "Add :orderedItems:$INDEX:enabled integer 0" "$PLIST_FILE" 2>/dev/null || true
+      /usr/libexec/PlistBuddy -c "Add :orderedItems:$INDEX:name string $category" "$PLIST_FILE" 2>/dev/null || true
+      INDEX=$((INDEX + 1))
     done
 
     # Alternative: Use defaults write with proper array syntax
