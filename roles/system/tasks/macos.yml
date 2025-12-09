@@ -109,7 +109,13 @@
     /usr/libexec/PlistBuddy -c "Add :orderedItems array" "$PLIST_FILE" 2>/dev/null || true
 
     # Add all categories as disabled
-    CATEGORIES=("APPLICATIONS" "BOOKMARKS" "CONTACT" "DIRECTORIES" "DOCUMENTS" "EVENT_TODO" "FONTS" "IMAGES" "MENU_CONVERSION" "MENU_DEFINITION" "MENU_EXPRESSION" "MENU_OTHER" "MENU_SPOTLIGHT_SUGGESTIONS" "MESSAGES" "MOVIES" "MUSIC" "PDF" "PRESENTATIONS" "SPREADSHEETS" "SYSTEM_PREFS" "SOURCE" "WEB_PAGES")
+    CATEGORIES=(
+      "APPLICATIONS" "BOOKMARKS" "CONTACT" "DIRECTORIES" "DOCUMENTS"
+      "EVENT_TODO" "FONTS" "IMAGES" "MENU_CONVERSION" "MENU_DEFINITION"
+      "MENU_EXPRESSION" "MENU_OTHER" "MENU_SPOTLIGHT_SUGGESTIONS" "MESSAGES"
+      "MOVIES" "MUSIC" "PDF" "PRESENTATIONS" "SPREADSHEETS" "SYSTEM_PREFS"
+      "SOURCE" "WEB_PAGES"
+    )
 
     for category in "${CATEGORIES[@]}"; do
       /usr/libexec/PlistBuddy -c "Add :orderedItems:$((${#CATEGORIES[@]} - 1)) dict" "$PLIST_FILE" 2>/dev/null || \
@@ -194,58 +200,58 @@
     else
       # Fallback: Use Python to create proper plist structure
       python3 << 'PYTHON_SCRIPT'
-import plistlib
-import os
-from pathlib import Path
+      import plistlib
+      import os
+      from pathlib import Path
 
-apps = [
-    "/Applications/WhatsApp.app",
-    "/Applications/Messages.app",
-    "/Applications/Copilot.app",
-    "/Applications/Slack.app",
-    "/Applications/Arc.app",
-    "/Applications/Visual Studio Code.app",
-    "/Applications/Warp.app",
-    "/Applications/Cursor.app",
-    "/Applications/Notion.app",
-    "/Applications/iMovie.app",
-    "/Applications/Music.app",
-    "/Applications/Reminders.app"
-]
+      apps = [
+          "/Applications/WhatsApp.app",
+          "/Applications/Messages.app",
+          "/Applications/Copilot.app",
+          "/Applications/Slack.app",
+          "/Applications/Arc.app",
+          "/Applications/Visual Studio Code.app",
+          "/Applications/Warp.app",
+          "/Applications/Cursor.app",
+          "/Applications/Notion.app",
+          "/Applications/iMovie.app",
+          "/Applications/Music.app",
+          "/Applications/Reminders.app"
+      ]
 
-persistent_apps = []
-for app_path in apps:
-    if os.path.exists(app_path):
-        app_url = f"file://{app_path}"
-        tile_data = {
-            "tile-data": {
-                "file-data": {
-                    "_CFURLString": app_url,
-                    "_CFURLStringType": 0
-                }
-            },
-            "tile-type": "file-tile"
-        }
-        persistent_apps.append(tile_data)
+      persistent_apps = []
+      for app_path in apps:
+          if os.path.exists(app_path):
+              app_url = f"file://{app_path}"
+              tile_data = {
+                  "tile-data": {
+                      "file-data": {
+                          "_CFURLString": app_url,
+                          "_CFURLStringType": 0
+                      }
+                  },
+                  "tile-type": "file-tile"
+              }
+              persistent_apps.append(tile_data)
 
-if persistent_apps:
-    plist_path = Path.home() / "Library/Preferences/com.apple.dock.plist"
-    try:
-        # Read existing plist
-        with open(plist_path, 'rb') as f:
-            plist = plistlib.load(f)
+      if persistent_apps:
+          plist_path = Path.home() / "Library/Preferences/com.apple.dock.plist"
+          try:
+              # Read existing plist
+              with open(plist_path, 'rb') as f:
+                  plist = plistlib.load(f)
 
-        # Update persistent-apps
-        plist['persistent-apps'] = persistent_apps
+              # Update persistent-apps
+              plist['persistent-apps'] = persistent_apps
 
-        # Write back
-        with open(plist_path, 'wb') as f:
-            plistlib.dump(plist, f)
+              # Write back
+              with open(plist_path, 'wb') as f:
+                  plistlib.dump(plist, f)
 
-        print("Dock configured with custom apps")
-    except Exception as e:
-        print(f"Error configuring Dock: {e}")
-PYTHON_SCRIPT
+              print("Dock configured with custom apps")
+          except Exception as e:
+              print(f"Error configuring Dock: {e}")
+      PYTHON_SCRIPT
     fi
 
     # Restart Dock to apply changes
@@ -298,6 +304,61 @@ PYTHON_SCRIPT
 #   register: mas_account
 #   tags:
 #     - macos
+
+- name: Set Arc as default browser (http/https) using duti
+  ansible.builtin.shell: |
+    set -e
+    if ! command -v duti >/dev/null 2>&1; then
+      echo "duti not installed; skipping default browser configuration"
+      exit 0
+    fi
+
+    ARC_PLIST="/Applications/Arc.app/Contents/Info.plist"
+    if [ -f "$ARC_PLIST" ]; then
+      ARC_BUNDLE_ID=$(/usr/libexec/PlistBuddy -c "Print :CFBundleIdentifier" "$ARC_PLIST" 2>/dev/null || echo "")
+    fi
+
+    # Fallback to known bundle id if plist lookup failed
+    if [ -z "${ARC_BUNDLE_ID:-}" ]; then
+      ARC_BUNDLE_ID="company.thebrowser.Arc"
+    fi
+
+    echo "Setting default handler for http/https to ${ARC_BUNDLE_ID}"
+    duti -s "${ARC_BUNDLE_ID}" http
+    duti -s "${ARC_BUNDLE_ID}" https
+  tags:
+    - macos
+    - macos_settings
+  changed_when: true
+  ignore_errors: true
+  register: set_arc_default_browser_result
+
+- name: Set Warp as default SSH handler using duti
+  ansible.builtin.shell: |
+    set -e
+    if ! command -v duti >/dev/null 2>&1; then
+      echo "duti not installed; skipping default SSH handler configuration"
+      exit 0
+    fi
+
+    WARP_PLIST="/Applications/Warp.app/Contents/Info.plist"
+    if [ -f "$WARP_PLIST" ]; then
+      WARP_BUNDLE_ID=$(/usr/libexec/PlistBuddy -c "Print :CFBundleIdentifier" "$WARP_PLIST" 2>/dev/null || echo "")
+    fi
+
+    # Fallback to common bundle id if plist lookup failed
+    if [ -z "${WARP_BUNDLE_ID:-}" ]; then
+      WARP_BUNDLE_ID="dev.warp.Warp"
+    fi
+
+    echo "Setting default handler for ssh to ${WARP_BUNDLE_ID}"
+    duti -s "${WARP_BUNDLE_ID}" ssh
+  tags:
+    - macos
+    - macos_settings
+  changed_when: true
+  ignore_errors: true
+  register: set_warp_default_ssh_result
 
 - name: Install apps
   ansible.builtin.command: "mas install {{ item }}"
