@@ -49,6 +49,7 @@ homebrew:
     - zsh-completions
     - zsh-autosuggestions
     - zsh-syntax-highlighting
+    # Note: docker is NOT in formulas_common because Docker Desktop (cask) conflicts with docker formula
 
   # Linux-specific formulas
   formulas_linux:
@@ -91,7 +92,7 @@ homebrew:
     - arc
     - copilot  # Money management app
     - cursor
-    - docker
+    - docker-desktop  # Docker Desktop - use docker-desktop cask name (not docker)
     - ghostty
     - grammarly-desktop
     - ha-menu
@@ -100,7 +101,6 @@ homebrew:
     - karabiner-elements  # macOS-only keyboard remapper
     - msty
     - notion
-    - ollama
     - orbstack
     - postico  # macOS-only PostgreSQL client
     - raycast  # macOS-only launcher
