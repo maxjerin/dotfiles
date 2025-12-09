@@ -14,21 +14,33 @@ fi
 
 # Disable Spotlight shortcut (key 64 = Command+Space)
 echo "Disabling Spotlight Command+Space shortcut..."
-if /usr/libexec/PlistBuddy -c "Print :AppleSymbolicHotKeys:64" ~/Library/Preferences/com.apple.symbolichotkeys.plist >/dev/null 2>&1; then
-    /usr/libexec/PlistBuddy -c "Set :AppleSymbolicHotKeys:64:enabled false" ~/Library/Preferences/com.apple.symbolichotkeys.plist
-    echo "✓ Spotlight shortcut disabled"
+PLIST_FILE="$HOME/Library/Preferences/com.apple.symbolichotkeys.plist"
+
+# Ensure file exists
+if [ ! -f "$PLIST_FILE" ]; then
+    defaults read com.apple.symbolichotkeys > /dev/null 2>&1 || true
+fi
+
+# Method 1: Use PlistBuddy
+if /usr/libexec/PlistBuddy -c "Print :AppleSymbolicHotKeys:64" "$PLIST_FILE" >/dev/null 2>&1; then
+    /usr/libexec/PlistBuddy -c "Set :AppleSymbolicHotKeys:64:enabled bool false" "$PLIST_FILE"
+    echo "✓ Spotlight shortcut disabled via PlistBuddy"
 else
     echo "⚠ Spotlight shortcut key 64 not found, creating it..."
-    /usr/libexec/PlistBuddy -c "Add :AppleSymbolicHotKeys:64 dict" ~/Library/Preferences/com.apple.symbolichotkeys.plist 2>/dev/null || true
-    /usr/libexec/PlistBuddy -c "Add :AppleSymbolicHotKeys:64:enabled bool false" ~/Library/Preferences/com.apple.symbolichotkeys.plist
-    /usr/libexec/PlistBuddy -c "Add :AppleSymbolicHotKeys:64:value dict" ~/Library/Preferences/com.apple.symbolichotkeys.plist 2>/dev/null || true
-    /usr/libexec/PlistBuddy -c "Add :AppleSymbolicHotKeys:64:value:type string standard" ~/Library/Preferences/com.apple.symbolichotkeys.plist 2>/dev/null || true
-    /usr/libexec/PlistBuddy -c "Add :AppleSymbolicHotKeys:64:value:parameters array" ~/Library/Preferences/com.apple.symbolichotkeys.plist 2>/dev/null || true
-    /usr/libexec/PlistBuddy -c "Add :AppleSymbolicHotKeys:64:value:parameters:0 integer 32" ~/Library/Preferences/com.apple.symbolichotkeys.plist 2>/dev/null || true
-    /usr/libexec/PlistBuddy -c "Add :AppleSymbolicHotKeys:64:value:parameters:1 integer 49" ~/Library/Preferences/com.apple.symbolichotkeys.plist 2>/dev/null || true
-    /usr/libexec/PlistBuddy -c "Add :AppleSymbolicHotKeys:64:value:parameters:2 integer 1048576" ~/Library/Preferences/com.apple.symbolichotkeys.plist 2>/dev/null || true
+    /usr/libexec/PlistBuddy -c "Add :AppleSymbolicHotKeys:64 dict" "$PLIST_FILE" 2>/dev/null || true
+    /usr/libexec/PlistBuddy -c "Add :AppleSymbolicHotKeys:64:enabled bool false" "$PLIST_FILE"
+    /usr/libexec/PlistBuddy -c "Add :AppleSymbolicHotKeys:64:value dict" "$PLIST_FILE" 2>/dev/null || true
+    /usr/libexec/PlistBuddy -c "Add :AppleSymbolicHotKeys:64:value:type string standard" "$PLIST_FILE" 2>/dev/null || true
+    /usr/libexec/PlistBuddy -c "Add :AppleSymbolicHotKeys:64:value:parameters array" "$PLIST_FILE" 2>/dev/null || true
+    /usr/libexec/PlistBuddy -c "Add :AppleSymbolicHotKeys:64:value:parameters:0 integer 32" "$PLIST_FILE" 2>/dev/null || true
+    /usr/libexec/PlistBuddy -c "Add :AppleSymbolicHotKeys:64:value:parameters:1 integer 49" "$PLIST_FILE" 2>/dev/null || true
+    /usr/libexec/PlistBuddy -c "Add :AppleSymbolicHotKeys:64:value:parameters:2 integer 1048576" "$PLIST_FILE" 2>/dev/null || true
     echo "✓ Spotlight shortcut created and disabled"
 fi
+
+# Method 2: Also use defaults write as backup (more reliable)
+defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 64 "{enabled = 0; value = { parameters = (32, 49, 1048576); type = 'standard'; }; }" 2>/dev/null || true
+echo "✓ Spotlight shortcut disabled via defaults write"
 
 # Configure Raycast if installed
 if [ -d "/Applications/Raycast.app" ]; then
@@ -45,9 +57,10 @@ else
     echo "  Please install Raycast first, then run this script again"
 fi
 
-# Restart Dock to apply Spotlight changes
-echo "Restarting Dock to apply Spotlight changes..."
+# Restart Dock and SystemUIServer to apply Spotlight changes
+echo "Restarting Dock and SystemUIServer to apply Spotlight changes..."
 killall Dock 2>/dev/null || true
+killall SystemUIServer 2>/dev/null || true
 
 echo ""
 echo "Configuration complete!"

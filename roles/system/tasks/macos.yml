@@ -21,22 +21,34 @@
     if [ ! -f ~/Library/Preferences/com.apple.symbolichotkeys.plist ]; then
       defaults read com.apple.symbolichotkeys > /dev/null 2>&1 || true
     fi
-    # Disable Spotlight shortcut (key 64 = Command+Space)
-    # First try to set it, if that fails try to add it
-    if /usr/libexec/PlistBuddy -c "Print :AppleSymbolicHotKeys:64" ~/Library/Preferences/com.apple.symbolichotkeys.plist >/dev/null 2>&1; then
-      /usr/libexec/PlistBuddy -c "Set :AppleSymbolicHotKeys:64:enabled false" ~/Library/Preferences/com.apple.symbolichotkeys.plist
+
+    # Method 1: Use PlistBuddy to disable Spotlight shortcut (key 64 = Command+Space)
+    PLIST_FILE="$HOME/Library/Preferences/com.apple.symbolichotkeys.plist"
+
+    # Check if key 64 exists, if not create it
+    if ! /usr/libexec/PlistBuddy -c "Print :AppleSymbolicHotKeys:64" "$PLIST_FILE" >/dev/null 2>&1; then
+      # Create the complete structure for key 64
+      /usr/libexec/PlistBuddy -c "Add :AppleSymbolicHotKeys:64 dict" "$PLIST_FILE" 2>/dev/null || true
+      /usr/libexec/PlistBuddy -c "Add :AppleSymbolicHotKeys:64:enabled bool false" "$PLIST_FILE"
+      /usr/libexec/PlistBuddy -c "Add :AppleSymbolicHotKeys:64:value dict" "$PLIST_FILE" 2>/dev/null || true
+      /usr/libexec/PlistBuddy -c "Add :AppleSymbolicHotKeys:64:value:type string standard" "$PLIST_FILE" 2>/dev/null || true
+      /usr/libexec/PlistBuddy -c "Add :AppleSymbolicHotKeys:64:value:parameters array" "$PLIST_FILE" 2>/dev/null || true
+      /usr/libexec/PlistBuddy -c "Add :AppleSymbolicHotKeys:64:value:parameters:0 integer 32" "$PLIST_FILE" 2>/dev/null || true
+      /usr/libexec/PlistBuddy -c "Add :AppleSymbolicHotKeys:64:value:parameters:1 integer 49" "$PLIST_FILE" 2>/dev/null || true
+      /usr/libexec/PlistBuddy -c "Add :AppleSymbolicHotKeys:64:value:parameters:2 integer 1048576" "$PLIST_FILE" 2>/dev/null || true
     else
-      /usr/libexec/PlistBuddy -c "Add :AppleSymbolicHotKeys:64 dict" ~/Library/Preferences/com.apple.symbolichotkeys.plist 2>/dev/null || true
-      /usr/libexec/PlistBuddy -c "Add :AppleSymbolicHotKeys:64:enabled bool false" ~/Library/Preferences/com.apple.symbolichotkeys.plist
-      /usr/libexec/PlistBuddy -c "Add :AppleSymbolicHotKeys:64:value dict" ~/Library/Preferences/com.apple.symbolichotkeys.plist 2>/dev/null || true
-      /usr/libexec/PlistBuddy -c "Add :AppleSymbolicHotKeys:64:value:type string standard" ~/Library/Preferences/com.apple.symbolichotkeys.plist 2>/dev/null || true
-      /usr/libexec/PlistBuddy -c "Add :AppleSymbolicHotKeys:64:value:parameters array" ~/Library/Preferences/com.apple.symbolichotkeys.plist 2>/dev/null || true
-      /usr/libexec/PlistBuddy -c "Add :AppleSymbolicHotKeys:64:value:parameters:0 integer 32" ~/Library/Preferences/com.apple.symbolichotkeys.plist 2>/dev/null || true
-      /usr/libexec/PlistBuddy -c "Add :AppleSymbolicHotKeys:64:value:parameters:1 integer 49" ~/Library/Preferences/com.apple.symbolichotkeys.plist 2>/dev/null || true
-      /usr/libexec/PlistBuddy -c "Add :AppleSymbolicHotKeys:64:value:parameters:2 integer 1048576" ~/Library/Preferences/com.apple.symbolichotkeys.plist 2>/dev/null || true
+      # Key exists, just disable it
+      /usr/libexec/PlistBuddy -c "Set :AppleSymbolicHotKeys:64:enabled bool false" "$PLIST_FILE"
     fi
-    # Restart Dock to apply changes
+
+    # Method 2: Also use defaults write as a backup (more reliable)
+    defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 64 "{enabled = 0; value = { parameters = (32, 49, 1048576); type = 'standard'; }; }" 2>/dev/null || true
+
+    # Restart Dock and SystemUIServer to apply changes
     killall Dock 2>/dev/null || true
+    killall SystemUIServer 2>/dev/null || true
+
+    echo "Spotlight Command+Space shortcut disabled"
   tags:
     - macos
     - macos_settings
