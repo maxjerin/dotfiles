@@ -93,13 +93,48 @@ else
     echo "  Please install Raycast first, then run this script again"
 fi
 
-# Disable Spotlight indexing
-echo "Disabling Spotlight indexing..."
+# Disable Spotlight indexing and search results
+echo "Disabling Spotlight indexing and search results..."
 sudo mdutil -i off / 2>/dev/null || echo "⚠ Could not disable Spotlight indexing (may need sudo password)"
 sudo mdutil -i off /System/Volumes/Data 2>/dev/null || true
+
+# Clear existing Spotlight index
+echo "Clearing existing Spotlight index..."
+sudo mdutil -E / 2>/dev/null || true
+sudo mdutil -E /System/Volumes/Data 2>/dev/null || true
+
+# Disable indexing via defaults
 defaults write com.apple.Spotlight.plist indexingEnabled -bool false 2>/dev/null || true
+
+# Disable all Spotlight search result categories
+echo "Disabling all Spotlight search result categories..."
+defaults write com.apple.Spotlight orderedItems -array-add '{enabled = 0; name = "APPLICATIONS";}' 2>/dev/null || true
+defaults write com.apple.Spotlight orderedItems -array-add '{enabled = 0; name = "BOOKMARKS";}' 2>/dev/null || true
+defaults write com.apple.Spotlight orderedItems -array-add '{enabled = 0; name = "CONTACT";}' 2>/dev/null || true
+defaults write com.apple.Spotlight orderedItems -array-add '{enabled = 0; name = "DIRECTORIES";}' 2>/dev/null || true
+defaults write com.apple.Spotlight orderedItems -array-add '{enabled = 0; name = "DOCUMENTS";}' 2>/dev/null || true
+defaults write com.apple.Spotlight orderedItems -array-add '{enabled = 0; name = "EVENT_TODO";}' 2>/dev/null || true
+defaults write com.apple.Spotlight orderedItems -array-add '{enabled = 0; name = "FONTS";}' 2>/dev/null || true
+defaults write com.apple.Spotlight orderedItems -array-add '{enabled = 0; name = "IMAGES";}' 2>/dev/null || true
+defaults write com.apple.Spotlight orderedItems -array-add '{enabled = 0; name = "MENU_CONVERSION";}' 2>/dev/null || true
+defaults write com.apple.Spotlight orderedItems -array-add '{enabled = 0; name = "MENU_DEFINITION";}' 2>/dev/null || true
+defaults write com.apple.Spotlight orderedItems -array-add '{enabled = 0; name = "MENU_EXPRESSION";}' 2>/dev/null || true
+defaults write com.apple.Spotlight orderedItems -array-add '{enabled = 0; name = "MENU_OTHER";}' 2>/dev/null || true
+defaults write com.apple.Spotlight orderedItems -array-add '{enabled = 0; name = "MENU_SPOTLIGHT_SUGGESTIONS";}' 2>/dev/null || true
+defaults write com.apple.Spotlight orderedItems -array-add '{enabled = 0; name = "MESSAGES";}' 2>/dev/null || true
+defaults write com.apple.Spotlight orderedItems -array-add '{enabled = 0; name = "MOVIES";}' 2>/dev/null || true
+defaults write com.apple.Spotlight orderedItems -array-add '{enabled = 0; name = "MUSIC";}' 2>/dev/null || true
+defaults write com.apple.Spotlight orderedItems -array-add '{enabled = 0; name = "PDF";}' 2>/dev/null || true
+defaults write com.apple.Spotlight orderedItems -array-add '{enabled = 0; name = "PRESENTATIONS";}' 2>/dev/null || true
+defaults write com.apple.Spotlight orderedItems -array-add '{enabled = 0; name = "SPREADSHEETS";}' 2>/dev/null || true
+defaults write com.apple.Spotlight orderedItems -array-add '{enabled = 0; name = "SYSTEM_PREFS";}' 2>/dev/null || true
+defaults write com.apple.Spotlight orderedItems -array-add '{enabled = 0; name = "SOURCE";}' 2>/dev/null || true
+defaults write com.apple.Spotlight orderedItems -array-add '{enabled = 0; name = "WEB_PAGES";}' 2>/dev/null || true
+
+# Disable Spotlight indexing service
 sudo launchctl unload -w /System/Library/LaunchDaemons/com.apple.metadata.mds.plist 2>/dev/null || true
-echo "✓ Spotlight indexing disabled"
+
+echo "✓ Spotlight indexing and search results disabled"
 
 # Restart Dock and SystemUIServer to apply Spotlight changes
 echo "Restarting Dock and SystemUIServer to apply Spotlight changes..."
