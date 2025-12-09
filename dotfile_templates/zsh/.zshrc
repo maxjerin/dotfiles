@@ -1,14 +1,3 @@
-#! /bin/zsh
 
-if [[ $(uname -s) == 'Darwin' ]] && [[ $(uname -m) == 'arm64' ]]; then
-  #  if M1 mac then use the following
-  eval "$(/opt/homebrew/bin/brew shellenv)"
-fi
-
-# Load configs
-for config (~/.config/zsh/*.zsh) source $config
-
-# WORK ZSHRC
-if test -f ~/.zshrc_company; then
-  source ~/.zshrc_company
-fi
+# Created by `pipx` on 2025-12-09 02:22:00
+export PATH="$PATH:/Users/maxjerin/.local/bin"
