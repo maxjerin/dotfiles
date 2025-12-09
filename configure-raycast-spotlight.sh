@@ -98,41 +98,56 @@ echo "Disabling Spotlight indexing and search results..."
 sudo mdutil -i off / 2>/dev/null || echo "⚠ Could not disable Spotlight indexing (may need sudo password)"
 sudo mdutil -i off /System/Volumes/Data 2>/dev/null || true
 
-# Clear existing Spotlight index
-echo "Clearing existing Spotlight index..."
+# Clear and erase existing Spotlight indexes
+echo "Clearing existing Spotlight indexes..."
 sudo mdutil -E / 2>/dev/null || true
 sudo mdutil -E /System/Volumes/Data 2>/dev/null || true
+
+# Remove Spotlight index directories (more aggressive)
+echo "Removing Spotlight index directories..."
+sudo rm -rf /.Spotlight-V100 2>/dev/null || true
+sudo rm -rf /System/Volumes/Data/.Spotlight-V100 2>/dev/null || true
 
 # Disable indexing via defaults
 defaults write com.apple.Spotlight.plist indexingEnabled -bool false 2>/dev/null || true
 
-# Disable all Spotlight search result categories
+# Replace entire orderedItems array with all categories disabled
 echo "Disabling all Spotlight search result categories..."
-defaults write com.apple.Spotlight orderedItems -array-add '{enabled = 0; name = "APPLICATIONS";}' 2>/dev/null || true
-defaults write com.apple.Spotlight orderedItems -array-add '{enabled = 0; name = "BOOKMARKS";}' 2>/dev/null || true
-defaults write com.apple.Spotlight orderedItems -array-add '{enabled = 0; name = "CONTACT";}' 2>/dev/null || true
-defaults write com.apple.Spotlight orderedItems -array-add '{enabled = 0; name = "DIRECTORIES";}' 2>/dev/null || true
-defaults write com.apple.Spotlight orderedItems -array-add '{enabled = 0; name = "DOCUMENTS";}' 2>/dev/null || true
-defaults write com.apple.Spotlight orderedItems -array-add '{enabled = 0; name = "EVENT_TODO";}' 2>/dev/null || true
-defaults write com.apple.Spotlight orderedItems -array-add '{enabled = 0; name = "FONTS";}' 2>/dev/null || true
-defaults write com.apple.Spotlight orderedItems -array-add '{enabled = 0; name = "IMAGES";}' 2>/dev/null || true
-defaults write com.apple.Spotlight orderedItems -array-add '{enabled = 0; name = "MENU_CONVERSION";}' 2>/dev/null || true
-defaults write com.apple.Spotlight orderedItems -array-add '{enabled = 0; name = "MENU_DEFINITION";}' 2>/dev/null || true
-defaults write com.apple.Spotlight orderedItems -array-add '{enabled = 0; name = "MENU_EXPRESSION";}' 2>/dev/null || true
-defaults write com.apple.Spotlight orderedItems -array-add '{enabled = 0; name = "MENU_OTHER";}' 2>/dev/null || true
-defaults write com.apple.Spotlight orderedItems -array-add '{enabled = 0; name = "MENU_SPOTLIGHT_SUGGESTIONS";}' 2>/dev/null || true
-defaults write com.apple.Spotlight orderedItems -array-add '{enabled = 0; name = "MESSAGES";}' 2>/dev/null || true
-defaults write com.apple.Spotlight orderedItems -array-add '{enabled = 0; name = "MOVIES";}' 2>/dev/null || true
-defaults write com.apple.Spotlight orderedItems -array-add '{enabled = 0; name = "MUSIC";}' 2>/dev/null || true
-defaults write com.apple.Spotlight orderedItems -array-add '{enabled = 0; name = "PDF";}' 2>/dev/null || true
-defaults write com.apple.Spotlight orderedItems -array-add '{enabled = 0; name = "PRESENTATIONS";}' 2>/dev/null || true
-defaults write com.apple.Spotlight orderedItems -array-add '{enabled = 0; name = "SPREADSHEETS";}' 2>/dev/null || true
-defaults write com.apple.Spotlight orderedItems -array-add '{enabled = 0; name = "SYSTEM_PREFS";}' 2>/dev/null || true
-defaults write com.apple.Spotlight orderedItems -array-add '{enabled = 0; name = "SOURCE";}' 2>/dev/null || true
-defaults write com.apple.Spotlight orderedItems -array-add '{enabled = 0; name = "WEB_PAGES";}' 2>/dev/null || true
+PLIST_FILE="$HOME/Library/Preferences/com.apple.Spotlight.plist"
+
+# Delete existing orderedItems and create new array with all disabled
+defaults delete com.apple.Spotlight orderedItems 2>/dev/null || true
+
+# Create array with all categories disabled at once
+defaults write com.apple.Spotlight orderedItems -array \
+  '{enabled = 0; name = APPLICATIONS;}' \
+  '{enabled = 0; name = BOOKMARKS;}' \
+  '{enabled = 0; name = CONTACT;}' \
+  '{enabled = 0; name = DIRECTORIES;}' \
+  '{enabled = 0; name = DOCUMENTS;}' \
+  '{enabled = 0; name = EVENT_TODO;}' \
+  '{enabled = 0; name = FONTS;}' \
+  '{enabled = 0; name = IMAGES;}' \
+  '{enabled = 0; name = MENU_CONVERSION;}' \
+  '{enabled = 0; name = MENU_DEFINITION;}' \
+  '{enabled = 0; name = MENU_EXPRESSION;}' \
+  '{enabled = 0; name = MENU_OTHER;}' \
+  '{enabled = 0; name = MENU_SPOTLIGHT_SUGGESTIONS;}' \
+  '{enabled = 0; name = MESSAGES;}' \
+  '{enabled = 0; name = MOVIES;}' \
+  '{enabled = 0; name = MUSIC;}' \
+  '{enabled = 0; name = PDF;}' \
+  '{enabled = 0; name = PRESENTATIONS;}' \
+  '{enabled = 0; name = SPREADSHEETS;}' \
+  '{enabled = 0; name = SYSTEM_PREFS;}' \
+  '{enabled = 0; name = SOURCE;}' \
+  '{enabled = 0; name = WEB_PAGES;}' 2>/dev/null || true
 
 # Disable Spotlight indexing service
 sudo launchctl unload -w /System/Library/LaunchDaemons/com.apple.metadata.mds.plist 2>/dev/null || true
+
+# Kill Spotlight processes
+killall Spotlight 2>/dev/null || true
 
 echo "✓ Spotlight indexing and search results disabled"
 

@@ -84,49 +84,77 @@
 - name: Disable Spotlight indexing and search results
   ansible.builtin.shell: |
     # Disable Spotlight indexing for all volumes
-    # This stops Spotlight from indexing files and using CPU/disk resources
     sudo mdutil -i off / 2>/dev/null || true
     sudo mdutil -i off /System/Volumes/Data 2>/dev/null || true
 
-    # Clear existing Spotlight index
+    # Clear and erase existing Spotlight indexes
     sudo mdutil -E / 2>/dev/null || true
     sudo mdutil -E /System/Volumes/Data 2>/dev/null || true
+
+    # Remove Spotlight index directories (more aggressive)
+    sudo rm -rf /.Spotlight-V100 2>/dev/null || true
+    sudo rm -rf /System/Volumes/Data/.Spotlight-V100 2>/dev/null || true
 
     # Disable indexing via defaults
     defaults write com.apple.Spotlight.plist indexingEnabled -bool false 2>/dev/null || true
 
-    # Disable all Spotlight search result categories
-    # This prevents Spotlight from showing any search results
-    defaults write com.apple.Spotlight orderedItems -array-add '{enabled = 0; name = "APPLICATIONS";}'
-    defaults write com.apple.Spotlight orderedItems -array-add '{enabled = 0; name = "BOOKMARKS";}'
-    defaults write com.apple.Spotlight orderedItems -array-add '{enabled = 0; name = "CONTACT";}'
-    defaults write com.apple.Spotlight orderedItems -array-add '{enabled = 0; name = "DIRECTORIES";}'
-    defaults write com.apple.Spotlight orderedItems -array-add '{enabled = 0; name = "DOCUMENTS";}'
-    defaults write com.apple.Spotlight orderedItems -array-add '{enabled = 0; name = "EVENT_TODO";}'
-    defaults write com.apple.Spotlight orderedItems -array-add '{enabled = 0; name = "FONTS";}'
-    defaults write com.apple.Spotlight orderedItems -array-add '{enabled = 0; name = "IMAGES";}'
-    defaults write com.apple.Spotlight orderedItems -array-add '{enabled = 0; name = "MENU_CONVERSION";}'
-    defaults write com.apple.Spotlight orderedItems -array-add '{enabled = 0; name = "MENU_DEFINITION";}'
-    defaults write com.apple.Spotlight orderedItems -array-add '{enabled = 0; name = "MENU_EXPRESSION";}'
-    defaults write com.apple.Spotlight orderedItems -array-add '{enabled = 0; name = "MENU_OTHER";}'
-    defaults write com.apple.Spotlight orderedItems -array-add '{enabled = 0; name = "MENU_SPOTLIGHT_SUGGESTIONS";}'
-    defaults write com.apple.Spotlight orderedItems -array-add '{enabled = 0; name = "MESSAGES";}'
-    defaults write com.apple.Spotlight orderedItems -array-add '{enabled = 0; name = "MOVIES";}'
-    defaults write com.apple.Spotlight orderedItems -array-add '{enabled = 0; name = "MUSIC";}'
-    defaults write com.apple.Spotlight orderedItems -array-add '{enabled = 0; name = "PDF";}'
-    defaults write com.apple.Spotlight orderedItems -array-add '{enabled = 0; name = "PRESENTATIONS";}'
-    defaults write com.apple.Spotlight orderedItems -array-add '{enabled = 0; name = "SPREADSHEETS";}'
-    defaults write com.apple.Spotlight orderedItems -array-add '{enabled = 0; name = "SYSTEM_PREFS";}'
-    defaults write com.apple.Spotlight orderedItems -array-add '{enabled = 0; name = "SOURCE";}'
-    defaults write com.apple.Spotlight orderedItems -array-add '{enabled = 0; name = "WEB_PAGES";}'
+    # Replace entire orderedItems array with all categories disabled
+    # Using PlistBuddy to properly set the array
+    PLIST_FILE="$HOME/Library/Preferences/com.apple.Spotlight.plist"
+
+    # First, delete existing orderedItems if it exists
+    /usr/libexec/PlistBuddy -c "Delete :orderedItems" "$PLIST_FILE" 2>/dev/null || true
+
+    # Create new array with all categories disabled
+    /usr/libexec/PlistBuddy -c "Add :orderedItems array" "$PLIST_FILE" 2>/dev/null || true
+
+    # Add all categories as disabled
+    CATEGORIES=("APPLICATIONS" "BOOKMARKS" "CONTACT" "DIRECTORIES" "DOCUMENTS" "EVENT_TODO" "FONTS" "IMAGES" "MENU_CONVERSION" "MENU_DEFINITION" "MENU_EXPRESSION" "MENU_OTHER" "MENU_SPOTLIGHT_SUGGESTIONS" "MESSAGES" "MOVIES" "MUSIC" "PDF" "PRESENTATIONS" "SPREADSHEETS" "SYSTEM_PREFS" "SOURCE" "WEB_PAGES")
+
+    for category in "${CATEGORIES[@]}"; do
+      /usr/libexec/PlistBuddy -c "Add :orderedItems:$((${#CATEGORIES[@]} - 1)) dict" "$PLIST_FILE" 2>/dev/null || \
+      /usr/libexec/PlistBuddy -c "Add :orderedItems:0 dict" "$PLIST_FILE" 2>/dev/null || true
+      /usr/libexec/PlistBuddy -c "Add :orderedItems:$((${#CATEGORIES[@]} - 1)):enabled integer 0" "$PLIST_FILE" 2>/dev/null || \
+      /usr/libexec/PlistBuddy -c "Add :orderedItems:0:enabled integer 0" "$PLIST_FILE" 2>/dev/null || true
+      /usr/libexec/PlistBuddy -c "Add :orderedItems:$((${#CATEGORIES[@]} - 1)):name string $category" "$PLIST_FILE" 2>/dev/null || \
+      /usr/libexec/PlistBuddy -c "Add :orderedItems:0:name string $category" "$PLIST_FILE" 2>/dev/null || true
+    done
+
+    # Alternative: Use defaults write with proper array syntax
+    defaults delete com.apple.Spotlight orderedItems 2>/dev/null || true
+    defaults write com.apple.Spotlight orderedItems -array \
+      '{enabled = 0; name = APPLICATIONS;}' \
+      '{enabled = 0; name = BOOKMARKS;}' \
+      '{enabled = 0; name = CONTACT;}' \
+      '{enabled = 0; name = DIRECTORIES;}' \
+      '{enabled = 0; name = DOCUMENTS;}' \
+      '{enabled = 0; name = EVENT_TODO;}' \
+      '{enabled = 0; name = FONTS;}' \
+      '{enabled = 0; name = IMAGES;}' \
+      '{enabled = 0; name = MENU_CONVERSION;}' \
+      '{enabled = 0; name = MENU_DEFINITION;}' \
+      '{enabled = 0; name = MENU_EXPRESSION;}' \
+      '{enabled = 0; name = MENU_OTHER;}' \
+      '{enabled = 0; name = MENU_SPOTLIGHT_SUGGESTIONS;}' \
+      '{enabled = 0; name = MESSAGES;}' \
+      '{enabled = 0; name = MOVIES;}' \
+      '{enabled = 0; name = MUSIC;}' \
+      '{enabled = 0; name = PDF;}' \
+      '{enabled = 0; name = PRESENTATIONS;}' \
+      '{enabled = 0; name = SPREADSHEETS;}' \
+      '{enabled = 0; name = SYSTEM_PREFS;}' \
+      '{enabled = 0; name = SOURCE;}' \
+      '{enabled = 0; name = WEB_PAGES;}' 2>/dev/null || true
 
     # Disable Spotlight indexing service
     sudo launchctl unload -w /System/Library/LaunchDaemons/com.apple.metadata.mds.plist 2>/dev/null || true
 
-    # Restart SystemUIServer to apply changes
+    # Restart SystemUIServer and kill Spotlight processes
     killall SystemUIServer 2>/dev/null || true
+    killall Spotlight 2>/dev/null || true
 
     echo "Spotlight indexing and search results disabled"
+    echo "NOTE: You may need to log out and back in for changes to take full effect"
   tags:
     - macos
     - macos_settings
