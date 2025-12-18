@@ -1,0 +1,9 @@
+---
+- name: Copy ssh config with 1Password link to ssh directory
+  ansible.builtin.copy:
+    src: macos_config
+    dest: ~/.ssh/config
+  tags:
+    - macos
+    - macos_ssh
+

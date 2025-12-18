@@ -1,0 +1,243 @@
+---
+- name: Set macOS default settings
+  community.general.osx_defaults:
+    domain: "{{ item['domain'] }}"
+    key: "{{ item['key'] }}"
+    type: "{{ item['type'] | default(omit) }}"
+    value: "{{ item['value'] }}"
+  loop: "{{ defaults }}"
+  failed_when: false
+  tags:
+    - macos
+    - macos_settings
+
+- name: Disable Spotlight Command+Space shortcut
+  ansible.builtin.shell: |
+    # Ensure the preferences file exists
+    if [ ! -f ~/Library/Preferences/com.apple.symbolichotkeys.plist ]; then
+      defaults read com.apple.symbolichotkeys > /dev/null 2>&1 || true
+    fi
+
+    # Method 1: Use PlistBuddy to disable Spotlight shortcut (key 64 = Command+Space)
+    PLIST_FILE="$HOME/Library/Preferences/com.apple.symbolichotkeys.plist"
+
+    # Check if key 64 exists, if not create it
+    if ! /usr/libexec/PlistBuddy -c "Print :AppleSymbolicHotKeys:64" "$PLIST_FILE" >/dev/null 2>&1; then
+      # Create the complete structure for key 64
+      /usr/libexec/PlistBuddy -c "Add :AppleSymbolicHotKeys:64 dict" "$PLIST_FILE" 2>/dev/null || true
+      /usr/libexec/PlistBuddy -c "Add :AppleSymbolicHotKeys:64:enabled bool false" "$PLIST_FILE"
+      /usr/libexec/PlistBuddy -c "Add :AppleSymbolicHotKeys:64:value dict" "$PLIST_FILE" 2>/dev/null || true
+      /usr/libexec/PlistBuddy -c "Add :AppleSymbolicHotKeys:64:value:type string standard" "$PLIST_FILE" 2>/dev/null || true
+      /usr/libexec/PlistBuddy -c "Add :AppleSymbolicHotKeys:64:value:parameters array" "$PLIST_FILE" 2>/dev/null || true
+      /usr/libexec/PlistBuddy -c "Add :AppleSymbolicHotKeys:64:value:parameters:0 integer 32" "$PLIST_FILE" 2>/dev/null || true
+      /usr/libexec/PlistBuddy -c "Add :AppleSymbolicHotKeys:64:value:parameters:1 integer 49" "$PLIST_FILE" 2>/dev/null || true
+      /usr/libexec/PlistBuddy -c "Add :AppleSymbolicHotKeys:64:value:parameters:2 integer 1048576" "$PLIST_FILE" 2>/dev/null || true
+    else
+      # Key exists, just disable it
+      /usr/libexec/PlistBuddy -c "Set :AppleSymbolicHotKeys:64:enabled bool false" "$PLIST_FILE"
+    fi
+
+    # Method 2: Also use defaults write as a backup (more reliable)
+    defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 64 "{enabled = 0; value = { parameters = (32, 49, 1048576); type = 'standard'; }; }" 2>/dev/null || true
+
+    # Method 3: Try to change Spotlight shortcut to something else to force it off
+    # Change it to Command+Option+Space (which is less likely to conflict)
+    defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 65 "{enabled = 1; value = { parameters = (32, 49, 1179648); type = 'standard'; }; }" 2>/dev/null || true
+
+    # Restart Dock and SystemUIServer to apply changes
+    killall Dock 2>/dev/null || true
+    killall SystemUIServer 2>/dev/null || true
+
+    echo "Spotlight Command+Space shortcut disabled"
+    echo "NOTE: You may need to manually uncheck Spotlight in System Settings → Keyboard → Keyboard Shortcuts"
+  tags:
+    - macos
+    - macos_settings
+  changed_when: true
+  register: disable_spotlight_result
+
+- name: Configure Raycast to use Command+Space hotkey
+  ansible.builtin.shell: |
+    # Set Raycast hotkey to Command+Space if Raycast is installed
+    if [ -d "/Applications/Raycast.app" ]; then
+      # Raycast uses "Command-49" format (49 is space key code, Command is modifier)
+      # Set Raycast hotkey to Command+Space
+      defaults write com.raycast.macos raycastGlobalHotkey "Command-49"
+      defaults write com.raycast.macos initialSpotlightHotkey "Command-49"
+      # Kill Raycast if running to apply changes (will restart automatically)
+      killall Raycast 2>/dev/null || true
+      echo "Raycast hotkey configured to Command+Space"
+    else
+      echo "Raycast not found, skipping hotkey configuration"
+    fi
+  tags:
+    - macos
+    - macos_settings
+  changed_when: true
+  ignore_errors: true
+  register: configure_raycast_result
+
+- name: Disable Spotlight indexing and search results
+  ansible.builtin.shell: |
+    # Disable indexing via defaults (no sudo required)
+    defaults write com.apple.Spotlight.plist indexingEnabled -bool false 2>/dev/null || true
+
+    # Replace entire orderedItems array with all categories disabled
+    # Using PlistBuddy to properly set the array
+    PLIST_FILE="$HOME/Library/Preferences/com.apple.Spotlight.plist"
+
+    # First, delete existing orderedItems if it exists
+    /usr/libexec/PlistBuddy -c "Delete :orderedItems" "$PLIST_FILE" 2>/dev/null || true
+
+    # Create new array with all categories disabled
+    /usr/libexec/PlistBuddy -c "Add :orderedItems array" "$PLIST_FILE" 2>/dev/null || true
+
+    # Add all categories as disabled
+    CATEGORIES=(
+      "APPLICATIONS" "BOOKMARKS" "CONTACT" "DIRECTORIES" "DOCUMENTS"
+      "EVENT_TODO" "FONTS" "IMAGES" "MENU_CONVERSION" "MENU_DEFINITION"
+      "MENU_EXPRESSION" "MENU_OTHER" "MENU_SPOTLIGHT_SUGGESTIONS" "MESSAGES"
+      "MOVIES" "MUSIC" "PDF" "PRESENTATIONS" "SPREADSHEETS" "SYSTEM_PREFS"
+      "SOURCE" "WEB_PAGES"
+    )
+
+    INDEX=0
+    for category in "${CATEGORIES[@]}"; do
+      /usr/libexec/PlistBuddy -c "Add :orderedItems:$INDEX dict" "$PLIST_FILE" 2>/dev/null || true
+      /usr/libexec/PlistBuddy -c "Add :orderedItems:$INDEX:enabled integer 0" "$PLIST_FILE" 2>/dev/null || true
+      /usr/libexec/PlistBuddy -c "Add :orderedItems:$INDEX:name string $category" "$PLIST_FILE" 2>/dev/null || true
+      INDEX=$((INDEX + 1))
+    done
+
+    # Alternative: Use defaults write with proper array syntax
+    defaults delete com.apple.Spotlight orderedItems 2>/dev/null || true
+    defaults write com.apple.Spotlight orderedItems -array \
+      '{enabled = 0; name = APPLICATIONS;}' \
+      '{enabled = 0; name = BOOKMARKS;}' \
+      '{enabled = 0; name = CONTACT;}' \
+      '{enabled = 0; name = DIRECTORIES;}' \
+      '{enabled = 0; name = DOCUMENTS;}' \
+      '{enabled = 0; name = EVENT_TODO;}' \
+      '{enabled = 0; name = FONTS;}' \
+      '{enabled = 0; name = IMAGES;}' \
+      '{enabled = 0; name = MENU_CONVERSION;}' \
+      '{enabled = 0; name = MENU_DEFINITION;}' \
+      '{enabled = 0; name = MENU_EXPRESSION;}' \
+      '{enabled = 0; name = MENU_OTHER;}' \
+      '{enabled = 0; name = MENU_SPOTLIGHT_SUGGESTIONS;}' \
+      '{enabled = 0; name = MESSAGES;}' \
+      '{enabled = 0; name = MOVIES;}' \
+      '{enabled = 0; name = MUSIC;}' \
+      '{enabled = 0; name = PDF;}' \
+      '{enabled = 0; name = PRESENTATIONS;}' \
+      '{enabled = 0; name = SPREADSHEETS;}' \
+      '{enabled = 0; name = SYSTEM_PREFS;}' \
+      '{enabled = 0; name = SOURCE;}' \
+      '{enabled = 0; name = WEB_PAGES;}' 2>/dev/null || true
+
+    # Restart SystemUIServer and kill Spotlight processes
+    killall SystemUIServer 2>/dev/null || true
+    killall Spotlight 2>/dev/null || true
+
+    echo "Spotlight indexing and search results disabled (user-level settings)"
+    echo "NOTE: For full system-level disabling, run manually with sudo:"
+    echo "  sudo mdutil -i off /"
+    echo "  sudo mdutil -E /"
+  tags:
+    - macos
+    - macos_settings
+  changed_when: true
+  ignore_errors: true
+  register: disable_spotlight_indexing_result
+
+- name: Configure Dock with custom apps
+  ansible.builtin.shell: |
+    # Configure Dock with specific apps in specified order
+    # Order: whatsapp, imessages, copilot money, slack, arc, vscode, warp, cursor, notion, imovie, music, reminders
+
+    # Clear existing Dock apps
+    defaults delete com.apple.dock persistent-apps 2>/dev/null || true
+
+    # Use dockutil if available, otherwise use defaults write with PlistBuddy
+    if command -v dockutil &> /dev/null; then
+      # Remove all apps first
+      dockutil --remove all --no-restart 2>/dev/null || true
+
+      # Add apps in specified order
+      dockutil --add "/Applications/WhatsApp.app" --no-restart 2>/dev/null || true
+      dockutil --add "/Applications/Messages.app" --no-restart 2>/dev/null || true
+      dockutil --add "/Applications/Copilot.app" --no-restart 2>/dev/null || true
+      dockutil --add "/Applications/Slack.app" --no-restart 2>/dev/null || true
+      dockutil --add "/Applications/Arc.app" --no-restart 2>/dev/null || true
+      dockutil --add "/Applications/Visual Studio Code.app" --no-restart 2>/dev/null || true
+      dockutil --add "/Applications/Warp.app" --no-restart 2>/dev/null || true
+      dockutil --add "/Applications/Cursor.app" --no-restart 2>/dev/null || true
+      dockutil --add "/Applications/Notion.app" --no-restart 2>/dev/null || true
+      dockutil --add "/Applications/iMovie.app" --no-restart 2>/dev/null || true
+      dockutil --add "/Applications/Music.app" --no-restart 2>/dev/null || true
+      dockutil --add "/Applications/Reminders.app" --no-restart 2>/dev/null || true
+
+      echo "Dock configured using dockutil"
+    else
+      # Fallback: Use Python to create proper plist structure
+      TMP_SCRIPT=$(mktemp)
+      cat > "$TMP_SCRIPT" << 'PYEOF'
+      import plistlib
+      import os
+      from pathlib import Path
+
+      apps = [
+          '/Applications/WhatsApp.app',
+          '/Applications/Messages.app',
+          '/Applications/Copilot.app',
+          '/Applications/Slack.app',
+          '/Applications/Arc.app',
+          '/Applications/Visual Studio Code.app',
+          '/Applications/Warp.app',
+          '/Applications/Cursor.app',
+          '/Applications/Notion.app',
+          '/Applications/iMovie.app',
+          '/Applications/Music.app',
+          '/Applications/Reminders.app'
+      ]
+
+      persistent_apps = []
+      for app_path in apps:
+          if os.path.exists(app_path):
+              app_url = f'file://{app_path}'
+              tile_data = {
+                  'tile-data': {
+                      'file-data': {
+                          '_CFURLString': app_url,
+                          '_CFURLStringType': 0
+                      }
+                  },
+                  'tile-type': 'file-tile'
+              }
+              persistent_apps.append(tile_data)
+
+      if persistent_apps:
+          plist_path = Path.home() / 'Library/Preferences/com.apple.dock.plist'
+          try:
+              with open(plist_path, 'rb') as f:
+                  plist = plistlib.load(f)
+              plist['persistent-apps'] = persistent_apps
+              with open(plist_path, 'wb') as f:
+                  plistlib.dump(plist, f)
+              print('Dock configured with custom apps')
+          except Exception as e:
+              print(f'Error configuring Dock: {e}')
+      PYEOF
+      python3 "$TMP_SCRIPT"
+      rm -f "$TMP_SCRIPT"
+    fi
+
+    # Restart Dock to apply changes
+    killall Dock 2>/dev/null || true
+  tags:
+    - macos
+    - macos_settings
+  changed_when: true
+  ignore_errors: true
+  register: configure_dock_result
+
