@@ -1,0 +1,18 @@
+---
+# - name: Check Mac App Store authentication status
+#   ansible.builtin.command: mas account
+#   changed_when: false
+#   failed_when: mas_account['rc'] not in [0,1]
+#   register: mas_account
+#   tags:
+#     - macos
+#     - macos_mas
+
+- name: Install Mac App Store apps
+  ansible.builtin.command: "mas install {{ item }}"
+  loop: "{{ homebrew['mas'] }}"
+  ignore_errors: true
+  tags:
+    - macos
+    - macos_mas
+
