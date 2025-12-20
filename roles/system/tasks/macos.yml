@@ -44,87 +44,69 @@
     - macos
     - macos_repos
 
-- name: Configure Dock with custom apps
+- name: Set Arc as default browser (http/https) using duti
   ansible.builtin.shell: |
-    # Configure Dock with specific apps in specified order
-    # Order: whatsapp, imessages, copilot money, slack, arc, vscode, warp, cursor, notion, imovie, music, reminders
-
-    # Clear existing Dock apps
-    defaults delete com.apple.dock persistent-apps 2>/dev/null || true
-
-    # Use dockutil if available, otherwise use defaults write with PlistBuddy
-    if command -v dockutil &> /dev/null; then
-      # Remove all apps first
-      dockutil --remove all --no-restart 2>/dev/null || true
-
-      # Add apps in specified order
-      dockutil --add "/Applications/WhatsApp.app" --no-restart 2>/dev/null || true
-      dockutil --add "/Applications/Messages.app" --no-restart 2>/dev/null || true
-      dockutil --add "/Applications/Copilot.app" --no-restart 2>/dev/null || true
-      dockutil --add "/Applications/Slack.app" --no-restart 2>/dev/null || true
-      dockutil --add "/Applications/Arc.app" --no-restart 2>/dev/null || true
-      dockutil --add "/Applications/Visual Studio Code.app" --no-restart 2>/dev/null || true
-      dockutil --add "/Applications/Warp.app" --no-restart 2>/dev/null || true
-      dockutil --add "/Applications/Cursor.app" --no-restart 2>/dev/null || true
-      dockutil --add "/Applications/Notion.app" --no-restart 2>/dev/null || true
-      dockutil --add "/Applications/iMovie.app" --no-restart 2>/dev/null || true
-      dockutil --add "/Applications/Music.app" --no-restart 2>/dev/null || true
-      dockutil --add "/Applications/Reminders.app" --no-restart 2>/dev/null || true
-
-      echo "Dock configured using dockutil"
-    else
-      # Fallback: Use Python to create proper plist structure
-      python3 - <<'PYEOF'
-      import plistlib
-      import os
-      from pathlib import Path
-
-      apps = [
-          '/Applications/WhatsApp.app',
-          '/Applications/Messages.app',
-          '/Applications/Copilot.app',
-          '/Applications/Slack.app',
-          '/Applications/Arc.app',
-          '/Applications/Visual Studio Code.app',
-          '/Applications/Warp.app',
-          '/Applications/Cursor.app',
-          '/Applications/Notion.app',
-          '/Applications/iMovie.app',
-          '/Applications/Music.app',
-          '/Applications/Reminders.app'
-      ]
-
-      persistent_apps = []
-      for app_path in apps:
-          if os.path.exists(app_path):
-              app_url = f'file://{app_path}'
-              tile_data = {
-                  'tile-data': {
-                      'file-data': {
-                          '_CFURLString': app_url,
-                          '_CFURLStringType': 0
-                      }
-                  },
-                  'tile-type': 'file-tile'
-              }
-              persistent_apps.append(tile_data)
-
-      if persistent_apps:
-          plist_path = Path.home() / 'Library/Preferences/com.apple.dock.plist'
-          try:
-              with open(plist_path, 'rb') as f:
-                  plist = plistlib.load(f)
-              plist['persistent-apps'] = persistent_apps
-              with open(plist_path, 'wb') as f:
-                  plistlib.dump(plist, f)
-              print('Dock configured with custom apps')
-          except Exception as e:
-              print(f'Error configuring Dock: {e}')
-      PYEOF
+    if ! command -v duti >/dev/null 2>&1; then
+      echo "duti not installed; skipping default browser configuration"
+      exit 0
     fi
 
-    # Restart Dock to apply changes
-    killall Dock 2>/dev/null || true
+    ARC_PLIST="/Applications/Arc.app/Contents/Info.plist"
+    ARC_BUNDLE_ID=""
+    if [ -f "$ARC_PLIST" ]; then
+      ARC_BUNDLE_ID=$(/usr/libexec/PlistBuddy -c "Print :CFBundleIdentifier" "$ARC_PLIST" 2>/dev/null || echo "")
+    fi
+
+    # Try known bundle IDs if plist lookup failed
+    if [ -z "${ARC_BUNDLE_ID:-}" ]; then
+      # Try common Arc bundle IDs
+      for bundle_id in "company.thebrowser.Browser" "company.thebrowser.Arc" "com.thebrowser.Arc"; do
+        if duti -s "${bundle_id}" http 2>/dev/null; then
+          ARC_BUNDLE_ID="${bundle_id}"
+          break
+        fi
+      done
+    fi
+
+    if [ -z "${ARC_BUNDLE_ID:-}" ]; then
+      echo "Could not determine Arc bundle ID; skipping default browser configuration"
+      echo "You may need to set Arc as default browser manually in System Settings"
+      exit 0
+    fi
+
+    echo "Setting default handler for http/https to ${ARC_BUNDLE_ID}"
+    duti -s "${ARC_BUNDLE_ID}" http 2>/dev/null || echo "Warning: Failed to set http handler (may require manual configuration)"
+    duti -s "${ARC_BUNDLE_ID}" https 2>/dev/null || echo "Warning: Failed to set https handler (may require manual configuration)"
   tags:
     - macos
-    - macos_dock
+    - macos_settings
+  changed_when: true
+  ignore_errors: true
+  register: set_arc_default_browser_result
+
+- name: Set Warp as default SSH handler using duti
+  ansible.builtin.shell: |
+    set -e
+    if ! command -v duti >/dev/null 2>&1; then
+      echo "duti not installed; skipping default SSH handler configuration"
+      exit 0
+    fi
+
+    WARP_PLIST="/Applications/Warp.app/Contents/Info.plist"
+    if [ -f "$WARP_PLIST" ]; then
+      WARP_BUNDLE_ID=$(/usr/libexec/PlistBuddy -c "Print :CFBundleIdentifier" "$WARP_PLIST" 2>/dev/null || echo "")
+    fi
+
+    # Fallback to common bundle id if plist lookup failed
+    if [ -z "${WARP_BUNDLE_ID:-}" ]; then
+      WARP_BUNDLE_ID="dev.warp.Warp"
+    fi
+
+    echo "Setting default handler for ssh to ${WARP_BUNDLE_ID}"
+    duti -s "${WARP_BUNDLE_ID}" ssh
+  tags:
+    - macos
+    - macos_settings
+  changed_when: true
+  ignore_errors: true
+  register: set_warp_default_ssh_result
