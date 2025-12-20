@@ -1,18 +1,51 @@
 ---
-# - name: Check Mac App Store authentication status
-#   ansible.builtin.command: mas account
-#   changed_when: false
-#   failed_when: mas_account['rc'] not in [0,1]
-#   register: mas_account
-#   tags:
-#     - macos
-#     - macos_mas
-
-- name: Install Mac App Store apps
-  ansible.builtin.command: "mas install {{ item }}"
-  loop: "{{ homebrew['mas'] }}"
-  ignore_errors: true
+- name: Check Mac App Store authentication status (native)
+  ansible.builtin.shell: |
+    # Check if Apple ID is stored in App Store preferences (native macOS method)
+    APPLE_ID=$(defaults read com.apple.appstore AppleID 2>/dev/null || echo "")
+    if [ -n "$APPLE_ID" ] && [ "$APPLE_ID" != "" ]; then
+      echo "SIGNED_IN"
+      exit 0
+    else
+      # Also check the plist file directly as fallback
+      if [ -f ~/Library/Preferences/com.apple.appstore.plist ]; then
+        PLIST_APPLE_ID=$(/usr/libexec/PlistBuddy -c "Print :AppleID" ~/Library/Preferences/com.apple.appstore.plist 2>/dev/null || echo "")
+        if [ -n "$PLIST_APPLE_ID" ] && [ "$PLIST_APPLE_ID" != "" ]; then
+          echo "SIGNED_IN"
+          exit 0
+        fi
+      fi
+      echo "NOT_SIGNED_IN"
+      exit 1
+    fi
+  changed_when: false
+  failed_when: false
+  register: mas_account_check
   tags:
     - macos
     - macos_mas
 
+- name: Install Mac App Store apps
+  ansible.builtin.command: "mas install {{ item }}"
+  loop: "{{ homebrew['mas'] }}"
+  when: "'SIGNED_IN' in mas_account_check.stdout"
+  ignore_errors: true
+  failed_when: false
+  tags:
+    - macos
+    - macos_mas
+
+- name: Warn if Mac App Store not signed in
+  ansible.builtin.debug:
+    msg: |
+      Skipped Mac App Store app installation because you are not signed in.
+      To install Mac App Store apps, please:
+      1. Open the Mac App Store app
+      2. Sign in with your Apple ID
+      3. Run this playbook again, or manually install with: mas install <app_id>
+
+      Apps to install: {{ homebrew['mas'] | join(', ') }}
+  when: "'SIGNED_IN' not in mas_account_check.stdout"
+  tags:
+    - macos
+    - macos_mas
