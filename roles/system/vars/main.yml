@@ -75,6 +75,7 @@ homebrew:
     - asdf
     - awscli
     - bat
+    - clusterctl
     - fzf
     - go
     - helm
@@ -83,6 +84,7 @@ homebrew:
     - minikube
     - shellcheck
     - starship
+    - siderolabs/tap/talosctl
     - yamllint
     - zsh-completions
     - zsh-autosuggestions
@@ -122,6 +124,7 @@ homebrew:
   # macOS-specific taps
   taps_macos:
     - olets/tap
+    - siderolabs/tap
 
   # macOS-only GUI applications (casks)
   casks_macos_only:
