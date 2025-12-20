@@ -70,6 +70,8 @@ defaults:
 # Common formulas that work on both macOS and Linux
 homebrew:
   formulas_common:
+    - ansible
+    - ansible-lint
     - asdf
     - awscli
     - bat
