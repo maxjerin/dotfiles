@@ -72,7 +72,6 @@ homebrew:
   formulas_common:
     - ansible
     - ansible-lint
-    - asdf
     - awscli
     - bat
     - clusterctl
@@ -82,6 +81,7 @@ homebrew:
     - k9s
     - kubectl
     - minikube
+    - mise
     - shellcheck
     - starship
     - siderolabs/tap/talosctl
