@@ -83,6 +83,7 @@ homebrew:
     - minikube
     - mise
     - shellcheck
+    - snitch
     - starship
     - siderolabs/tap/talosctl
     - tilt
