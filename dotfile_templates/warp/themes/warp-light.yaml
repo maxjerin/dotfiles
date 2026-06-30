@@ -1,0 +1,25 @@
+---
+# Warp Light — matches the Ghostty warp-light theme.
+accent: '#2C5E96'
+background: '#F6F7F9'
+foreground: '#24282E'
+details: lighter
+terminal_colors:
+  normal:
+    black: '#24282E'
+    red: '#BE3A3A'
+    green: '#2D8B3C'
+    yellow: '#A87B00'
+    blue: '#2C5E96'
+    magenta: '#7A3DAD'
+    cyan: '#1A7A85'
+    white: '#6B7480'
+  bright:
+    black: '#4A505A'
+    red: '#D14545'
+    green: '#3BA84C'
+    yellow: '#C99400'
+    blue: '#3A72B0'
+    magenta: '#9250CC'
+    cyan: '#2297A5'
+    white: '#24282E'
