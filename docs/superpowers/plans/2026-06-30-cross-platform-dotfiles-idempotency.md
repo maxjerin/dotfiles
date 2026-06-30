@@ -15,6 +15,7 @@
 - Every shell-init side effect (symlink, file generation, clone) must be idempotent: `ln -sfn`, generate-only-when-changed, `[ ! -d ] && git clone`.
 - Every bootstrap step must be safe to re-run: guard `/etc/shells` appends with `grep -q`, `chsh` only when `$SHELL` differs, `mkdir -p` before copies.
 - Ansible file operations use `ansible.builtin.file`/`copy` (not raw `command:`); OS-specific task includes carry `when: ansible_os_family == 'Debian'`.
+- Terminal-agnostic: the Warp-like UX lives in the zsh modules and works in any host terminal. Inside Warp (`$TERM_PROGRAM=WarpTerminal`) the shell skips its input-editor plugins (autosuggest, syntax-highlight, fzf-tab, starship, atuin keybind) so they don't fight Warp's native UI.
 - Work happens on branch `dotfiles-idempotency-rewrite`. Commit after each task.
 - This machine is macOS — Linux-only paths are verified by static checks (syntax, lint, grep, `stow -n`), not execution.
 
@@ -212,6 +213,10 @@ if command -v mise >/dev/null 2>&1; then
   eval "$(mise activate zsh)"
 fi
 
+# Warp ships its own input editor; flag it so later modules skip redundant
+# shell UI (autosuggest, syntax-highlight, fzf-tab, starship, atuin keybind).
+[[ "$TERM_PROGRAM" == "WarpTerminal" ]] && export _IN_WARP=1
+
 # Deduplicate PATH.
 typeset -U PATH path
 ```
@@ -254,9 +259,11 @@ _brew_prefix="$(brew --prefix 2>/dev/null)"
 [ -r "$_brew_prefix/share/zsh-abbr/zsh-abbr.zsh" ] && \
   source "$_brew_prefix/share/zsh-abbr/zsh-abbr.zsh"
 
-# Ghost-text autosuggestions.
-[ -r "$_brew_prefix/share/zsh-autosuggestions/zsh-autosuggestions.zsh" ] && \
+# Ghost-text autosuggestions (skip inside Warp — it has its own).
+if [[ -z "$_IN_WARP" ]] && \
+   [ -r "$_brew_prefix/share/zsh-autosuggestions/zsh-autosuggestions.zsh" ]; then
   source "$_brew_prefix/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
+fi
 
 # Completions.
 FPATH="$_brew_prefix/share/zsh-completions:$FPATH"
@@ -274,16 +281,19 @@ if command -v carapace >/dev/null 2>&1; then
   source <(carapace _carapace zsh)
 fi
 
-# fzf-tab — fzf-driven completion menus.
-[ -r ~/.config/zsh/fzf-tab/fzf-tab.plugin.zsh ] && \
+# fzf-tab — fzf-driven completion menus (skip inside Warp).
+if [[ -z "$_IN_WARP" ]] && [ -r ~/.config/zsh/fzf-tab/fzf-tab.plugin.zsh ]; then
   source ~/.config/zsh/fzf-tab/fzf-tab.plugin.zsh
+fi
 
 # fzf key bindings.
 [ -r ~/.fzf.zsh ] && source ~/.fzf.zsh
 
-# Syntax highlighting — MUST be sourced last.
-[ -r "$_brew_prefix/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" ] && \
+# Syntax highlighting — MUST be sourced last (skip inside Warp).
+if [[ -z "$_IN_WARP" ]] && \
+   [ -r "$_brew_prefix/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" ]; then
   source "$_brew_prefix/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
+fi
 
 unset _brew_prefix
 ```
@@ -315,8 +325,8 @@ git commit -m "zsh: 02-plugins adds carapace + fzf-tab, guards all sources"
 
 Replace `dotfile_templates/zsh/zsh/03-style.zsh` entirely with:
 ```zsh
-# Prompt.
-if command -v starship >/dev/null 2>&1; then
+# Prompt (skip inside Warp — it renders its own prompt UI).
+if [[ -z "$_IN_WARP" ]] && command -v starship >/dev/null 2>&1; then
   eval "$(starship init zsh)"
 fi
 ```
@@ -382,7 +392,10 @@ fi
 command -v zoxide >/dev/null 2>&1 && eval "$(zoxide init zsh)"
 
 # atuin — SQLite history; Ctrl-R recall, Up-arrow stays zsh-native.
-command -v atuin >/dev/null 2>&1 && eval "$(atuin init zsh --disable-up-arrow)"
+# Skip inside Warp (Warp owns Ctrl-R / its own history palette).
+if [[ -z "$_IN_WARP" ]] && command -v atuin >/dev/null 2>&1; then
+  eval "$(atuin init zsh --disable-up-arrow)"
+fi
 
 # OrbStack shell init (macOS).
 [ -r "$HOME/.orbstack/shell/init.zsh" ] && \
@@ -490,6 +503,10 @@ setup_dotfiles_common() {
     pushd k9s > /dev/null
     stow --adopt -R --target ~/.config/k9s/skins skins
     popd > /dev/null
+
+    # Warp themes live under ~/.warp (not ~/.config); both OSes run Warp.
+    mkdir -p ~/.warp/themes
+    stow --adopt -R --target ~/.warp warp
 
     # OS-only extras (e.g. karabiner on macOS).
     for dir in $STOW_OS_EXTRA; do
@@ -824,7 +841,94 @@ git commit -m "ansible(apt): guard packagecloud repo script with creates (idempo
 
 ---
 
-### Task 15: Whole-repo verification gate
+### Task 15: Generate Warp theme templates
+
+**Files:**
+- Create: `dotfile_templates/warp/themes/warp-dark.yaml`
+- Create: `dotfile_templates/warp/themes/warp-light.yaml`
+
+**Interfaces:**
+- Consumes: the existing Ghostty palettes in `dotfile_templates/ghostty/themes/warp-dark` and `warp-light` (One Dark / light equivalents).
+- Produces: Warp-format theme YAMLs stowed to `~/.warp/themes` by Task 8, giving Warp the same light/dark colors as Ghostty.
+
+- [ ] **Step 1: Write `warp-dark.yaml`**
+
+Create `dotfile_templates/warp/themes/warp-dark.yaml` with:
+```yaml
+# Warp Dark — matches the Ghostty warp-dark theme (One Dark palette).
+accent: '#61AFEF'
+background: '#1B1F27'
+foreground: '#F2F2F2'
+details: darker
+terminal_colors:
+  normal:
+    black: '#1B1F27'
+    red: '#E06C75'
+    green: '#98C379'
+    yellow: '#E5C07B'
+    blue: '#61AFEF'
+    magenta: '#C678DD'
+    cyan: '#56B6C2'
+    white: '#ABB2BF'
+  bright:
+    black: '#808080'
+    red: '#E06C75'
+    green: '#98C379'
+    yellow: '#E5C07B'
+    blue: '#61AFEF'
+    magenta: '#C678DD'
+    cyan: '#56B6C2'
+    white: '#FFFFFF'
+```
+
+- [ ] **Step 2: Write `warp-light.yaml`**
+
+Create `dotfile_templates/warp/themes/warp-light.yaml` with:
+```yaml
+# Warp Light — matches the Ghostty warp-light theme.
+accent: '#2C5E96'
+background: '#F6F7F9'
+foreground: '#24282E'
+details: lighter
+terminal_colors:
+  normal:
+    black: '#24282E'
+    red: '#BE3A3A'
+    green: '#2D8B3C'
+    yellow: '#A87B00'
+    blue: '#2C5E96'
+    magenta: '#7A3DAD'
+    cyan: '#1A7A85'
+    white: '#6B7480'
+  bright:
+    black: '#4A505A'
+    red: '#D14545'
+    green: '#3BA84C'
+    yellow: '#C99400'
+    blue: '#3A72B0'
+    magenta: '#9250CC'
+    cyan: '#2297A5'
+    white: '#24282E'
+```
+
+- [ ] **Step 3: Validate YAML**
+
+Run: `yamllint dotfile_templates/warp/themes/ && echo OK`
+Expected: `OK`.
+
+- [ ] **Step 4: Commit**
+
+```bash
+git add -A
+git commit -m "warp: theme templates (dark/light) matching Ghostty palette"
+```
+
+> After stow, enable in Warp: Settings → Appearance → pick warp-dark / warp-light,
+> and turn on "Sync with OS" so they auto-switch like Ghostty's `dark:/light:`.
+
+---
+
+### Task 16: Whole-repo verification gate
 
 **Files:** none (verification only)
 
@@ -849,8 +953,13 @@ Expected: `OK`.
 
 - [ ] **Step 4: Stow dry-run resolves (macOS profile)**
 
-Run: `cd dotfile_templates && for d in zsh starship alacritty tmux kitty ghostty k9s karabiner; do stow -n -v --target ~ "$d" 2>&1 | head -1; done; cd ..`
+Run: `cd dotfile_templates && for d in zsh starship alacritty tmux kitty ghostty k9s karabiner; do stow -n -v --target ~ "$d" 2>&1 | head -1; done; mkdir -p ~/.warp && stow -n -v --target ~/.warp warp 2>&1 | head -1; cd ..`
 Expected: no `existing target is not a symlink` conflicts (already-stowed dirs report nothing or LINK lines).
+
+- [ ] **Step 4b: Warp guard works**
+
+Run: `TERM_PROGRAM=WarpTerminal zsh -ic 'source dotfile_templates/zsh/zsh/00-environment.zsh; echo "warp=$_IN_WARP"'`
+Expected: `warp=1` (so 02/03/04 skip the input-editor plugins inside Warp).
 
 - [ ] **Step 5: Ansible syntax + lint**
 
@@ -874,15 +983,16 @@ git commit -m "Verify cross-platform idempotency rewrite (all gates green)" --al
 ## Self-Review
 
 **Spec coverage:**
+- §0 Terminal layer → Task 4 (Warp guard flag `_IN_WARP`), Tasks 5-7 (guarded plugins), Task 15 (Warp theme templates), Task 8 (Warp themes stow). ✓
 - §1 Shell layer → Tasks 3-7 (loader, 00-02-03-04 modules, atuin+carapace+fzf-tab). ✓
 - §2 Bootstrap layer → Tasks 8-9 (common core, refactor, idempotent shell switch, `/etc/shells` guard). ✓
 - §3 Ansible layer → Tasks 10-14 (vars cleanup, duti dedup, keyboard file module + typo, fonts copy, apt guard, OS guards). ✓
-- §4 Stow parity → Task 8 (ghostty in shared list, karabiner via `STOW_OS_EXTRA`) + Task 2 (orphan delete). ✓
+- §4 Stow parity → Task 8 (ghostty + warp in shared list, karabiner via `STOW_OS_EXTRA`) + Task 2 (orphan delete). ✓
 - §5 Fish revert → Task 1. ✓
-- Verification → Task 15 maps the spec's acceptance tests. ✓
+- Verification → Task 16 maps the spec's acceptance tests (incl. Warp guard + stow). ✓
 
 **Placeholder scan:** `<repo>` in Task 14 is an intentional read-from-current-file value with explicit instruction to substitute; `powerline_src_dir` in Task 13 is explicitly defined-from-existing-var. All code steps show complete code.
 
 **Type/name consistency:** Common functions (`command_exists`, `install_git_hooks`, `clone_zsh_plugins`, `setup_dotfiles_common`, `ensure_login_shell`) are defined in Task 8 and consumed by the same names in Task 9. `STOW_OS_EXTRA` set in Task 9, consumed in Task 8. Consistent.
 
-**Rollout order** matches spec §Rollout: fish revert (T1) → shell (T3-7) → stow parity/orphans (T2, T8) → bootstrap (T8-9) → ansible (T10-14) → verify (T15).
+**Rollout order** matches spec §Rollout: fish revert (T1) → shell + Warp guard (T3-7) → stow parity/orphans (T2, T8) → bootstrap (T8-9) → ansible (T10-14) → Warp themes (T15) → verify (T16).

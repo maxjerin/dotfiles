@@ -26,6 +26,11 @@ recall) in **zsh** on both OSes.
 - **Ansible idempotency depth:** pragmatic — fix cheap/structural issues; leave
   `defaults write` / `duti` / PlistBuddy tasks as-is but documented (proper
   change-detection there is costly and brittle).
+- **Terminal emulator is pluggable, not pinned.** The Warp-like UX lives in the
+  shell (zsh modules) and renders in any host terminal. Repo manages: Ghostty
+  config (file-based; also consumed by Supacode on macOS), Warp themes
+  (`~/.warp/themes`), plus existing kitty/alacritty. Add a Warp-detection guard
+  in zsh so shell plugins don't fight Warp's native input editor.
 
 ## Non-goals
 
@@ -35,6 +40,47 @@ recall) in **zsh** on both OSes.
   but out of scope.
 - No removal of currently-stowed terminals the user may still use (kitty,
   alacritty) — left intact.
+
+---
+
+## Section 0 — Terminal layer (terminal-agnostic)
+
+The Warp-like interactive UX (autosuggest, syntax-highlight, rich completions,
+history recall, prompt) is provided by the **shell**, so it follows the user
+into any host terminal. The terminal emulator only owns its own theme/font/keys.
+Two independent layers; the shell layer (Sections 1+) is unchanged regardless of
+terminal.
+
+### Terminal matrix
+
+| Terminal | macOS | Linux | Config the repo manages | Shell-UX source |
+|---|:--:|:--:|---|---|
+| Ghostty | ✅ | ✅ | `~/.config/ghostty/config` (stowed) | zsh modules |
+| Supacode | ✅ | ❌ | none — reads Ghostty's config (GhosttyKit) | zsh modules |
+| Warp | ✅ | ✅ | `~/.warp/themes/*.yaml` (stowed) | Warp native + guarded zsh |
+| Kitty / Alacritty | ✅ | ✅ | existing stowed configs | zsh modules |
+
+**Linux "equivalent" of the mac terminals is Ghostty itself** — it ships a Linux
+build and is the cross-platform constant. No additional terminal is adopted.
+Supacode is a macOS-only extra that needs no separate config (consumes Ghostty's).
+
+### Warp guard
+
+Warp replaces the shell's input editor with its own autosuggestions, completions,
+blocks, and AI. Inside Warp, `zsh-autosuggestions`, `zsh-syntax-highlighting`,
+`fzf-tab`, `starship`, and atuin's Ctrl-R binding are redundant and visually
+conflict. Warp sets `TERM_PROGRAM=WarpTerminal`. The zsh config detects this and
+skips those input-editor plugins while keeping environment/PATH, `mise`, `zoxide`,
+`carapace` completion data, and `abbr`. Ghostty/Supacode/kitty/alacritty/Linux
+get the full zsh stack.
+
+### Warp themes
+
+Stow `~/.warp/themes/` (both OSes — Warp runs on both) with `warp-dark.yaml` and
+`warp-light.yaml` generated from the existing Ghostty `warp-dark`/`warp-light`
+theme palettes, so the same light/dark colors are version-controlled and shared
+across machines. Warp's appearance auto-switch (Settings → Appearance → Sync with
+OS) then drives them, mirroring the Ghostty `dark:/light:` behavior.
 
 ---
 
@@ -169,7 +215,10 @@ role.
 
 ## Section 4 — Stow / config parity
 
-- **ghostty** added to the shared stow list → deployed on Linux too.
+- **ghostty** added to the shared stow list → deployed on Linux too (covers
+  Ghostty + Supacode on macOS, Ghostty on Linux).
+- **warp** themes added to the shared stow list, targeting `~/.warp/themes`
+  (both OSes).
 - **karabiner** stays macOS-only (correct — macOS-only tool).
 - **Delete orphan template dirs** `dotfile_templates/neovim/` and
   `dotfile_templates/nvim/` (never stowed; user uses neither).
