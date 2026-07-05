@@ -1,0 +1,103 @@
+# =============================================================================
+# Ghostty Config — Warp-like
+# Automatically switches between warp-dark and warp-light based on macOS
+# system appearance (System Settings → Appearance → Dark/Light/Auto).
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# Font
+# -----------------------------------------------------------------------------
+font-family = FiraCode Nerd Font Mono
+font-size = 14
+font-feature = +liga
+font-feature = +calt
+font-feature = +ss01
+font-feature = +ss02
+font-feature = +ss03
+font-feature = +ss06
+font-thicken = true
+
+# -----------------------------------------------------------------------------
+# Theme — auto-switches with macOS appearance
+# Custom theme files live in ~/.config/ghostty/themes/
+# -----------------------------------------------------------------------------
+theme = dark:warp-dark,light:warp-light
+
+# -----------------------------------------------------------------------------
+# Cursor
+# -----------------------------------------------------------------------------
+cursor-style = block
+cursor-style-blink = false
+
+# -----------------------------------------------------------------------------
+# Window
+# -----------------------------------------------------------------------------
+# Tabs integrated into the title bar (closest to Warp's compact header)
+macos-titlebar-style = tabs
+window-padding-x = 16
+window-padding-y = 10
+window-padding-balance = true
+
+# Start at a wide, productive size
+window-width = 220
+window-height = 55
+
+# Subtle translucency (Warp has a near-solid background with slight depth)
+background-opacity = 0.97
+background-blur = true
+
+# -----------------------------------------------------------------------------
+# Shell Integration — enables Warp-like command blocks:
+#   • Visual prompt marks (jump between them with Cmd+Shift+Up/Down)
+#   • Command duration, exit-code decorations
+#   • Sudo prompt pass-through
+#   • Dynamic window/tab title from current directory
+# -----------------------------------------------------------------------------
+shell-integration = detect
+shell-integration-features = cursor,sudo,title
+
+# -----------------------------------------------------------------------------
+# Scrollback
+# -----------------------------------------------------------------------------
+scrollback-limit = 10485760
+
+# -----------------------------------------------------------------------------
+# Clipboard / Selection
+# -----------------------------------------------------------------------------
+copy-on-select = clipboard
+
+# -----------------------------------------------------------------------------
+# URLs
+# -----------------------------------------------------------------------------
+link-url = true
+
+# -----------------------------------------------------------------------------
+# macOS
+# -----------------------------------------------------------------------------
+macos-option-as-alt = left
+mouse-hide-while-typing = true
+confirm-close-surface = false
+quit-after-last-window-closed = true
+
+# -----------------------------------------------------------------------------
+# Keybindings — Warp-compatible additions on top of Ghostty defaults
+# Defaults already handle: Cmd+T (tab), Cmd+W (close), Cmd+K (clear),
+# Cmd+N (new window), Cmd+1-9 (tab switching), Cmd+Enter (fullscreen)
+# -----------------------------------------------------------------------------
+
+# Split panes (Warp: Cmd+D → right, Cmd+Shift+D → down)
+keybind = super+d=new_split:right
+keybind = super+shift+d=new_split:down
+
+# Navigate splits (matches Ghostty default: Cmd+Option+arrow)
+keybind = super+alt+left=goto_split:left
+keybind = super+alt+right=goto_split:right
+keybind = super+alt+up=goto_split:up
+keybind = super+alt+down=goto_split:down
+
+# Jump between command prompt marks (Warp: Cmd+Up/Down — needs shell integration)
+keybind = super+up=jump_to_prompt:-1
+keybind = super+down=jump_to_prompt:1
+
+# Clear scrollback (Warp: Cmd+Shift+K)
+keybind = super+shift+k=clear_screen

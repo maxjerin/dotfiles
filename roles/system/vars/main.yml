@@ -72,9 +72,12 @@ homebrew:
   formulas_common:
     - ansible
     - ansible-lint
+    - atuin  # SQLite shell history + fuzzy ctrl-r (Warp-like command recall)
     - awscli
     - bat
+    - carapace  # cross-shell rich completions (Warp-like menus)
     - clusterctl
+    - fish  # primary interactive shell (native autosuggestions + completions)
     - fzf
     - go
     - helm
