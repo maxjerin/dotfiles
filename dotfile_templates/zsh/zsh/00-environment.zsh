@@ -1,17 +1,29 @@
-export PATH=$(brew --prefix)/bin:$PATH
-export PATH=$(brew --prefix)/sbin:$PATH
+# Homebrew-relative paths (mac-arm /opt/homebrew, mac-intel /usr/local, linuxbrew).
+if command -v brew >/dev/null 2>&1; then
+  _brew_prefix="$(brew --prefix)"
+  export PATH="$_brew_prefix/bin:$_brew_prefix/sbin:$PATH"
+  unset _brew_prefix
+fi
 
-# Add pipx bin directory to PATH (for ansible, ansible-lint, yamllint, etc.)
-export PATH="$HOME/.local/bin:$PATH"
+# User-local bins.
+export PATH="$HOME/.local/bin:$PATH"      # pipx (ansible, ansible-lint, yamllint)
+export PATH="$HOME/.opencode/bin:$PATH"   # opencode
 
-# K9S
-export K9S_CONFIG_DIR=~/.config/k9s
+# Tool config locations.
+export K9S_CONFIG_DIR="$HOME/.config/k9s"
+export STARSHIP_CONFIG="$HOME/.config/starship/starship.toml"
 
-# Starship
-export STARSHIP_CONFIG=~/.config/starship/starship.toml
-
-# Disable Homebrew autoupdates
+# Homebrew behaviour.
 export HOMEBREW_NO_AUTO_UPDATE=1
 
-# Remove all duplicates from $PATH
-typeset -U PATH
+# mise runtime version manager.
+if command -v mise >/dev/null 2>&1; then
+  eval "$(mise activate zsh)"
+fi
+
+# Warp ships its own input editor; flag it so later modules skip redundant
+# shell UI (autosuggest, syntax-highlight, fzf-tab, starship, atuin keybind).
+[[ "$TERM_PROGRAM" == "WarpTerminal" ]] && export _IN_WARP=1
+
+# Deduplicate PATH.
+typeset -U PATH path
