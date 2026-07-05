@@ -20,12 +20,14 @@
     name:
       - hardinfo
 
-- name: Setup Tabby Gpg Keys
+- name: Add packagecloud apt repository (Tabby)
   tags:
     - linux
-  ansible.builtin.command:
-    cmd: curl -s https://packagecloud.io/install/repositories/eugeny/tabby/script.deb.sh | sudo bash
-  changed_when: false
+  ansible.builtin.shell: |
+    curl -s https://packagecloud.io/install/repositories/eugeny/tabby/script.deb.sh | sudo bash
+  args:
+    creates: /etc/apt/sources.list.d/eugeny_tabby.list
+  when: ansible_os_family == 'Debian'
 
 - name: Install a Tabby (terminus)
   tags:
