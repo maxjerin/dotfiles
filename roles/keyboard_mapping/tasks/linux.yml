@@ -56,34 +56,28 @@
 
 ####### Deprecated ########
 
-- name: Create directory if no exists
-  ansible.builtin.command:
-    cmd: mkdir -p ~/.xkb/keymap
-  changed_when: true
-  become: true
-  become_method: sudo
+- name: Ensure xkb keymap directory exists
+  ansible.builtin.file:
+    path: "{{ ansible_env.HOME }}/.xkb/keymap"
+    state: directory
+    mode: "0755"
 
-- name: Create files
-  ansible.builtin.command:
-    cmd: touch ~/.xkbd/keymap/mykbd
-  changed_when: true
-  become: true
-  become_method: sudo
+- name: Ensure xkb keymap file exists
+  ansible.builtin.file:
+    path: "{{ ansible_env.HOME }}/.xkb/keymap/mykbd"
+    state: touch
+    mode: "0644"
 
+- name: Generate xkb keymap
+  ansible.builtin.shell: setxkbmap -print > "{{ ansible_env.HOME }}/.xkb/keymap/mykbd"
+  args:
+    creates: "{{ ansible_env.HOME }}/.xkb/keymap/mykbd"
 
-- name: Output current keyboard defintion
-  ansible.builtin.command:
-    cmd: setxkbmap -print > ~/.xkb/keymap/mykbd
-  changed_when: true
-  become: true
-  become_method: sudo
-
-- name: Create directory if no exists
-  ansible.builtin.command:
-    cmd: mkdir -p ~/.xkb/symbols
-  changed_when: true
-  become: true
-  become_method: sudo
+- name: Ensure xkb symbols directory exists
+  ansible.builtin.file:
+    path: "{{ ansible_env.HOME }}/.xkb/symbols"
+    state: directory
+    mode: "0755"
 
 - name: Copy keyboard config
   copy:
@@ -98,8 +92,7 @@
 
 
 - name: Output current keyboard defintion (disble warnings)
+  # applies keymap each run by design (no reliable state probe)
   ansible.builtin.command:
     cmd: xkbcomp -w0 -I$HOME/.xkb ~/.xkb/keymap/mykbd $DISPLAY
   changed_when: true
-  become: true
-  become_method: sudo
