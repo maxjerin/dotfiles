@@ -90,6 +90,8 @@ homebrew:
     - siderolabs/tap/talosctl
     - tilt
     - yamllint
+    - zoxide  # smart cd (Warp-like), replaces z; common to both OSes
+    - zsh
     - zsh-completions
     - zsh-autosuggestions
     - zsh-syntax-highlighting
@@ -101,12 +103,9 @@ homebrew:
     - exa
     - openjdk@11
     - pyenv
-    - spaceship
     - svn
     - vault
     - yarn
-    - z
-    - zsh
 
   # macOS-specific formulas
   formulas_macos:
@@ -122,7 +121,6 @@ homebrew:
     - powerline-go
     - tmux
     - yq
-    - zoxide
     - dockutil  # Tool for managing Dock apps programmatically
 
   # macOS-specific taps
