@@ -8,15 +8,12 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$SCRIPT_DIR"
 
-# Ensure we protect files before commit
-if [ -d ".git" ]; then
-    cp repo_config/pre-commit .git/hooks/pre-commit
-fi
+# shellcheck source=bootstrap-common.sh
+source "$SCRIPT_DIR/bootstrap-common.sh"
+export STOW_OS_EXTRA=""
 
-# Function to check if a command exists
-command_exists() {
-    command -v "$1" &> /dev/null
-}
+# Ensure we protect files before commit
+install_git_hooks
 
 # Function to check if running as root
 check_root() {
@@ -36,7 +33,7 @@ install_linuxbrew() {
         if [ -d "/home/linuxbrew/.linuxbrew" ]; then
             eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
         elif [ -d "$HOME/.linuxbrew" ]; then
-            eval "$($HOME/.linuxbrew/bin/brew shellenv)"
+            eval "$("$HOME"/.linuxbrew/bin/brew shellenv)"
         fi
     else
         echo "Linuxbrew already installed"
@@ -133,7 +130,8 @@ setup_pipx_tools() {
         ANSIBLE_PATH=$(find ~ -name ansible-playbook 2>/dev/null | head -1)
         if [ -n "$ANSIBLE_PATH" ]; then
             echo "Found ansible-playbook at: $ANSIBLE_PATH"
-            export PATH="$(dirname "$ANSIBLE_PATH"):$PATH"
+            ANSIBLE_DIR="$(dirname "$ANSIBLE_PATH")"
+            export PATH="$ANSIBLE_DIR:$PATH"
         else
             echo "Error: Could not find ansible-playbook after installation"
             echo "Please check pipx installation: pipx list"
@@ -146,21 +144,7 @@ setup_pipx_tools() {
 
 # Function to set zsh as default shell
 setup_zsh_shell() {
-    if command_exists zsh; then
-        if command_exists brew; then
-            ZSH_PATH="$(brew --prefix)/bin/zsh"
-        else
-            ZSH_PATH="$(command -v zsh)"
-        fi
-
-        if [ -n "$ZSH_PATH" ] && [ -f "$ZSH_PATH" ]; then
-            echo "Setting zsh as default shell..."
-            echo "$ZSH_PATH" | sudo tee -a /etc/shells > /dev/null
-            chsh -s "$ZSH_PATH"
-        fi
-    else
-        echo "Warning: zsh not found. Please install zsh first."
-    fi
+    ensure_login_shell
 }
 
 # Function to run Ansible playbook for Linux
@@ -173,7 +157,8 @@ run_ansible_playbook() {
         ANSIBLE_PATH=$(find ~ -name ansible-playbook 2>/dev/null | head -1)
         if [ -n "$ANSIBLE_PATH" ]; then
             echo "Found ansible-playbook at: $ANSIBLE_PATH"
-            export PATH="$(dirname "$ANSIBLE_PATH"):$PATH"
+            ANSIBLE_DIR="$(dirname "$ANSIBLE_PATH")"
+            export PATH="$ANSIBLE_DIR:$PATH"
         else
             echo "Error: ansible-playbook not found."
             echo "Please ensure pipx is installed and ansible is installed via: pipx install ansible"
@@ -197,46 +182,8 @@ run_ansible_playbook() {
 
 # Function to setup dotfiles with Stow
 setup_dotfiles() {
-    if ! command_exists stow; then
-        echo "Error: Stow is required but not installed"
-        return 1
-    fi
-
-    echo "Setting up dotfiles with Stow..."
-
-    pushd dotfile_templates > /dev/null
-
-    # Zsh configuration
-    ln -sf "$(pwd)/zsh/.zshrc_linux" "${HOME}/.zshrc"
-    pushd zsh > /dev/null
-    mkdir -p ~/.config/zsh
-    stow --adopt -R --target ~/.config/zsh zsh
-    popd > /dev/null
-
-    # Starship prompt
-    mkdir -p ~/.config/starship
-    stow --adopt -R --target ~/.config/starship starship
-
-    # Alacritty terminal
-    mkdir -p ~/.config/alacritty
-    stow --adopt -R --target ~/.config/alacritty alacritty
-
-    # Tmux
-    mkdir -p ~/.config/tmux
-    stow --adopt -R --target ~/.config/tmux tmux
-
-    # K9s
-    mkdir -p ~/.config/k9s/skins
-    stow --adopt -R --target ~/.config/k9s k9s
-    pushd k9s > /dev/null
-    stow --adopt -R --target ~/.config/k9s/skins skins
-    popd > /dev/null
-
-    # Kitty
-    mkdir -p ~/.config/kitty
-    stow --adopt -R --target ~/.config/kitty kitty
-
-    popd > /dev/null
+    clone_zsh_plugins
+    setup_dotfiles_common
 }
 
 # Main execution
