@@ -77,7 +77,6 @@ homebrew:
     - bat
     - carapace  # cross-shell rich completions (Warp-like menus)
     - clusterctl
-    - fish  # primary interactive shell (native autosuggestions + completions)
     - fzf
     - go
     - helm

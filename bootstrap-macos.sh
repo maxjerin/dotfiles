@@ -196,10 +196,6 @@ setup_dotfiles() {
     mkdir -p ~/.config/kitty
     stow --adopt -R --target ~/.config/kitty kitty
 
-    # Fish shell (Warp-like interactive shell)
-    mkdir -p ~/.config/fish
-    stow --adopt -R --target ~/.config/fish fish
-
     # Ghostty terminal (auto light/dark theme + shell integration)
     mkdir -p ~/.config/ghostty
     stow --adopt -R --target ~/.config/ghostty ghostty
