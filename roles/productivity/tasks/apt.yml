@@ -2,21 +2,21 @@
 - name: Add Notion-Enhancer (unofficial port of Notion to Linux) deb
   tags:
     - linux
-  apt_repository:
+  ansible.builtin.apt_repository:
     repo: deb [trusted=yes] https://apt.fury.io/notion-repackaged/ /
     state: present
 
 - name: Install notion app
   tags:
     - linux
-  apt:
+  ansible.builtin.apt:
     name:
       - notion-app-enhanced
 
 - name: Install Debian Utilities
   tags:
     - linux
-  apt:
+  ansible.builtin.apt:
     name:
       - hardinfo
 
@@ -24,13 +24,15 @@
   tags:
     - linux
   ansible.builtin.shell: |
+    set -o pipefail
     curl -s https://packagecloud.io/install/repositories/eugeny/tabby/script.deb.sh | sudo bash
   args:
+    executable: /bin/bash
     creates: /etc/apt/sources.list.d/eugeny_tabby.list
   when: ansible_os_family == 'Debian'
 
 - name: Install a Tabby (terminus)
   tags:
     - linux
-  apt:
+  ansible.builtin.apt:
     deb: https://github.com/Eugeny/tabby/releases/download/v1.0.179/tabby-1.0.179-linux-x64.deb

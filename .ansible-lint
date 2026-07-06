@@ -7,6 +7,17 @@ skip_list:
   - experimental  # Skip experimental rules
   - no-handler    # Allow tasks without handlers (useful for simple playbooks)
 
+# Non-fatal (shown as warnings): acknowledged tech debt, not regressions.
+# - var-naming: role vars unprefixed (defaults/homebrew/repos); renaming touches
+#   every reference, deferred.
+# - ignore-errors: deliberate on optional installs (duti/mas/brew casks) so one
+#   failure doesn't abort the whole run.
+# - command-instead-of-module: packagecloud curl|bash has no module equivalent.
+warn_list:
+  - var-naming[no-role-prefix]
+  - ignore-errors
+  - command-instead-of-module
+
 # Paths to exclude from linting
 exclude_paths:
   - .cache/
@@ -15,6 +26,8 @@ exclude_paths:
   - dependencies/
   - .git/
   - node_modules/
+  - .ansible/            # downloaded Galaxy role dependencies
+  - dotfile_templates/   # stowed app configs (k9s, ghostty, …), not Ansible
 
 # Use default ruleset
 use_default_rules: true

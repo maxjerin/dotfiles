@@ -1,9 +1,10 @@
+---
 - name: Load linux
-  include_tasks:
+  ansible.builtin.include_tasks:
     file: linux.yml
   args:
     apply:
-      become: yes
+      become: true
   when: ansible_os_family == 'Debian'
   tags:
     - linux

@@ -67,4 +67,3 @@
   changed_when: true
   ignore_errors: true
   register: set_warp_default_ssh_result
-

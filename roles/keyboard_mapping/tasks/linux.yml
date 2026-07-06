@@ -80,9 +80,10 @@
     mode: "0755"
 
 - name: Copy keyboard config
-  copy:
+  ansible.builtin.copy:
     src: custom_swap
     dest: ~/.xkb/symbols/custom_swap
+    mode: "0644"
 
 # TODO: figure out how to do this using sed
 # https://unix.stackexchange.com/a/65600

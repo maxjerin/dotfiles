@@ -28,6 +28,8 @@
 - name: Install Mac App Store apps
   ansible.builtin.command: "mas install {{ item }}"
   loop: "{{ homebrew['mas'] }}"
+  register: mas_install
+  changed_when: "'Installed' in mas_install.stdout"
   when: "'SIGNED_IN' in mas_account_check.stdout"
   ignore_errors: true
   failed_when: false
