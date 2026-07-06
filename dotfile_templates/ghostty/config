@@ -66,6 +66,11 @@ scrollback-limit = 10485760
 # -----------------------------------------------------------------------------
 copy-on-select = clipboard
 
+# Cmd+V paste: Ghostty's paste-protection prompt is suppressed inside Supacode,
+# so pastes with newlines/control chars silently do nothing. Disable it so
+# Cmd+V pastes directly (the super+v keybind is set in the Keybindings section).
+clipboard-paste-protection = false
+
 # -----------------------------------------------------------------------------
 # URLs
 # -----------------------------------------------------------------------------
@@ -84,6 +89,9 @@ quit-after-last-window-closed = true
 # Defaults already handle: Cmd+T (tab), Cmd+W (close), Cmd+K (clear),
 # Cmd+N (new window), Cmd+1-9 (tab switching), Cmd+Enter (fullscreen)
 # -----------------------------------------------------------------------------
+
+# Paste (Cmd+V) — explicit so it works in Supacode's embedded Ghostty
+keybind = super+v=paste_from_clipboard
 
 # Split panes (Warp: Cmd+D → right, Cmd+Shift+D → down)
 keybind = super+d=new_split:right
