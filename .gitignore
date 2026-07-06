@@ -3,3 +3,6 @@ dependencies/
 venv/
 .DS_Store
 .vault-password
+
+# Ansible Galaxy role dependencies (downloaded, not tracked)
+.ansible/
