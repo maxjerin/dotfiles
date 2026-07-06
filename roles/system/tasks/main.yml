@@ -1,16 +1,16 @@
 ---
 - name: Load macos
-  include_tasks:
+  ansible.builtin.include_tasks:
     file: macos.yml
   tags:
     - macos
 
 - name: Load linux
-  include_tasks:
+  ansible.builtin.include_tasks:
     file: linux.yml
   args:
     apply:
-      become: yes
+      become: true
       become_method: sudo
   tags:
     - linux

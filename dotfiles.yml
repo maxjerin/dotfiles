@@ -1,6 +1,5 @@
 ---
 - name: Set up local workstation
-  vars:
   hosts: local
   ignore_errors: true
   roles:

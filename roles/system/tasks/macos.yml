@@ -3,42 +3,42 @@
 # See roles/system/tasks/macos/ directory
 
 - name: Load SSH configuration
-  include_tasks:
+  ansible.builtin.include_tasks:
     file: macos/ssh.yml
   tags:
     - macos
     - macos_ssh
 
 - name: Load macOS system settings
-  include_tasks:
+  ansible.builtin.include_tasks:
     file: macos/settings.yml
   tags:
     - macos
     - macos_settings
 
 - name: Load Homebrew installation tasks
-  include_tasks:
+  ansible.builtin.include_tasks:
     file: macos/homebrew.yml
   tags:
     - macos
     - macos_homebrew
 
 - name: Load default application handlers
-  include_tasks:
+  ansible.builtin.include_tasks:
     file: macos/defaults.yml
   tags:
     - macos
     - macos_defaults
 
 - name: Load Mac App Store installation tasks
-  include_tasks:
+  ansible.builtin.include_tasks:
     file: macos/mas.yml
   tags:
     - macos
     - macos_mas
 
 - name: Load repository configuration
-  include_tasks:
+  ansible.builtin.include_tasks:
     file: macos/repos.yml
   tags:
     - macos

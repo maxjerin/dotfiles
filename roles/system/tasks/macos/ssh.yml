@@ -3,7 +3,7 @@
   ansible.builtin.copy:
     src: macos_config
     dest: ~/.ssh/config
+    mode: "0600"
   tags:
     - macos
     - macos_ssh
-

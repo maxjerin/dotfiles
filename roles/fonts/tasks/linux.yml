@@ -1,11 +1,11 @@
 ---
 - name: Add universe repositroy
-  apt_repository:
+  ansible.builtin.apt_repository:
     repo: deb http://archive.ubuntu.com/ubuntu {{ ansible_distribution_release }} universe
     state: present
 
 - name: Install Fonts
-  apt:
+  ansible.builtin.apt:
     name:
       - fonts-firacode
       - fonts-roboto
@@ -13,16 +13,18 @@
 
 # https://swetankraj.github.io/ubuntu-terminal-powelinego/
 - name: Download Powerline Symbols
-  get_url:
+  ansible.builtin.get_url:
     url: https://github.com/powerline/powerline/raw/develop/font/PowerlineSymbols.otf
     dest: /tmp/PowerlineSymbols.otf
+    mode: "0644"
   changed_when: false
 # checksum: figure out how to do this?
 
 - name: Download 10-powerline-symbols
-  get_url:
+  ansible.builtin.get_url:
     url: https://github.com/powerline/powerline/raw/develop/font/10-powerline-symbols.conf
     dest: /tmp/10-powerline-symbols.conf
+    mode: "0644"
   changed_when: false
 # checksum: figure out how to do this?
 

@@ -1,6 +1,6 @@
 ---
 - name: Load font scripts
-  include_tasks:
+  ansible.builtin.include_tasks:
     file: linux.yml
   when: ansible_os_family == 'Debian'
   tags:

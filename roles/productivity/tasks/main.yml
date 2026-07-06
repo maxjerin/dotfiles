@@ -1,36 +1,36 @@
 ---
 - name: Load linux snap
-  include_tasks:
+  ansible.builtin.include_tasks:
     file: snap.yml
   args:
     apply:
-      become: yes
+      become: true
   tags:
     - linux
 
 - name: Load linux apt
-  include_tasks:
+  ansible.builtin.include_tasks:
     file: apt.yml
   args:
     apply:
-      become: yes
+      become: true
   tags:
     - linux
 
 - name: Load linux cursor and warp installation
-  include_tasks:
+  ansible.builtin.include_tasks:
     file: cursor-warp.yml
   args:
     apply:
-      become: yes
+      become: true
   tags:
     - linux
 
 - name: Load linux brew tasks
-  include_tasks:
+  ansible.builtin.include_tasks:
     file: chrome.yml
   args:
     apply:
-      become: yes
+      become: true
   tags:
     - linux
