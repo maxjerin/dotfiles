@@ -1,54 +1,52 @@
-# Combine abbreviations as abbr only loads one file
-cat ~/.config/zsh/abbreviations_common > ~/.config/zsh/abbreviations
-cat ~/.config/zsh/abbreviations_work >> ~/.config/zsh/abbreviations
-
-# Load abbreviations
-abbr load
-
-# 1Password Agent Link
-if test -f ~/Library/Group\ Containers/2BUA8C4S2C.com.1password/t/agent.sock; then
-  mkdir -p ~/.1password && ln -s ~/Library/Group\ Containers/2BUA8C4S2C.com.1password/t/agent.sock ~/.1password/agent.sock
+# Rebuild combined abbreviations only when a source file is newer (idempotent).
+_abbr_dir="$HOME/.config/zsh"
+_abbr_out="$_abbr_dir/abbreviations"
+if [ "$_abbr_dir/abbreviations_common" -nt "$_abbr_out" ] || \
+   [ "$_abbr_dir/abbreviations_work" -nt "$_abbr_out" ] || \
+   [ ! -e "$_abbr_out" ]; then
+  cat "$_abbr_dir/abbreviations_common" "$_abbr_dir/abbreviations_work" \
+    > "$_abbr_out" 2>/dev/null
 fi
+command -v abbr >/dev/null 2>&1 && abbr load
+unset _abbr_dir _abbr_out
 
-if test -f /opt/homebrew/opt/asdf/libexec/asdf.sh; then
-  source $(brew --prefix asdf)/libexec/asdf.sh
-fi
-
-if test -f ~/.orbstack/shell/init.zsh; then
-  . ~/.orbstack/shell/init.zsh 2>/dev/null || :
-fi
-
-if command -v zoxide &> /dev/null; then
-  eval "$(zoxide init zsh)"
-fi
-
-if command -v alacritty &> /dev/null; then
-  if test ! -d ~/.config/alacritty/themes; then
-    git clone https://github.com/alacritty/alacritty-theme ~/.config/alacritty/themes
+# macOS-only integrations.
+if [[ "$OSTYPE" == darwin* ]]; then
+  # 1Password SSH agent socket.
+  _op_sock="$HOME/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"
+  if [ -S "$_op_sock" ]; then
+    mkdir -p "$HOME/.1password"
+    ln -sfn "$_op_sock" "$HOME/.1password/agent.sock"
   fi
+  unset _op_sock
+
+  # pnpm.
+  export PNPM_HOME="$HOME/Library/pnpm"
+  case ":$PATH:" in
+    *":$PNPM_HOME:"*) ;;
+    *) export PATH="$PNPM_HOME:$PATH" ;;
+  esac
 fi
 
-if command -v tmux &> /dev/null; then
-  if test ! -d ~/.config/tmux/plugins/tpm; then
-    git clone https://github.com/tmux-plugins/tpm ~/.config/tmux/plugins/tpm
-    tmux source ~/.config/tmux/tmux.conf
-  fi
+# zoxide — smart cd.
+command -v zoxide >/dev/null 2>&1 && eval "$(zoxide init zsh)"
 
-  if test -d ~/.config/tmux/plugins/tmux-colors-solarized; then
-    # echo "gsed -i 's/catppuccin_latte/catppuccin_frappe/' ~/.config/alacritty/alacritty.yml" >> ~/.config/tmux/plugins/tmux-colors-solarized/tmuxcolors-dark.conf
-    # echo "gsed -i 's/catppuccin_frappe/catppuccin_latte/' ~/.config/alacritty/alacritty.yml" >> ~/.config/tmux/plugins/tmux-colors-solarized/tmuxcolors-light.conf
-  fi
+# atuin — SQLite history; Ctrl-R recall, Up-arrow stays zsh-native.
+# Skip inside Warp (Warp owns Ctrl-R / its own history palette).
+if [[ -z "$_IN_WARP" ]] && command -v atuin >/dev/null 2>&1; then
+  eval "$(atuin init zsh --disable-up-arrow)"
 fi
 
-if test -f "/Applications/Visual Studio Code.app"; then
-  code version use oss --install-dir "/Applications/Visual Studio Code.app"
+# OrbStack shell init (macOS).
+[ -r "$HOME/.orbstack/shell/init.zsh" ] && \
+  source "$HOME/.orbstack/shell/init.zsh" 2>/dev/null
+
+# tmux plugin manager (idempotent clone).
+if command -v tmux >/dev/null 2>&1 && [ ! -d "$HOME/.config/tmux/plugins/tpm" ]; then
+  git clone https://github.com/tmux-plugins/tpm "$HOME/.config/tmux/plugins/tpm"
 fi
 
-# Configure PNPM
-# pnpm
-export PNPM_HOME="~/Library/pnpm"
-case ":$PATH:" in
-  *":$PNPM_HOME:"*) ;;
-  *) export PATH="$PNPM_HOME:$PATH" ;;
-esac
-# pnpm end
+# Alacritty themes (idempotent clone).
+if command -v alacritty >/dev/null 2>&1 && [ ! -d "$HOME/.config/alacritty/themes" ]; then
+  git clone https://github.com/alacritty/alacritty-theme "$HOME/.config/alacritty/themes"
+fi

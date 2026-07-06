@@ -13,7 +13,8 @@ k9s:
     reactive: true
     noIcons: false
     defaultsToFullScreen: false
-    skin: dracula
+    # skin: dracula
+    skin: rose-pine-dawn
   skipLatestRevCheck: false
   disablePodCounting: false
   shellPod:

@@ -72,8 +72,10 @@ homebrew:
   formulas_common:
     - ansible
     - ansible-lint
+    - atuin  # SQLite shell history + fuzzy ctrl-r (Warp-like command recall)
     - awscli
     - bat
+    - carapace  # cross-shell rich completions (Warp-like menus)
     - clusterctl
     - fzf
     - go
@@ -88,6 +90,8 @@ homebrew:
     - siderolabs/tap/talosctl
     - tilt
     - yamllint
+    - zoxide  # smart cd (Warp-like), replaces z; common to both OSes
+    - zsh
     - zsh-completions
     - zsh-autosuggestions
     - zsh-syntax-highlighting
@@ -99,12 +103,9 @@ homebrew:
     - exa
     - openjdk@11
     - pyenv
-    - spaceship
     - svn
     - vault
     - yarn
-    - z
-    - zsh
 
   # macOS-specific formulas
   formulas_macos:
@@ -120,7 +121,6 @@ homebrew:
     - powerline-go
     - tmux
     - yq
-    - zoxide
     - dockutil  # Tool for managing Dock apps programmatically
 
   # macOS-specific taps
@@ -175,7 +175,7 @@ homebrew:
     - visual-studio-code
 
 repos:
-  - name: spacemacs # Avoid name conflict with repo packaged with rpm: 1password.repo
+  - name: spacemacs  # Avoid name conflict with repo packaged with rpm: 1password.repo
     description: Spacemacs
     baseurl: https://github.com/syl20bnr/spacemacs
     # gpgkey: https://downloads.1password.com/linux/keys/1password.asc

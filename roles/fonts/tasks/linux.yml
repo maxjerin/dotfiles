@@ -26,14 +26,28 @@
   changed_when: false
 # checksum: figure out how to do this?
 
-- name: Install Powerline Symbol font
-  ansible.builtin.command:
-    cmd: mv PowerlineSymbols.otf /usr/share/fonts && fc-cache -vf /usr/share/fonts
-    chdir: /tmp
-  changed_when: false
+- name: Set Powerline source dir
+  ansible.builtin.set_fact:
+    powerline_src_dir: /tmp
 
-- name: Install 10-powerline-symbols.conf
+- name: Install Powerline symbols font
+  ansible.builtin.copy:
+    src: "{{ powerline_src_dir }}/PowerlineSymbols.otf"
+    dest: /usr/share/fonts/PowerlineSymbols.otf
+    remote_src: true
+    mode: "0644"
+  become: true
+
+- name: Install Powerline fontconfig
+  ansible.builtin.copy:
+    src: "{{ powerline_src_dir }}/10-powerline-symbols.conf"
+    dest: /etc/fonts/conf.d/10-powerline-symbols.conf
+    remote_src: true
+    mode: "0644"
+  become: true
+
+- name: Refresh font cache
   ansible.builtin.command:
-    cmd: mv 10-powerline-symbols.conf /etc/fonts/conf.d
-    chdir: /tmp
-  changed_when: false
+    cmd: fc-cache -vf /usr/share/fonts
+  changed_when: true
+  become: true

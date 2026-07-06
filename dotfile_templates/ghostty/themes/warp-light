@@ -1,0 +1,25 @@
+# Warp Light — matches Warp terminal's default light theme
+# Background: soft white #F6F7F9 | Foreground: dark navy #24282E
+background = #F6F7F9
+foreground = #24282E
+cursor-color = #24282E
+cursor-text = #F6F7F9
+selection-background = #C9D4E4
+selection-foreground = #24282E
+
+palette = 0=#24282E
+palette = 1=#BE3A3A
+palette = 2=#2D8B3C
+palette = 3=#A87B00
+palette = 4=#2C5E96
+palette = 5=#7A3DAD
+palette = 6=#1A7A85
+palette = 7=#6B7480
+palette = 8=#4A505A
+palette = 9=#D14545
+palette = 10=#3BA84C
+palette = 11=#C99400
+palette = 12=#3A72B0
+palette = 13=#9250CC
+palette = 14=#2297A5
+palette = 15=#24282E
