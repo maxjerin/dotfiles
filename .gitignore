@@ -6,3 +6,4 @@ venv/
 
 # Ansible Galaxy role dependencies (downloaded, not tracked)
 .ansible/
+.worktrees/
