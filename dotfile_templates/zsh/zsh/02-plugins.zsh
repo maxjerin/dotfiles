@@ -13,8 +13,10 @@ fi
 # Completions.
 FPATH="$_brew_prefix/share/zsh-completions:$FPATH"
 autoload -Uz compinit
+# -u: skip insecure-dir prompt. Single-user Mac; some cask completions are owned by
+# an orphaned uid (501) from migration, which compaudit flags on every rebuild.
 if [ -n "$(find -L ~/.zcompdump -prune -mtime +1 2>/dev/null)" ] || [ ! -e ~/.zcompdump ]; then
-  compinit
+  compinit -u
 else
   compinit -C
 fi
