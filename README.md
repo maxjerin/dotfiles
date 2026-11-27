@@ -85,3 +85,22 @@ ansible localhost -i hosts -m community.general.osx_defaults -a "domain=NSGlobal
 * https://dev.to/smashse/devops-environment-on-macos-4gc7
 * https://github.com/geerlingguy/mac-dev-playbook
 * https://towardsthecloud.com/automatically-setup-macbook-development
+
+## Agent instructions
+
+`dotfile_templates/agents/AGENTS.md` holds agent-agnostic development rules (git worktrees,
+branch naming, PR/CI/merge flow, secrets, session naming). It is the source of truth for
+every coding agent; repo-level `AGENTS.md` / `CLAUDE.md` files override it.
+
+The bootstrap stows it to `~/.config/agents/AGENTS.md`, then:
+- symlinks `~/.codex/AGENTS.md` to it (Codex)
+- appends `@~/.config/agents/AGENTS.md` to `~/.claude/CLAUDE.md` (Claude Code import;
+  machine-specific notes in that file are kept)
+
+To wire up only this part on an existing machine:
+
+```bash
+cd dotfile_templates && mkdir -p ~/.config/agents && \
+  stow -R --no-folding --target ~/.config/agents agents && cd .. && \
+  bash -c 'source bootstrap-common.sh && link_agent_instructions'
+```

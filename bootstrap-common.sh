@@ -22,6 +22,27 @@ clone_zsh_plugins() {
     fi
 }
 
+# Point each coding agent's global instructions at ~/.config/agents/AGENTS.md.
+# Idempotent. Never overwrites an agent file that already has its own content.
+link_agent_instructions() {
+    local src="$HOME/.config/agents/AGENTS.md"
+    local import_line="@~/.config/agents/AGENTS.md"
+
+    # Codex reads ~/.codex/AGENTS.md: symlink it if free.
+    mkdir -p ~/.codex
+    if [ ! -e ~/.codex/AGENTS.md ] || [ -L ~/.codex/AGENTS.md ]; then
+        ln -sfn "$src" ~/.codex/AGENTS.md
+    fi
+
+    # Claude Code reads ~/.claude/CLAUDE.md, which may hold machine-specific notes:
+    # import AGENTS.md instead of replacing the file.
+    mkdir -p ~/.claude
+    touch ~/.claude/CLAUDE.md
+    if ! grep -qxF "$import_line" ~/.claude/CLAUDE.md; then
+        printf '\n%s\n' "$import_line" >> ~/.claude/CLAUDE.md
+    fi
+}
+
 # Stow all shared configs plus any OS-only dirs in $STOW_OS_EXTRA.
 setup_dotfiles_common() {
     if ! command_exists stow; then
@@ -54,6 +75,12 @@ setup_dotfiles_common() {
     # Warp themes live under ~/.warp (not ~/.config); both OSes run Warp.
     mkdir -p ~/.warp/themes
     stow --adopt -R --target ~/.warp warp
+
+    # Agent-agnostic dev instructions -> ~/.config/agents/AGENTS.md, then point
+    # each agent's global instructions file at it.
+    mkdir -p ~/.config/agents
+    stow --adopt -R --no-folding --target ~/.config/agents agents
+    link_agent_instructions
 
     # OS-only extras (e.g. karabiner on macOS).
     # shellcheck disable=SC2086
