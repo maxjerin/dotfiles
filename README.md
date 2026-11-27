@@ -97,6 +97,10 @@ The bootstrap stows it to `~/.config/agents/AGENTS.md`, then:
 - stows `dotfile_templates/claude/` (`CLAUDE.md`, `RTK.md`) into `~/.claude`. The global
   `CLAUDE.md` imports `AGENTS.md`. Existing real files are moved to `*.pre-dotfiles` first.
 
+`register_mcp_servers` (bootstrap) registers user-scoped MCP servers with Claude Code:
+currently 1Password (`/Applications/1Password.app/Contents/MacOS/onepassword-mcp`). It skips
+any server that's already registered or whose binary is missing.
+
 This repo is public: environment-specific details (IPs, 1Password item IDs) belong in the
 relevant private project's `CLAUDE.md`, not here.
 

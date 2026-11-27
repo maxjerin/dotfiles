@@ -49,6 +49,18 @@ link_agent_instructions() {
     stow -R --no-folding --dir "$templates" --target ~/.claude claude
 }
 
+# Register user-scoped MCP servers with Claude Code (idempotent; skips when the
+# CLI or the server binary is missing).
+register_mcp_servers() {
+    command_exists claude || return 0
+
+    # 1Password: local server bundled with the 1Password desktop app (macOS).
+    local op_mcp="/Applications/1Password.app/Contents/MacOS/onepassword-mcp"
+    if [ -x "$op_mcp" ] && ! claude mcp get 1password >/dev/null 2>&1; then
+        claude mcp add --scope user 1password -- "$op_mcp"
+    fi
+}
+
 # Stow all shared configs plus any OS-only dirs in $STOW_OS_EXTRA.
 setup_dotfiles_common() {
     if ! command_exists stow; then
@@ -87,6 +99,7 @@ setup_dotfiles_common() {
     mkdir -p ~/.config/agents
     stow --adopt -R --no-folding --target ~/.config/agents agents
     link_agent_instructions
+    register_mcp_servers
 
     # OS-only extras (e.g. karabiner on macOS).
     # shellcheck disable=SC2086

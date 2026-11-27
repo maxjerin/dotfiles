@@ -123,6 +123,9 @@ gh pr merge <n> --squash --delete-branch
 - Never ask the user to paste a password, token or key. Load it non-interactively from the
   store (1Password `op read "op://<vault>/<item>/<field>"`; concealed fields need `--reveal`
   with `op item get`) into a transient shell variable.
+- A 1Password MCP server (`1password`) is registered for Claude Code. Its tools manage
+  1Password **Environments** (env-var sets, local `.env` files), not vault items: use the
+  `op` CLI for item reads.
 - Authenticate once at the start of a task, pull every secret the task needs in one batch,
   and reuse the variables. A lazy lookup mid-run can stall on a biometric prompt nobody sees.
 - Never print, log or commit a secret value. Not in files, PR bodies, commit messages or
