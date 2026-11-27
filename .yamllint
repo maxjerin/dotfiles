@@ -9,4 +9,5 @@ rules:
 ignore: |
   .yamllint
   dependencies/**
+  .ansible/**
 # .github/stale.yml
