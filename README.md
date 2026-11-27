@@ -94,8 +94,11 @@ every coding agent; repo-level `AGENTS.md` / `CLAUDE.md` files override it.
 
 The bootstrap stows it to `~/.config/agents/AGENTS.md`, then:
 - symlinks `~/.codex/AGENTS.md` to it (Codex)
-- appends `@~/.config/agents/AGENTS.md` to `~/.claude/CLAUDE.md` (Claude Code import;
-  machine-specific notes in that file are kept)
+- stows `dotfile_templates/claude/` (`CLAUDE.md`, `RTK.md`) into `~/.claude`. The global
+  `CLAUDE.md` imports `AGENTS.md`. Existing real files are moved to `*.pre-dotfiles` first.
+
+This repo is public: environment-specific details (IPs, 1Password item IDs) belong in the
+relevant private project's `CLAUDE.md`, not here.
 
 To wire up only this part on an existing machine:
 

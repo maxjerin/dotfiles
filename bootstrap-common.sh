@@ -22,11 +22,13 @@ clone_zsh_plugins() {
     fi
 }
 
-# Point each coding agent's global instructions at ~/.config/agents/AGENTS.md.
-# Idempotent. Never overwrites an agent file that already has its own content.
+# Point each coding agent's global instructions at ~/.config/agents/AGENTS.md
+# and stow the Claude Code globals (CLAUDE.md, RTK.md) into ~/.claude.
+# Idempotent. Existing real files are moved to *.pre-dotfiles, never overwritten.
 link_agent_instructions() {
     local src="$HOME/.config/agents/AGENTS.md"
-    local import_line="@~/.config/agents/AGENTS.md"
+    local templates
+    templates="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/dotfile_templates"
 
     # Codex reads ~/.codex/AGENTS.md: symlink it if free.
     mkdir -p ~/.codex
@@ -34,13 +36,17 @@ link_agent_instructions() {
         ln -sfn "$src" ~/.codex/AGENTS.md
     fi
 
-    # Claude Code reads ~/.claude/CLAUDE.md, which may hold machine-specific notes:
-    # import AGENTS.md instead of replacing the file.
+    # Claude Code reads ~/.claude/CLAUDE.md (which imports AGENTS.md + RTK.md): stow the
+    # claude package. A pre-existing real file is backed up, not adopted, so local edits
+    # never overwrite the repo copy.
     mkdir -p ~/.claude
-    touch ~/.claude/CLAUDE.md
-    if ! grep -qxF "$import_line" ~/.claude/CLAUDE.md; then
-        printf '\n%s\n' "$import_line" >> ~/.claude/CLAUDE.md
-    fi
+    local f
+    for f in CLAUDE.md RTK.md; do
+        if [ -f "$HOME/.claude/$f" ] && [ ! -L "$HOME/.claude/$f" ]; then
+            mv "$HOME/.claude/$f" "$HOME/.claude/$f.pre-dotfiles"
+        fi
+    done
+    stow -R --no-folding --dir "$templates" --target ~/.claude claude
 }
 
 # Stow all shared configs plus any OS-only dirs in $STOW_OS_EXTRA.
