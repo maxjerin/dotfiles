@@ -147,3 +147,7 @@ gh pr merge <n> --squash --delete-branch
 - Use what the project already has (its cache, queue, flag system, error reporting) before
   adding new infrastructure. New services need an explicit go-ahead.
 - Note out-of-scope problems you notice; don't fix them in the current PR.
+- Clean up what you start. When a task ends (or before handing back), stop every container,
+  stack and long-running process you started: `docker compose down`, `tilt down`, throwaway
+  test databases, dev servers, port-forwards. Leave alone anything that was already running
+  before you began. If something must stay up, say what and why in your final summary.
